@@ -1,0 +1,9 @@
+/*
+* Estilo de la página
+*/
+
+body {
+    width: 1250px;
+    margin: 0 auto;   
+    padding: 0;
+}
