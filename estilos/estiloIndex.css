@@ -7,3 +7,106 @@ body {
     margin: 0 auto;   
     padding: 0;
 }
+
+
+
+/*
+* ZONA DE CONTROL USUARIOS
+*/
+
+#zonaControlUsuario {    
+    margin: 0 auto;
+    width: 250px;
+    height: 250px;       
+    color: purple;
+    position: relative;
+    top: 200px;
+}
+
+#zonaControlUsuario fieldset {    
+    border:2px solid purple;
+    border-radius: 1em;
+    background-color: #eee;
+}
+
+#textoAcceso {
+    font-family : Arial, sans-serif;
+    font-size: 16pt;
+    font-weight:bold;
+    color: purple;
+}
+
+#textoDiario {
+    font-family : Arial, sans-serif;
+    font-size: 12pt;
+    font-weight:bold;
+    color: purple;
+}
+
+#zonaControlUsuario label {
+    font-family : Arial, sans-serif;
+    font-size:0.8em;
+    font-weight: bold;
+}
+
+#usuario {
+    font-family : Arial, Verdana, sans-serif;
+    font-size: 0.8em;
+    line-height:140%;
+    color : #000; 
+    padding : 0 0 0 3px; 
+    border : 1px solid #999;
+    height:27px;
+    width:214px;
+}
+
+#contraseña {
+    font-family : Arial, Verdana, sans-serif;
+    font-size: 0.8em;
+    line-height:140%;
+    color : #000; 
+    padding : 0 0 0 3px; 
+    border : 1px solid #999;
+    height:27px;
+    width:210px;
+}
+
+#botonEntrar {   
+    outline: none; /* No muestra el borde cuando se ejecuta */
+    width:100px;
+    height:40px;
+    padding-left:0px;
+    text-align: right;
+    font-weight: bold;
+    background-color: aliceblue;
+    background-image: url(../imagenes/passw_boton.png);
+    background-position: 3px;
+    background-repeat: no-repeat;   
+    border-radius: 0.8em; 
+}
+
+#botonEntrar:hover, #botonEntrar:focus {
+  border: 2px solid purple;  
+  color: red;
+}
+
+
+/*
+* CLASES GENERALES
+*/
+.campo {
+    margin-top:8px;
+    margin-bottom: 10px;
+}
+
+
+/*
+* ZONA PARA MOSTRAR ERRORES
+*/
+
+.error {
+    font-family: Verdana, Arial, sans-serif; 
+    font-size: 0.7em;
+    color: #900;
+    background-color : #ffff00;
+}
