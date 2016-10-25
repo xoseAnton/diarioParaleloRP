@@ -9,18 +9,18 @@ body {
 }
 
 
-
 /*
 * ZONA DE CONTROL USUARIOS
 */
 
-#zonaControlUsuario {    
+#zonaControlUsuario {     
     margin: 0 auto;
     width: 250px;
     height: 250px;       
     color: purple;
     position: relative;
     top: 200px;
+    display: none;
 }
 
 #zonaControlUsuario fieldset {    

@@ -51,14 +51,6 @@
     color: purple;    
 }
 
-#botonInformacion:hover {
-    background-color: purple;        
-}
-
-#botonInformacion:hover ~ #contenedorInformacion {
-    display: block;
-}
-
 .cancelarFlotantes {
     clear: both;
 }
