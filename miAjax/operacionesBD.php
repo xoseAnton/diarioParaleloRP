@@ -7,9 +7,9 @@
  */
 
 // Insertamos la clase "Usuario"
-require_once 'Usuario.php'; // Especifico la ruta absoluta
-require_once 'Diario.php';
-require_once 'Asiento.php';
+require_once '/./../clases/Usuario.php'; // Especifico la ruta absoluta
+require_once '/./../clases/Diario.php';
+require_once '/./../clases/Asiento.php';
 
 
 class operacionesBD {
@@ -108,7 +108,7 @@ class operacionesBD {
             // Añadimos un elemento por cada usuario obtenido
             $row = $resultado->fetch();
             while ($row != null) {
-                $listaUsuarios[] = new Usuario($row);
+                $listaUsuarios[] = ["id" =>$row[0], "nombre"=>$row[1], "rol"=>$row[2]];
                 $row = $resultado->fetch();
             }
         }
