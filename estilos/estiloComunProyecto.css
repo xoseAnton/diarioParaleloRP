@@ -1,4 +1,16 @@
 /*
+* Estilo de la página
+*/
+
+body {
+    width: 1250px;
+    margin: 0 auto;   
+    padding: 0;
+}
+
+
+
+/*
 * BLOQUE DE INFORMACION
 */
 
@@ -9,6 +21,8 @@
 }
 
 #botonInformacion {
+    /* Suprimo el comportamiento del boton*/
+    outline: none;
     float: right;
     width:100px;
     height:25px;
@@ -53,4 +67,27 @@
 
 .cancelarFlotantes {
     clear: both;
+}
+
+
+/*
+* ESTILO BOTONES MENU
+*/
+
+.botonMenu {
+    outline: none; /* No muestra el borde cuando se ejecuta */
+    width:128px;
+    height:30px;
+    padding-left:0px;
+    text-align: right;
+    font-weight: bold;
+    background-color: aliceblue;    
+    background-repeat: no-repeat;   
+    border-radius: 0.8em;
+}
+
+
+.botonMenu:hover, .botonMenu:focus {
+  border: 2px solid purple;  
+  color: red;
 }

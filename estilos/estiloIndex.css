@@ -1,17 +1,7 @@
 /*
-* Estilo de la página
-*/
-
-body {
-    width: 1250px;
-    margin: 0 auto;   
-    padding: 0;
-}
-
-
-/*
 * ZONA DE CONTROL USUARIOS
 */
+
 
 #zonaControlUsuario {     
     margin: 0 auto;
@@ -71,23 +61,11 @@ body {
     width:210px;
 }
 
-#botonEntrar {   
-    outline: none; /* No muestra el borde cuando se ejecuta */
-    width:100px;
-    height:40px;
-    padding-left:0px;
-    text-align: right;
-    font-weight: bold;
-    background-color: aliceblue;
-    background-image: url(../imagenes/passw_boton.png);
-    background-position: 3px;
-    background-repeat: no-repeat;   
-    border-radius: 0.8em; 
-}
-
-#botonEntrar:hover, #botonEntrar:focus {
-  border: 2px solid purple;  
-  color: red;
+#botonEntrar {       
+    width: 110px;
+    height: 40px;
+    background-image: url(../imagenes/passw_boton.png);    
+    background-position: 5px;
 }
 
 

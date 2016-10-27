@@ -8,8 +8,8 @@
 
 // Insertamos la clase "Usuario"
 require_once '/./../clases/Usuario.php'; // Especifico la ruta absoluta
-require_once '/./../clases/Diario.php';
-require_once '/./../clases/Asiento.php';
+require_once '/./../clases/Diario.php'; // Insertamos la clase "Diario"
+require_once '/./../clases/Asiento.php'; // Insertamos la clase "Asiento"
 
 
 class operacionesBD {
@@ -108,7 +108,7 @@ class operacionesBD {
             // Añadimos un elemento por cada usuario obtenido
             $row = $resultado->fetch();
             while ($row != null) {
-                $listaUsuarios[] = ["id" =>$row[0], "nombre"=>$row[1], "rol"=>$row[2]];
+                $listaUsuarios[] = new Usuario($row);
                 $row = $resultado->fetch();
             }
         }
