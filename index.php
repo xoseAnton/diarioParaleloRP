@@ -55,7 +55,7 @@
 
                         <!-- Zona de BOTONES -->
                         <div class="campo">                       
-                            <input type="submit" id="botonEntrar" class="botonMenu" name="entrar" value="Entrar" />
+                            <input type="submit" id="botonEntrar" class="botonMenu" name="entrar" disabled value="Entrar" />
                         </div>
 
                     </fieldset>            

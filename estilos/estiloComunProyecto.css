@@ -85,9 +85,3 @@ body {
     background-repeat: no-repeat;   
     border-radius: 0.8em;
 }
-
-
-.botonMenu:hover, .botonMenu:focus {
-  border: 2px solid purple;  
-  color: red;
-}

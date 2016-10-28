@@ -42,11 +42,29 @@ $(function (){
     */ 
    $("#usuario, #contraseña").on("change keyup", function (){
       
+      // Si tenemos datos en los dos campos
       if(contenDatos("#usuario") && contenDatos("#contraseña")) {            
+          // Habilitamos el boton entrar
             $("#botonEntrar").removeAttr("disabled");
+            
+            // Establecemos los eventos
+            $("#botonEntrar").focus( function (){
+                mostrarBorde("#botonEntrar");
+            });            
+            $("#botonEntrar").focusout( function (){
+                ocultarBorde("#botonEntrar");
+            });            
+            $("#botonEntrar").hover( function (){
+                mostrarBorde("#botonEntrar");}, function (){
+                ocultarBorde("#botonEntrar");
+            });
       }
-      else {
+      else {    // Si no tenemos datos en los dos campos
+          // Deshabilitamos el boton entrar
           $("#botonEntrar").attr("disabled", "disabled");
+          // Suprimimos los eventos
+          $("#botonEntrar").off("focus");
+          $("#botonEntrar").off("hover");
       }
    });
    

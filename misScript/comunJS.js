@@ -22,3 +22,19 @@ function mostrarInformacion() {
          $("#contenedorTextoIndormacion").html("<p class='textoInformacion'><span class='textoTituloInformacion'>Aviso: </span>Información no disponible!</p>");
     }
 }
+
+/*
+ * FUNCIÓN PARA MOSTRAR EL BORDE DE UN ELEMENTO
+ */
+function mostrarBorde(idElemento){
+    $(idElemento).css("border", "2px solid purple");
+    $(idElemento).css("color", "red");
+}
+
+/*
+ * FUNCIÓN PARA OCULTAR EL BORDE DE UN ELEMENTO
+ */
+function ocultarBorde(idElemento){
+    $(idElemento).css("border", "");
+    $(idElemento).css("color", "");
+}
