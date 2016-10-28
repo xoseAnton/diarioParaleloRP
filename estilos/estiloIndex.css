@@ -81,10 +81,21 @@
 /*
 * ZONA PARA MOSTRAR ERRORES
 */
-
-.error {
+#campoError {  
+    /* No visible pero mantenemos su espacio */
+    visibility: hidden;
+    
+    width: 250px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    
+    border:2px solid red;
+    border-radius: 3em;    
+    background-color : #ffff00;
+    
     font-family: Verdana, Arial, sans-serif; 
     font-size: 0.7em;
-    color: #900;
-    background-color : #ffff00;
+    text-align: center;
+    color: red;
 }

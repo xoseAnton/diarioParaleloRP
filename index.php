@@ -32,15 +32,13 @@
 
             <!-- Zona de control de Usuario -->
             <div id="zonaControlUsuario">
+                
+                <!-- Zona de MENSAJES -->
+                <div id="campoError"></div>
+                
                 <form id="formControlUsuarios" name="formControlUsuarios" method="post">
                     <fieldset>
                         <legend><span id="textoAcceso">Acceso - </span><span id="textoDiario">Diario Paralelo</span></legend>
-
-                        <!-- Zona de MENSAJES -->
-                        <div>
-                            <span class="error"></span>
-                        </div>
-
                         <!-- Zona de USUARIO -->
                         <div class="campo">
                             <label>Usuario:</label><br/>                         

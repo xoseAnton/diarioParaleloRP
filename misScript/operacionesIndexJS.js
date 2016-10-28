@@ -18,6 +18,67 @@ function listarUsuario() {
 }
 
 
+
+function comprobarUsuario(datos){    
+    // Enviamos la solicitud ajax a la página del servidor
+    $.getJSON("./miAjax/comprobarUsuario.php", {id:5, contra:"prueba"}, function (resultado) {
+        $.each(resultado, function (i, usuario){
+             alert(usuario.id+" => "+ usuario.contra); 
+   });
+    });
+}
+
+
+/*
+ * Función para comprobar si un elemento tiene datos
+ */
+function contenDatos(idElemento) {
+    /* Obtengo el valor contenido en el elemento y lo 
+     * tranformo en un string
+     */
+   
+    var valor = new String($(idElemento).val());
+    /*Expresión reguar para encontrar espacios en blanco: \s+ (uno o más)
+     * al principio: ^
+     * o al fina: $
+     */   
+    var cadena = /^\s+$/;    
+    // Compruebo la expresión. Coincide = true
+    var compruebo = valor.match(cadena) ? true : false;
+    
+    /*
+     * Comprobamos también que no tenga níngún valor (null)
+     * o una longitud de 0.
+     */
+    if(valor == null || valor.length == 0 || compruebo){
+        return false;
+    }
+    else 
+        return true;
+}
+
+
+/*
+ * Función para desplazar elemento
+ */
+function desplaza(idElemento) {
+    $(idElemento).show(800);
+}
+
+
+/*
+ * Función para ocultar errores
+ */
+function ocultarErrores(idElemento) {
+    // Desaparición progresiva-rapida
+    $(idElemento).fadeOut("fast");
+}
+
+
+/*
+ * Cuando la página esté preparada
+ * @returns {undefined}
+ */
 $(function (){    
     // Introducimos la información del proyecto en su campo
     mostrarInformacion();
@@ -68,49 +129,14 @@ $(function (){
       }
    });
    
+   $("#botonEntrar").click( function(evento){
+       evento.preventDefault();
+       var datos = {id:$("#usuario").val(), contraseña:$("#contraseña").val()};
+      
+        comprobarUsuario(datos);
+      
+   });
+   
 });
 
 
-/*
- * Función para desplazar elemento
- */
-function desplaza(idElemento) {
-    $(idElemento).show(800);
-}
-
-/*
- * Función para ocultar errores
- */
-function ocultarErrores(idElemento) {
-    // Desaparición progresiva-rapida
-    $(idElemento).fadeOut("fast");
-}
-
-/*
- * Función para comprobar si un elemento tiene datos
- */
-
-function contenDatos(idElemento) {
-    /* Obtengo el valor contenido en el elemento y lo 
-     * tranformo en un string
-     */
-   
-    var valor = new String($(idElemento).val());
-    /*Expresión reguar para encontrar espacios en blanco: \s+ (uno o más)
-     * al principio: ^
-     * o al fina: $
-     */   
-    var cadena = /^\s+$/;    
-    // Compruebo la expresión. Coincide = true
-    var compruebo = valor.match(cadena) ? true : false;
-    
-    /*
-     * Comprobamos también que no tenga níngún valor (null)
-     * o una longitud de 0.
-     */
-    if(valor == null || valor.length == 0 || compruebo){
-        return false;
-    }
-    else 
-        return true;
-}
