@@ -35,7 +35,7 @@ class operacionesBD {
      * @param string $tipo Puede valer 'ACCION' o 'SELECT' según sea el tipo de la consulta
      * @return string|int El resultado de la consulta, en caso de $tipo = 'SELECT' será un array con todas las filas, en el caso $tipo = 'ACCION' será el número de filas afectadas
      */
-    protected static function consultaPreparada($sql, $arrayParametros, $tipo, $baseDatos) {        
+    public static function consultaPreparada($sql, $arrayParametros, $tipo, $baseDatos) {        
         
         $opc = array(
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", // Codificación de caracteres
@@ -69,7 +69,7 @@ class operacionesBD {
      * Función para ejecutar consultas en la base de datos
      */
 
-    protected static function ejecutaConsulta($sql, $baseDatos) {
+    public static function ejecutaConsulta($sql, $baseDatos) {
         // Declaro las variables                
         $resultado = null;
 
@@ -115,39 +115,5 @@ class operacionesBD {
         // Retorno un array de objetos de la clase Usuario
         return $listaUsuarios;
     }
-    
-    
-    /*
-     * Función para verificar usuarios en la base de datos
-     */
-
-    public static function verificaUsuario($nombre, $contrasena) {
-        // Defino la variable (que será el valor de retorno)
-        $verificado = false;
-
-        /* Introduzco un filtro de saneamiento para los datos que vamos
-         * introducir en la base de datos (evitar ataques xss - cross-site Scripting).
-         * (Añade un caracter de escape delante de: ', ", \ y NUL)
-         */
-        $nombreFiltrado = filter_var($nombre, FILTER_SANITIZE_MAGIC_QUOTES);
-        $contrasenaFiltrada = filter_var($contrasena, FILTER_SANITIZE_MAGIC_QUOTES);
-
-        // Comando para la consulta
-        $sql = "SELECT nombre FROM usuarios "
-                . "WHERE nombre='$nombreFiltrado' "
-                . "AND clave='" . md5($contrasenaFiltrada) . "'";
-
-        // Ejecuto la consulta
-        $resultado = self::ejecutaConsulta($sql, "negreira");
-
-        // Compruebo el resultado
-        if (isset($resultado)) {
-            $fila = $resultado->fetch();
-            if ($fila !== false)
-                $verificado = true;
-        }
-        return $verificado;
-    }
-
 
 }

@@ -21,10 +21,15 @@ function listarUsuario() {
 
 function comprobarUsuario(datos){    
     // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/comprobarUsuario.php", {id:5, contra:"prueba"}, function (resultado) {
-        $.each(resultado, function (i, usuario){
-             alert(usuario.id+" => "+ usuario.contra); 
-   });
+    $.getJSON("./miAjax/comprobarUsuario.php", datos, function (resultado) {
+        // Si se produjo un error de indentificación lo mostramos
+        if(resultado[0].error) {
+            $("#campoError").html(resultado[0].textoError);
+            $("#campoError").css("visibility", "visible");
+        }
+        else {
+            document.location.href = "asientosDiario.php";
+        }
     });
 }
 
@@ -38,11 +43,8 @@ function contenDatos(idElemento) {
      */
    
     var valor = new String($(idElemento).val());
-    /*Expresión reguar para encontrar espacios en blanco: \s+ (uno o más)
-     * al principio: ^
-     * o al fina: $
-     */   
-    var cadena = /^\s+$/;    
+    /* Expresión regular para encontrar espacios en blanco: (uno o más) */
+    var cadena = /\s+/;    
     // Compruebo la expresión. Coincide = true
     var compruebo = valor.match(cadena) ? true : false;
     
@@ -69,9 +71,8 @@ function desplaza(idElemento) {
 /*
  * Función para ocultar errores
  */
-function ocultarErrores(idElemento) {
-    // Desaparición progresiva-rapida
-    $(idElemento).fadeOut("fast");
+function ocultarErrores() {
+    $("#campoError").css("visibility", "hidden");
 }
 
 
@@ -130,11 +131,12 @@ $(function (){
    });
    
    $("#botonEntrar").click( function(evento){
+       // Detenemos la acción del botón input:submit
        evento.preventDefault();
-       var datos = {id:$("#usuario").val(), contraseña:$("#contraseña").val()};
-      
-        comprobarUsuario(datos);
-      
+       // Creamos el array con los datos
+       var datos = {id:$("#usuario").val(), contraseña:$("#contraseña").val()};       
+      // Comprobamos usuario y contraseña en la base de datos.
+       comprobarUsuario(datos);      
    });
    
 });
