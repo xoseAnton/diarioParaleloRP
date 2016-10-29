@@ -42,20 +42,19 @@
                         <!-- Zona de USUARIO -->
                         <div class="campo">
                             <label>Usuario:</label><br/>                         
-                            <select id="usuario" name="usuario" onchange="ocultarErrores()" required></select><br/>
+                            <select id="usuario" name="usuario" onchange="borrarErrores()" required></select><br/>
                         </div>
 
                         <!-- Zona de CONTRASEÑA -->
                         <div class="campo">
                             <label for="password" >Contraseña:</label><br/>
-                            <input type="password" name="contraseña" id="contraseña" onkeydown="ocultarErrores()" required /><br/>
+                            <input type="password" name="contraseña" id="contraseña" onkeydown="borrarErrores()" required /><br/>
                         </div>
 
                         <!-- Zona de BOTONES -->
                         <div class="campo">                       
                             <input type="submit" id="botonEntrar" class="botonMenu" name="entrar" disabled value="Entrar" />
                         </div>
-
                     </fieldset>            
                 </form>            
             </div>

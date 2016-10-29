@@ -35,7 +35,7 @@ class operacionesBD {
      * @param string $tipo Puede valer 'ACCION' o 'SELECT' según sea el tipo de la consulta
      * @return string|int El resultado de la consulta, en caso de $tipo = 'SELECT' será un array con todas las filas, en el caso $tipo = 'ACCION' será el número de filas afectadas
      */
-    public static function consultaPreparada($sql, $arrayParametros, $tipo, $baseDatos) {        
+    protected static function consultaPreparada($sql, $arrayParametros, $tipo, $baseDatos) {        
         
         $opc = array(
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8", // Codificación de caracteres
@@ -45,8 +45,8 @@ class operacionesBD {
         
         try {
             $bbdd = new PDO($dsn, self::$usuario, self::$contrasena, $opc);
-        } catch (PDOException $e) {
-            die ("<h1>ERROR</h1><p>".$e->getMessage()."</p>");
+        } catch (PDOException $error) {
+            die ("<h1>ERROR</h1><p>".$error->getMessage()."</p>");
         }
 
         $consulta = $bbdd->prepare($sql);
@@ -69,7 +69,7 @@ class operacionesBD {
      * Función para ejecutar consultas en la base de datos
      */
 
-    public static function ejecutaConsulta($sql, $baseDatos) {
+    protected static function ejecutaConsulta($sql, $baseDatos) {
         // Declaro las variables                
         $resultado = null;
 
@@ -83,7 +83,7 @@ class operacionesBD {
                 $resultado = $dwes->query($sql);
             return $resultado;
         } catch (PDOException $error) {
-            return $resultado;
+            die ("<h1>ERROR</h1><p>".$error->getMessage()."</p>");
         }
     }
     
@@ -115,5 +115,40 @@ class operacionesBD {
         // Retorno un array de objetos de la clase Usuario
         return $listaUsuarios;
     }
+    
+    
+    /*
+     * Función para verificar usuarios en la base de datos
+     */
+    public static function verificaUsuario($miId, $miContraseña) {        
+        // Defino la variable de retorno
+        $retorno = array();
 
-}
+        /* Introduzco un filtro de saneamiento para los datos que vamos
+         * introducir en la base de datos (evitar ataques xss - cross-site Scripting).
+         * (Añade un caracter de escape delante de: ', ", \ y NUL)
+         */
+        $idFiltrado = filter_var($miId, FILTER_SANITIZE_MAGIC_QUOTES);
+        $contrasenaFiltrada = filter_var($miContraseña, FILTER_SANITIZE_MAGIC_QUOTES);
+
+        // Comando para la consulta
+        $sql = "SELECT id, nombre, rol FROM usuarios "
+                . "WHERE id='$idFiltrado' "
+                . "AND clave='" . md5($contrasenaFiltrada) . "'";
+
+        // Ejecuto la consulta
+        $resultado = self::ejecutaConsulta($sql, "negreira");
+
+        // Compruebo el resultado
+        if (isset($resultado)) {
+            $fila = $resultado->fetch();
+            if ($fila !== false) {
+                $retorno = ["error" => FALSE, "id" => $fila['id'], "nombre" => $fila['nombre'], "rol" => $fila['rol']];
+            }
+            else
+                $retorno = ["error" => TRUE, "textoError" => "Contraseña incorrecta!"];
+        }
+        return $retorno;
+    }
+
+} // Fin de la clase "operacionesBD"

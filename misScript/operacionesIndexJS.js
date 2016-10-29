@@ -18,14 +18,18 @@ function listarUsuario() {
 }
 
 
-
-function comprobarUsuario(datos){    
+/*
+ * Función para comprobar si un usuario está defindo
+ * @param {type} datos
+ * @returns {undefined}
+ */
+function comprobarUsuario(datos){      
     // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/comprobarUsuario.php", datos, function (resultado) {
-        // Si se produjo un error de indentificación lo mostramos
-        if(resultado[0].error) {
-            $("#campoError").html(resultado[0].textoError);
-            $("#campoError").css("visibility", "visible");
+    $.getJSON("./miAjax/comprobarUsuario.php", datos, function (resultado) {        
+        // Si se produjo un error de indentificación lo mostramos        
+        if(resultado.error) {
+            // Mostramos el error            
+            $("#contraseña").focus().after("<span class='campoError'>"+resultado.textoError+"</span>");
         }
         else {
             document.location.href = "asientosDiario.php";
@@ -69,10 +73,10 @@ function desplaza(idElemento) {
 
 
 /*
- * Función para ocultar errores
+ * Función para borrar el campo de errores
  */
-function ocultarErrores() {
-    $("#campoError").css("visibility", "hidden");
+function borrarErrores() {
+    $(".campoError").remove();
 }
 
 
@@ -86,17 +90,7 @@ $(function (){
     
     // Introducimos los usuarios activos en la página
     listarUsuario();
-        
-   // Animación para la zona "bloque de Información" 
-   $("#botonInformacion").hover(function (){ // Cuando gana el foco      
-      $("#botonInformacion").css("background-color", "purple");
-      $("#contenedorInformacion").fadeIn("slow"); //Aparición progresiva
-   }, function (){ // Cuando pierde el foco
-       $("#botonInformacion").css("background-color", "");
-      $("#contenedorInformacion").hide("slow"); //Desaparición con desplazamiento
-   }); 
-   
-   
+      
    /* Cargamos la función de validación para el formulario
     * 
     * @param {type} idElemento

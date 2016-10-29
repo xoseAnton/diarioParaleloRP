@@ -21,6 +21,16 @@ function mostrarInformacion() {
     else {
          $("#contenedorTextoIndormacion").html("<p class='textoInformacion'><span class='textoTituloInformacion'>Aviso: </span>Información no disponible!</p>");
     }
+    
+    // Animación para la zona "bloque de Información" 
+    $("#botonInformacion").hover(function () { // Cuando gana el foco      
+        $("#botonInformacion").css("background-color", "purple");
+        $("#contenedorInformacion").fadeIn("slow"); //Aparición progresiva
+    }, function () { // Cuando pierde el foco
+        $("#botonInformacion").css("background-color", "");
+        $("#contenedorInformacion").hide("slow"); //Desaparición con desplazamiento
+    }); 
+    
 }
 
 /*
