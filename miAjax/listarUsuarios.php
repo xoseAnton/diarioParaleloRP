@@ -30,9 +30,24 @@ else {
 // Preparo los datos para entregar
 $resultado = array();
 
-foreach ($listaUsuarios as $miUsuario) {
-    $resultado[] = ["id"=>$miUsuario->getId(), "nombre"=>$miUsuario->getNombre()];
+
+// Comprobamos si existe un usuario identificado
+if (isset($_SESSION['usuario'])) {
+    $miId = $_SESSION['usuario]']['id'];
+    foreach ($listaUsuarios as $miUsuario) {
+        if ($miId == $miUsuario->getId())
+            $resultado[] = ["id" => $miUsuario->getId(), "nombre" => $miUsuario->getNombre(), "porDefecto" => TRUE];
+        else
+            $resultado[] = ["id" => $miUsuario->getId(), "nombre" => $miUsuario->getNombre(), "porDefecto" => FALSE];
+    }
 }
+else {
+    foreach ($listaUsuarios as $miUsuario) {
+        $resultado[] = ["id" => $miUsuario->getId(), "nombre" => $miUsuario->getNombre(), "porDefecto" => FALSE];
+    }
+}
+
+
 // Retorno un "string" con los datos optenidos
 echo json_encode($resultado);
 

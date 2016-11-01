@@ -1,0 +1,205 @@
+/*
+* ZONA DE PROGRAMA
+*/
+
+#zonaPrograma {
+    margin: 0 auto;
+    width: 1250px;
+}
+
+
+/*
+* ZONA DE CONTROL
+*/
+
+#zonaControl {
+    height: 130px;
+}
+
+#zonaControl fieldset {  
+    background-color: #eee;
+    margin-bottom: 5px;
+    border:2px solid purple;
+    border-radius: 1em;    
+    color: purple;
+    font-weight: bold;
+    height: 80px;
+}
+
+#zonaControl legend {
+    font-family : Arial, sans-serif;
+    font-size: 16pt;
+    font-weight:bold;
+    color:purple;
+}
+
+.contenedorBusqueda {
+    float: left;
+    margin-right: 15px;
+    padding: 5px;
+    border: 0.2em solid purple;
+    border-radius: 1em;
+    background-color: #eee;
+}
+
+
+/* zona de búsqueda por DIARIO */
+
+#buscaDiario {
+    text-align: center;    
+    width: 56px;
+    height: 45px;
+    background-color: #93C572;    
+}
+
+#diario {
+    width: 55px;
+    height: 25px;
+}
+
+/* zona de búsqueda por ASIENTO */
+
+#buscaAsiento {        
+    width: 90px;
+    height: 45px;       
+}
+
+#asiento {    
+    width: 50px;    
+    height: 18px;
+    margin-left: 17px;
+}
+
+/* zona de búsqueda por FECHA */
+
+#buscaFecha {            
+    width: 133px;
+    height: 45px;    
+}
+
+#fecha {
+    width: 127px;
+}
+
+/* zona de búsqueda por USUARIO */
+
+#buscaUsuario {            
+    width: 125px;
+    height: 45px;
+}
+
+#usuario {
+    width: 125px;
+    height: 25px;
+    background-color:#eee;
+}
+
+/* zona de búsqueda por TEXTO */
+
+#buscaTexto {            
+    width: 150px;
+    height: 45px;
+}
+
+#textoBusca {    
+    width: 145px;
+    height: 18px; 
+}
+
+/* zona de búsqueda por FECHA MODIFICA DIARIO */
+
+#buscaFechaModifica {            
+    width: 210px;
+    height: 45px;
+}
+
+#fechaModifica {
+    width: 127px;
+}
+
+#horaModifica {
+    width: 68px;
+}
+
+/* zona de búsqueda por ESTADO DEL ASIENTO */
+
+#buscaEstado {
+    text-align: center;    
+    margin-right: 5px;    
+    width: 247px;
+    height: 45px;
+}
+
+#buscaEstadoActivo {    
+    margin-right: 5px;        
+    width: 63px;
+    height: 30px;
+    background-color: #93C572;
+}
+
+#buscaEstadoCerrado {    
+    margin-right: 5px;        
+    width: 63px;
+    height: 30px;
+}
+
+#buscaEstadoTodos {
+    margin-right: 0px;
+    width: 63px;
+    height: 30px;
+}
+
+
+/* zona de MENU BOTONES */
+
+#menuBotones {
+    width: 1250px;
+    margin: 0 auto;   
+    padding: 0;      
+}
+
+#menuBotones1 {
+    width: 880px;
+    float: left;    
+}
+
+#menuBotones2 {    
+    width: 370px;
+    float: left;
+}
+
+.contenBotonMenu {
+    margin-right: 25px;
+    float: left;
+    padding: 5px;      
+}
+
+#listar {
+    background-image: url(../imagenes/buscar_boton.png);
+    background-position: 5px;
+}
+
+#mostrarImprimir {
+    background-image: url(../imagenes/generaPDF_boton.png);    
+    background-position: 2px;
+}
+
+#mostrarAcciones {
+    background-image: url(../imagenes/notas_boton.png);
+    background-position: 6px;
+}
+
+#adminDiario {
+    background-image: url(../imagenes/administrar_boton.png);
+    background-position: 5px;
+}
+
+#botonDesconectar {    
+    float: right;
+    padding: 5px;  
+}
+
+#desconectar {
+    background-image: url(../imagenes/exit_boton.png);
+    background-position: 6px;
+}

@@ -41,10 +41,43 @@ function mostrarBorde(idElemento){
     $(idElemento).css("color", "red");
 }
 
+
 /*
  * FUNCIÓN PARA OCULTAR EL BORDE DE UN ELEMENTO
  */
 function ocultarBorde(idElemento){
     $(idElemento).css("border", "");
     $(idElemento).css("color", "");
+}
+
+
+/*
+ * FUNCIÓN PARA MOSTRAR EL BORDE DEL CAMPO LISTADO
+ */
+function mostrarBordeContenBusqueda(idElemento){
+    // Cambiamos el estilo de todos los demas contenedores
+    $(".contenedorBusqueda").css("border", "2px solid purple");
+    // Obtenemos el nombre de la clase seleccionada
+    var nombreClase = $(idElemento).attr('class');    
+    var nombreId = $(idElemento).attr('id');    
+    if (nombreClase == "contenedorBusqueda") {
+        $(idElemento).css("border", "0.2em solid #93C572");
+        if(nombreId == "buscaEstadoActivo" || nombreId == "buscaEstadoCerrado" || nombreId == "buscaEstadoTodos")
+            $("#buscaEstado").css("border", "0.2em solid #93C572");
+    }
+    else {
+        $(idElemento).parents(".contenedorBusqueda").css("border", "0.2em solid #93C572");
+        if(nombreId == "buscaEstadoActivo" || nombreId == "buscaEstadoCerrado" || nombreId == "buscaEstadoTodos")
+            $("#buscaEstado").css("border", "0.2em solid #93C572");
+    }
+}
+
+/*
+ * FUNCIÓN PARA OCULTAR EL BORDE DEL CAMPO LISTADO
+ */
+function ocultarBordeContenBusqueda(idElemento){
+    if ($(idElemento).attr('class') == "contenedorBusqueda")
+        $(idElemento).css("border", "2px solid purple");
+    else
+        $(idElemento).parents(".contenedorBusqueda").css("border", "2px solid purple");
 }
