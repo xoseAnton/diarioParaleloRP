@@ -66,8 +66,7 @@ if (isset($_POST['desconectar'])) {
                                 <label>Diario:</label>
                             </div>
                             <div>
-                                <select id="diario" name="diario" required>                                    
-                                </select>
+                                <select id="diario" name="diario"></select>
                             </div>
                         </div>
 
@@ -197,6 +196,14 @@ if (isset($_POST['desconectar'])) {
                 
             </div> <!-- Fin de zona CONTROL -->
             
+            <!-- ZONA PARA MOSTRAR DATOS -->
+            <div id="zonaMostrar">
+                <fieldset id="zonaMostrarDatos">
+                    <legend id="legendAñadir">Zona Prueba</legend>
+                    <!-- Zona de datos -->
+                    <div id="zonaRelacionAsientos"></div>
+                </fieldset>                   
+            </div>     
             
         </div> <!-- Fin de zona PROGRAMA -->
 

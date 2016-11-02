@@ -77,31 +77,3 @@
 }
 
 
-/*
-* ZONA PARA MOSTRAR ERRORES
-*/
-
-.campoError {
-    background-color: #BC1010;
-    padding: 6px 12px;
-    border-radius: 4px;
-    color: white;
-    font-weight: bold;
-    margin-left: 16px;    
-    position: absolute;
-    width: 165px;
-}
-
-/* Creamos un elemento hijo del anterior
-*  (crea un efecto punta de lanza)
-*/
-.campoError:before {
-    content: '';
-    border-top: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-right: 10px solid #BC1010;
-    border-left: 10px solid transparent;
-    left: -20px;
-    position: absolute;
-    top: 5px;    
-}

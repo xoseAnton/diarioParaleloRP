@@ -33,6 +33,49 @@ function listarDiarios() {
     });
 }
 
+function validarDatosListar(){
+    // Variable de control
+    var validado = true;
+    
+    // Valido el diario
+    var miDiario = $("#diario").val();      
+    if (isNaN(miDiario) || miDiario == "" || miDiario == true) {        
+        validado = false;   // Cambiamos la variable de control
+        // Mostramos el error            
+        $("#diario").focus().after("<span class='campoError'>Diario incorrecto!</span>");       
+    }
+    
+    // Valido el asiento si esta seleccionado
+    if(validado && $("#buscaPorAsiento").is(':checked')){
+        var miAsiento = $("#asiento").val();         
+         if (isNaN(miAsiento) || miAsiento < 1 || miAsiento == "") {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $("#asiento").focus().after("<span class='campoError'>Asiento incorrecto!</span>");
+        }
+    }
+    
+    // Valido la fecha de asiento si esta seleccionado
+    if(validado && $("#buscaPorFecha").is(':checked')){
+        var miFecha = new Date($("#fecha").val());         
+         // Compruebo que el formato introducido de la fecha es correcto
+        if ((miFecha.getDate()<1 || miFecha.getDate()>31) || ((miFecha.getMonth()+1)<1 || (miFecha.getMonth()+1)>12) || miFecha.getFullYear()<2016 || $("#fecha").val()=="") {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $("#fecha").focus().after("<span class='campoError'>Fecha no valida!</span>");
+        }
+    }
+    
+    // Devolvemos el resultado
+    if(validado){
+        return validado;
+    }
+    else {
+        // Lo ocultamos pasados 3 segundos, y lo borramos
+        setTimeout("$('.campoError').hide('slow');", 3000);       
+    }
+}
+
 
 /*
  * Cuando la página esté preparada
@@ -95,7 +138,6 @@ $(function() {
                 for (i in elemento) {
                     $(elemento[i]).attr("disabled", false);
                     $(elemento[i]).css("background-color", "white");
-                    $(elemento[i]).attr("required", true);
                 }
             }
        }
@@ -105,12 +147,27 @@ $(function() {
             $(contenedor).css("background-color", "#eee");
             // Recorremos todos los elementos por si tenemos más de uno               
             for (i in elemento) {                
-                $(elemento[i]).attr("disabled", true);
-                $(elemento[i]).attr("required", false);
+                $(elemento[i]).attr("disabled", true);                
                 $(elemento[i]).css("background-color", "");
             }
        }
     });
+    
+    /*
+     * Establecemos el evento "click" para el botón listar
+     */
+    $("#listar").click( function(evento){
+       // Detenemos la acción del botón input
+       evento.preventDefault();
+       // Borramos las posibles notificaciones de errores existentes
+       $(".campoError").remove();
+       // Validamos los datos introducidos
+       if(validarDatosListar()) {
+           
+           
+       }
+       
+   });
     
 });
 

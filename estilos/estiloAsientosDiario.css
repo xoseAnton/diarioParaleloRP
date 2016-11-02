@@ -203,3 +203,41 @@
     background-image: url(../imagenes/exit_boton.png);
     background-position: 6px;
 }
+
+
+/*
+* ZONA PARA MOSTRAR LISTADO DE ASIENTOS
+*/
+
+#zonaMostrar {    
+    height: 740px;
+    width: 1250;
+    margin-top: 25px;
+}
+
+#zonaMostrarDatos { 
+    margin: 0;
+    padding: 0 0 0 5px;
+    height: 715px;
+    background-color: #eee;    
+    border:2px solid purple;
+    border-radius: 1em;    
+    color: purple;
+    font-weight: bold;
+}
+
+#zonaMostrarDatos legend {
+    font-family : Arial, sans-serif;
+    font-size: 16pt;
+    font-weight:bold;
+    color:purple;
+}
+
+#zonaRelacionAsientos {    
+    margin: 0;
+    padding: 0;
+    height: 675px;
+    /*Barras de desplazamiento */    
+    overflow-x: hidden;
+    overflow-y: scroll;    
+}

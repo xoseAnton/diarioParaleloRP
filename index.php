@@ -1,5 +1,8 @@
 <?php
 
+// Establecemos por defecto la zona horaria
+date_default_timezone_set('Europe/Berlin');
+
 ?>
 
 <!DOCTYPE html>
