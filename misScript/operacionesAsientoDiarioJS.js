@@ -35,5 +35,41 @@ $(function() {
         mostrarBordeContenBusqueda(this);
     }, function() {
         ocultarBordeContenBusqueda(this);
-    });     
+    });
+    
+    /*
+     * Establecemos el evento "click" para el "checkbox" de las zonas de busqueda
+     */
+    $(".checkBusqueda").click(function (){
+        var contenedor = $(this).data("contenedor");
+       if($(this).is(':checked')){
+           if($(this).attr('type') == 'radio') {               
+              // Ponemos todos los elementos tipo "radio" como no seleccionados
+              $("#buscaEstadoActivo, #buscaEstadoCerrado, #buscaEstadoTodos").css("background-color", "#eee");
+              // Ponemos el elemento tipo "radio" como seleccionado
+              $(contenedor).css("background-color", "#93C572");              
+           }
+            else {
+                var elemento = JSON.parse('['+$(this).data("controla")+']');                
+                $(contenedor).css("background-color", "#93C572");
+                // Recorremos todos los elementos por si tenemos más de uno               
+                for (i in elemento) {
+                    $(elemento[i]).attr("disabled", false);
+                    $(elemento[i]).css("background-color", "white");
+                    $(elemento[i]).attr("required", true);
+                }
+            }
+       }
+       else {
+            var elemento = JSON.parse('['+$(this).data("controla")+']');
+            $(contenedor).css("background-color", "#eee");
+            // Recorremos todos los elementos por si tenemos más de uno               
+            for (i in elemento) {                
+                $(elemento[i]).attr("disabled", true);
+                $(elemento[i]).attr("required", false);
+                $(elemento[i]).css("background-color", "");
+            }
+       }
+    });
+    
 });

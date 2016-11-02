@@ -65,7 +65,7 @@ if (!isset($_SESSION['usuario'])) {
                         <!-- Buscar por Asiento -->
                         <div id="buscaAsiento" class="contenedorBusqueda">
                             <div>                                
-                                <input type="checkbox" id="buscaPorAsiento" name="buscaPorAsiento" onclick="estadoChecbox()" title="Buscar por Asiento"/>
+                                <input type="checkbox" id="buscaPorAsiento" class="checkBusqueda" name="buscaPorAsiento" data-contenedor="#buscaAsiento" data-controla='"#asiento"' title="Buscar por Asiento"/>
                                 <label>Asiento:</label>
                             </div>
                             <div>
@@ -76,7 +76,7 @@ if (!isset($_SESSION['usuario'])) {
                         <!-- Buscar por Fecha del asiento -->
                         <div id="buscaFecha" class="contenedorBusqueda">
                             <div>                                
-                                <input type="checkbox" id="buscaPorFecha" name="buscaPorFecha" onclick="estadoChecbox()" title="Buscar por Fecha"/>
+                                <input type="checkbox" id="buscaPorFecha" class="checkBusqueda" name="buscaPorFecha" data-contenedor="#buscaFecha" data-controla='"#fecha"' title="Buscar por Fecha"/>
                                 <label>Fecha asiento:</label>
                             </div>
                             <div>
@@ -87,7 +87,7 @@ if (!isset($_SESSION['usuario'])) {
                         <!-- Buscar por Texto -->
                         <div id="buscaTexto" class="contenedorBusqueda">
                             <div>
-                                <input type="checkbox" id="buscaPorTexto" name="buscaPorTexto" onclick="estadoChecbox()" title="Buscar por Texto Libre"/>
+                                <input type="checkbox" id="buscaPorTexto" class="checkBusqueda" name="buscaPorTexto" data-contenedor="#buscaTexto" data-controla='"#textoBusca"' title="Buscar por Texto Libre"/>
                                 <label>Texto:</label>      
                             </div>
                             <div>
@@ -98,7 +98,7 @@ if (!isset($_SESSION['usuario'])) {
                         <!-- Buscar por Usuario -->
                         <div id="buscaUsuario" class="contenedorBusqueda">
                             <div>
-                                <input type="checkbox" id="buscaPorUsuario" name="buscaPorUsuario"  onclick="estadoChecbox()" title="Buscar por Usuario"/>
+                                <input type="checkbox" id="buscaPorUsuario" class="checkBusqueda" name="buscaPorUsuario"  data-contenedor="#buscaUsuario" data-controla='"#usuario"' title="Buscar por Usuario"/>
                                 <label>Asignado:</label>
                             </div>
                             <div>
@@ -110,7 +110,7 @@ if (!isset($_SESSION['usuario'])) {
                         <!-- Buscar por Fecha de Modificacion del diario -->
                         <div id="buscaFechaModifica" class="contenedorBusqueda">
                             <div>                                
-                                <input type="checkbox" id="buscaPorFechaModifica" name="buscaPorFechaModifica"  onclick="estadoChecbox()" title="Buscar por Fecha de Modificación del diario"/>
+                                <input type="checkbox" id="buscaPorFechaModifica" class="checkBusqueda" name="buscaPorFechaModifica"  data-contenedor="#buscaFechaModifica" data-controla='"#fechaModifica", "#horaModifica"' title="Buscar por Fecha de Modificación del diario"/>
                                 <label>Fecha/Hora modificación:</label>
                             </div>
                             <div>
@@ -126,7 +126,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <label>Activos</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="buscaActivos" name="buscaEstado" value="1" checked onclick="estadoChecbox()" title="Buscar asientos Activos"/>
+                                    <input type="radio" id="buscaActivos" class="checkBusqueda" name="buscaEstado" value="1" checked data-contenedor="#buscaEstadoActivo" title="Buscar asientos Activos"/>
                                 </div>
                             </div>
                             <div id="buscaEstadoCerrado" class="contenedorBusqueda">
@@ -134,7 +134,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <label>Cerrados</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="buscaCerrados" name="buscaEstado" value="0" onclick="estadoChecbox()" title="Buscar asientos Cerrados"/>
+                                    <input type="radio" id="buscaCerrados" class="checkBusqueda" name="buscaEstado" value="0" data-contenedor="#buscaEstadoCerrado" title="Buscar asientos Cerrados"/>
                                 </div>
                             </div>
                             <div id="buscaEstadoTodos" class="contenedorBusqueda">
@@ -142,7 +142,7 @@ if (!isset($_SESSION['usuario'])) {
                                     <label>Todos</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="buscaTodos" name="buscaEstado" value="" onclick="estadoChecbox()" title="Buscar asientos Activos y Cerrados"/>
+                                    <input type="radio" id="buscaTodos" class="checkBusqueda" name="buscaEstado" value="" data-contenedor="#buscaEstadoTodos" title="Buscar asientos Activos y Cerrados"/>
                                 </div>
                             </div>
                             <div class="cancelarFlotantes"></div>
