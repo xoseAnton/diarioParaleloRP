@@ -1,4 +1,40 @@
 /*
+ * Función introduce los usuarios activos definidos en la base de datos
+ * en un "select". Si estamos identificados selecciona por defecto el usuario.
+ * @returns Lista de usuarios de la base de datos
+ */
+function listarUsuarios() {
+    // Enviamos la solicitud ajax a la página del servidor
+    $.getJSON("./miAjax/listarUsuarios.php", function (resultado) {
+        // Recorro todos los valores optenidos
+        $.each(resultado, function (i, usuario) {
+            if(usuario.porDefecto == true)
+                $("#usuario").append("<option value='" + usuario.nombre + "' selected='true'>" + usuario.nombre + "</option>");
+            else
+                $("#usuario").append("<option value='" + usuario.nombre + "'>" + usuario.nombre + "</option>");
+        });
+    });
+}
+
+
+/*
+ * Función introduce los diarios activos definidos en la base de datos
+ * en un "select". Selecciona por defecto el último diario.
+ * @returns Lista de los diarios activos de la base de datos.
+ */
+function listarDiarios() {
+    // Enviamos la solicitud ajax a la página del servidor
+    $.getJSON("./miAjax/listarDiarios.php", function (resultado) {
+        // Recorro todos los valores optenidos
+        $.each(resultado, function (i, miDiario) {
+            if(miDiario.cerrado == 1)
+                $("#diario").append("<option value='" + miDiario.diario + "'>" + miDiario.diario + "</option>");
+        });
+    });
+}
+
+
+/*
  * Cuando la página esté preparada
  * @returns {undefined}
  */
@@ -41,15 +77,18 @@ $(function() {
      * Establecemos el evento "click" para el "checkbox" de las zonas de busqueda
      */
     $(".checkBusqueda").click(function (){
-        var contenedor = $(this).data("contenedor");
+       // Recupero la información del contenedor 
+       var contenedor = $(this).data("contenedor");
+       // Compruebo si está seleccionado
        if($(this).is(':checked')){
-           if($(this).attr('type') == 'radio') {               
+           if($(this).attr('type') == 'radio') { // Para el caso de que el selector sea de tipo "radio"              
               // Ponemos todos los elementos tipo "radio" como no seleccionados
               $("#buscaEstadoActivo, #buscaEstadoCerrado, #buscaEstadoTodos").css("background-color", "#eee");
               // Ponemos el elemento tipo "radio" como seleccionado
               $(contenedor).css("background-color", "#93C572");              
            }
             else {
+                // Recupero los elementos que controla el check.
                 var elemento = JSON.parse('['+$(this).data("controla")+']');                
                 $(contenedor).css("background-color", "#93C572");
                 // Recorremos todos los elementos por si tenemos más de uno               
@@ -60,7 +99,8 @@ $(function() {
                 }
             }
        }
-       else {
+       else { // Si el elemento no está seleccionado los deshabilito
+            // Recupero los elementos que controla el check.
             var elemento = JSON.parse('['+$(this).data("controla")+']');
             $(contenedor).css("background-color", "#eee");
             // Recorremos todos los elementos por si tenemos más de uno               
@@ -72,4 +112,12 @@ $(function() {
        }
     });
     
+});
+
+// Cunado la página esta cargada
+$(document).ready(function (){
+    // Cargamos los usuarios
+    listarUsuarios();
+    // Cargamos los diarios
+    listarDiarios();
 });

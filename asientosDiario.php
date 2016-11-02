@@ -11,6 +11,15 @@ if (!isset($_SESSION['usuario'])) {
     header("Location: index.php");
 } 
 
+
+// Comprobamos si queremos desconectar la página
+if (isset($_POST['desconectar'])) {
+    // Borramos los datos de la sesión
+    session_unset();
+    // Redirigimos a la pantalla inicial
+    header("Location: index.php");
+}
+
 ?>
 
 
@@ -45,7 +54,7 @@ if (!isset($_SESSION['usuario'])) {
             
             <!-- Zona de CONTROL Y BUSQUEDAS -->
             <div id="zonaControl">
-                <form id="formularioBusqueda" name="formularioBusqueda" method="post">
+                <form id="formularioBusqueda" name="formularioBusqueda" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
                     <!-- Zona de BÚSQUEDA -->
                     <fieldset>
@@ -102,8 +111,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <label>Asignado:</label>
                             </div>
                             <div>
-                                <select id="usuario" name="usuario" disabled>                                    
-                                </select>
+                                <select id="usuario" name="usuario" disabled=""></select>
                             </div>
                         </div>
 
@@ -156,20 +164,20 @@ if (!isset($_SESSION['usuario'])) {
                     <div id="menuBotones">
                         <div id="menuBotones1">                                                         
                             <div id="botonListar" class="contenBotonMenu"> 
-                                <input type="submit" id="listar" class="botonMenu" name="listar" value="Listar" onclick="iniciarBarraDesplazamiento(), mostrarZonaTrabajando()" title="Listamos con las opciones seleccionadas los asientos del diario "/>
+                                <input type="button" id="listar" class="botonMenu" name="listar" value="Listar" title="Listamos con las opciones seleccionadas los asientos del diario "/>
                             </div>
                             <div id="botonMostrarAcciones" class="contenBotonMenu"> 
-                                <input type="button" id="mostrarAcciones" class="botonMenu" name="mostrarAcciones" value="Acciones" onclick="mostrarCampoIncidencias()" />
+                                <input type="button" id="mostrarAcciones" class="botonMenu" name="mostrarAcciones" value="Acciones" />
                             </div>
                             <div id="botonMostrarImprimir" class="contenBotonMenu"> 
-                                <input type="button" id="mostrarImprimir" class="botonMenu" name="mostrarImprimir" value="Imprimir" onclick="mostrarImprimirListado()"/>
+                                <input type="button" id="mostrarImprimir" class="botonMenu" name="mostrarImprimir" value="Imprimir" />
                             </div>
                             <?php
                             if (isset($_SESSION['usuario'])) {
                                 // Si el usuario tiene un rol adecuado enseñamos el botón administrar                                
                                 if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1) {
                                     echo "<div id='botonAdministrar' class='contenBotonMenu'>";
-                                    echo "<input type='submit' id='adminDiario' class='botonMenu' name='adminDiario' value='Administrar' onclick='mostrarZonaTrabajando()' />";
+                                    echo "<input type='submit' id='adminDiario' class='botonMenu' name='adminDiario' value='Administrar' />";
                                     echo "</div>";
                                 }
                             }

@@ -9,7 +9,7 @@ function listarUsuario() {
     $.getJSON("./miAjax/listarUsuarios.php", function (resultado){
         // Recorro todos los valores optenidos
         $.each(resultado, function (i, usuario){
-            $("#usuario").append("<option value='"+usuario.id+"'>"+usuario.nombre+"</option>")
+            $("#usuario").append("<option value='"+usuario.id+"'>"+usuario.nombre+"</option>");
         });
     });
     

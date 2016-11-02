@@ -150,5 +150,35 @@ class operacionesBD {
         }
         return $retorno;
     }
+    
+    
+    /*
+     * Función para LISTAR TODOS LOS DIARIOS
+     */
+    public static function listarTotalDiarios() {
+
+        // Comando para la consulta
+        $sql = "SELECT id, diario, asientos, fechaAsiento, fechaCreacion, usuarioCreacion, cerrado FROM diarios ORDER BY diario DESC";
+
+        // Ejecuto la consulta
+        $resultado = self::ejecutaConsulta($sql, "diariosparalelos");
+
+        // Variable que contendrá un array de objetos "Diarios"
+        $listaDiarios = array();
+        
+        // Compruebo el resultado
+        if (isset($resultado)) {
+            // Añadimos un elemento por cada diario obtenido
+            $row = $resultado->fetch();
+            while ($row != null) {
+                $listaDiarios[] = new Diario($row);
+                $row = $resultado->fetch();
+            }
+        }
+        // Retorno un array de objetos de la clase Diario
+        return $listaDiarios;
+    }
+    
+    
 
 } // Fin de la clase "operacionesBD"

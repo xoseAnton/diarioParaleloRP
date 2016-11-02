@@ -27,13 +27,14 @@ else {
     $listaUsuarios = unserialize($_SESSION['listaUsuarios']);
 }
 
+
 // Preparo los datos para entregar
 $resultado = array();
 
 
 // Comprobamos si existe un usuario identificado
 if (isset($_SESSION['usuario'])) {
-    $miId = $_SESSION['usuario]']['id'];
+    $miId = $_SESSION['usuario']['id'];
     foreach ($listaUsuarios as $miUsuario) {
         if ($miId == $miUsuario->getId())
             $resultado[] = ["id" => $miUsuario->getId(), "nombre" => $miUsuario->getNombre(), "porDefecto" => TRUE];
