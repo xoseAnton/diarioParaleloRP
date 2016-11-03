@@ -19,7 +19,6 @@ if (isset($_POST['desconectar'])) {
     // Redirigimos a la pantalla inicial
     header("Location: index.php");
 }
-
 ?>
 
 

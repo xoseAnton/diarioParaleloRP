@@ -1,3 +1,7 @@
+// Variable globales
+var opcionesConsulta;
+
+
 /*
  * Función introduce los usuarios activos definidos en la base de datos
  * en un "select". Si estamos identificados selecciona por defecto el usuario.
@@ -36,6 +40,8 @@ function listarDiarios() {
 function validarDatosListar(){
     // Variable de control
     var validado = true;
+    opcionesConsulta = new Array();
+    
     
     // Valido el diario
     var miDiario = $("#diario").val();      
@@ -44,19 +50,32 @@ function validarDatosListar(){
         // Mostramos el error            
         $("#diario").focus().after("<span class='campoError'>Diario incorrecto!</span>");       
     }
+    else { // Guardamos la consulta
+        opcionesConsulta["diario"] = [true, miDiario];
+    }
+    
     
     // Valido el asiento si esta seleccionado
     if(validado && $("#buscaPorAsiento").is(':checked')){
+        // Recupero el valor introducido
         var miAsiento = $("#asiento").val();         
          if (isNaN(miAsiento) || miAsiento < 1 || miAsiento == "") {
             validado = false;   // Cambiamos la variable de control            
             // Mostramos el error            
             $("#asiento").focus().after("<span class='campoError'>Asiento incorrecto!</span>");
         }
+        else {
+            opcionesConsulta["asiento"] = [true, miAsiento];
+        }
     }
+    else {
+        opcionesConsulta["asiento"] = [false, ""];
+    }
+    
     
     // Valido la fecha de asiento si esta seleccionado
     if(validado && $("#buscaPorFecha").is(':checked')){
+        // Recupero el valor introducido
         var miFecha = new Date($("#fecha").val());         
          // Compruebo que el formato introducido de la fecha es correcto
         if ((miFecha.getDate()<1 || miFecha.getDate()>31) || ((miFecha.getMonth()+1)<1 || (miFecha.getMonth()+1)>12) || miFecha.getFullYear()<2016 || $("#fecha").val()=="") {
@@ -64,14 +83,121 @@ function validarDatosListar(){
             // Mostramos el error            
             $("#fecha").focus().after("<span class='campoError'>Fecha no valida!</span>");
         }
+        else {
+            opcionesConsulta["fecha"] = [true, $("#fecha").val()];
+        }
     }
+    else {
+        opcionesConsulta["fecha"] = [false, ""];
+    }
+    
+    
+    // Valido que tengamos texto de búsqueda
+    if(validado && $("#buscaPorTexto").is(':checked')){
+        // Recupero el valor introducido
+        var miTexto = new String($("#textoBusca").val());
+        
+        /* Expresión regular para encontrar espacios en blanco: (uno o más) */
+        var cadena = /^\s+$/;
+        // Compruebo la expresión. Coincide = true
+        var compruebo = miTexto.match(cadena) ? true : false;
+        
+         // Compruebo si no está vacío
+        if (miTexto.length == 0 || miTexto == null || compruebo) {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $("#textoBusca").focus().after("<span class='campoError'>Introduce algún texto!</span>");
+        }
+        else {
+            opcionesConsulta["texto"] = [true, miTexto];
+        }
+    }
+    else {
+        opcionesConsulta["texto"] = [false, ""];
+    }
+    
+    
+    // Valido que tengamos texto, usuarios, en el campo "asignado"
+    if(validado && $("#buscaPorUsuario").is(':checked')){
+        // Recupero el valor introducido
+        var miUsuario = new String($("#usuario").val());
+        
+        /* Expresión regular para encontrar espacios en blanco: (uno o más) */
+        var cadena = /^\s+$/;
+        // Compruebo la expresión. Coincide = true
+        var compruebo = miUsuario.match(cadena) ? true : false;
+        
+         // Compruebo si no está vacío
+        if (miUsuario.length == 0 || miUsuario == null || compruebo) {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $("#usuario").focus().after("<span class='campoError'>No existe usuario!</span>");
+        }
+        else {
+            opcionesConsulta["usuario"] = [true, miUsuario];
+        }
+    }
+    else {
+        opcionesConsulta["usuario"] = [false, ""];
+    }
+    
+    
+    // Valido la fecha y hora de modificación introducida
+    if(validado && $("#buscaPorFechaModifica").is(':checked')){
+        // Recupero el valor introducido
+        var miFecha = new Date($("#fechaModifica").val());                 
+        
+         // Compruebo que el formato introducido de la fecha es correcto
+        if ((miFecha.getDate()<1 || miFecha.getDate()>31) || ((miFecha.getMonth()+1)<1 || (miFecha.getMonth()+1)>12) || miFecha.getFullYear()<2016 || $("#fechaModifica").val()=="") {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $("#fechaModifica").focus().after("<span class='campoError'>Fecha no valida!</span>");
+        }
+        else { // Compruebo la hora
+            // Recupero el valor introducido
+            var horaMinutos = $("#horaModifica").val();
+            if (horaMinutos == "") {
+                validado = false;   // Cambiamos la variable de control
+                // Mostramos el error            
+                $("#horaModifica").focus().after("<span class='campoError'>Hora no valida!</span>");
+            }
+            else { // Compruebo que la hora introducida esté en los intervalos                
+                var datosHora = horaMinutos.split(":");
+                // Convierto a entero los datos optenidos
+                var miHora = parseInt(datosHora[0]);
+                var miMinuto = parseInt(datosHora[1]);                
+                
+                if ((miHora < 0 || miHora > 23) || (miMinuto < 0 || miMinuto > 59)) {
+                    validado = false;   // Cambiamos la variable de control
+                    // Mostramos el error            
+                    $("#horaModifica").focus().after("<span class='campoError'>Fecha no valida!</span>");
+                }
+                else {
+                    opcionesConsulta["fechaModifica"] = [true, $("#fechaModifica").val()];
+                    opcionesConsulta["horaModifica"] = [true, horaMinutos];
+                }
+            }
+        }
+    }
+    else {
+        opcionesConsulta["fechaModifica"] = [false, ""];
+        opcionesConsulta["horaModifica"] = [false, ""];
+    }
+    
+    // Busca por asientos ACTIVOS/CERRADOS/TODOS
+    if($("#buscaCerrados").is(':checked')) // Asientos cerrados
+        opcionesConsulta["activos"] = [false, true, false];
+    else if($("#buscaTodos").is(':checked')) // Todos los asientos
+        opcionesConsulta["activos"] = [false, false, true];
+    else // Por defecto buscamos los asientos activos
+        opcionesConsulta["activos"] = [true, false, false];
     
     // Devolvemos el resultado
     if(validado){
         return validado;
     }
     else {
-        // Lo ocultamos pasados 3 segundos, y lo borramos
+        // Ocultamos los errores pasados 3 segundos.
         setTimeout("$('.campoError').hide('slow');", 3000);       
     }
 }
@@ -163,8 +289,9 @@ $(function() {
        $(".campoError").remove();
        // Validamos los datos introducidos
        if(validarDatosListar()) {
-           
-           
+            // Creamos el array con los datos
+            // var datos = JSON.parse(opcionesConsulta);
+            alert(JSON.stringify(opcionesConsulta));
        }
        
    });
