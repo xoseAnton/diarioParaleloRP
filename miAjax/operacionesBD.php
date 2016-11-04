@@ -180,5 +180,83 @@ class operacionesBD {
     }
     
     
+    /*
+     * Función para LISTAR LOS ASIENTOS
+     */
+    public static function listarAsientos($diario, $asiento, $fecha, $texto, $usuario, $fechaModifica, $horaModifica, $buscaCerrados, $buscaTodos, $buscaActivos) {
+        
+        /* Introduzco un filtro de saneamiento para los datos que vamos
+         * introducir en la base de datos (evitar ataques xss - cross-site Scripting).
+         * (Añade un caracter de escape delante de: ', ", \ y NUL)
+         */
+        $diarioFiltrado = filter_var($diario->valor, FILTER_SANITIZE_MAGIC_QUOTES);       
+        
+        
+        // Para el caso especial que seleccionemos el estado del diario a una fecha determinada
+        if ($fechaModifica->seleccionado && $horaModifica->seleccionado) {
+            $fecha = date_create($fechaModifica->valor . " " . $horaModifica->valor);
+            $fecha = date_format($fecha, "Y-m-d H:i");
+            $fechaFiltrada = filter_var($fecha, FILTER_SANITIZE_MAGIC_QUOTES);
+            
+            $sql = "SELECT listaAsientos.* FROM `" . $diarioFiltrado . "` listaAsientos INNER JOIN " .
+                   "(SELECT asiento, MAX(id) AS ultimaModific FROM `" . $diarioFiltrado . "` WHERE fechaModificado<='" . $fechaFiltrada . "' GROUP BY asiento)" .
+                   " listaResulta ON listaAsientos.asiento=listaResulta.asiento AND listaAsientos.id=listaResulta.ultimaModific AND ";
+            
+        } else {
+            // Para todos los demas casos construimos el comando para la consulta
+            $sql = "SELECT listaAsientos.* FROM `" . $diarioFiltrado . "` listaAsientos INNER JOIN " .
+                    "(SELECT asiento, MAX(id) AS ultimaModific FROM `" . $diarioFiltrado . "` GROUP BY asiento)" .
+                    " listaResulta ON listaAsientos.asiento=listaResulta.asiento AND listaAsientos.id=listaResulta.ultimaModific AND ";
+        }
+
+        if($asiento->seleccionado) {
+            $asientoFiltrado = filter_var($asiento->valor, FILTER_SANITIZE_MAGIC_QUOTES);
+            $sql = $sql ."listaAsientos.asiento='".$asientoFiltrado."' AND ";
+        }
+        if($fecha->seleccionado) {
+            $fechaFiltrada = filter_var($fecha->valor, FILTER_SANITIZE_MAGIC_QUOTES);
+            $sql = $sql ."listaAsientos.fecha='".$fechaFiltrada."' AND ";
+        }
+        if($texto->seleccionado) {
+            $textoFiltrado = filter_var($texto->valor, FILTER_SANITIZE_MAGIC_QUOTES);
+            $sql = $sql ."(listaAsientos.situacion LIKE '%".$textoFiltrado."%' OR listaAsientos.incidencia LIKE '%".$textoFiltrado."%' OR listaAsientos.otroTexto LIKE '%".$textoFiltrado."%') AND ";
+        }
+        if($usuario->seleccionado) {
+            $usuarioFiltrado = filter_var($usuario->valor, FILTER_SANITIZE_MAGIC_QUOTES);
+            $sql = $sql ."listaAsientos.asignado='".$usuarioFiltrado."' AND ";        
+        }
+        if($buscaCerrados->seleccionado)
+            $sql = $sql ."listaAsientos.cerrado='0' "; // Para buscar los asientos cerrados
+        elseif ($buscaTodos->seleccionado)
+            $sql = $sql ."listaAsientos.cerrado>='0' "; // Para buscar todos los asientos
+        else
+            $sql = $sql ."listaAsientos.cerrado='1' "; // Por defecto buscamos los asientos activos       
+        
+        // Cerramos el comando para la consulta
+        $sql = $sql . "ORDER BY asiento ASC"; 
+        
+        // Ejecuto la consulta
+        $resultado = self::ejecutaConsulta($sql, "diariosparalelos");        
+        
+        // Variable de sesion que contendrá un array de objetos "Asiento"
+        $listaAsientos = array();
+        
+        // Compruebo el resultado
+        if (isset($resultado)) {
+            // Añadimos un elemento por cada procedimiento
+            $row = $resultado->fetch();
+            while ($row != null) {
+                //Incluimos el diario en los datos obtenidos
+                $row['diario'] = $buscarPor['diario'][1];
+                $listaAsientos[] = new Asiento($row);
+                $row = $resultado->fetch();
+            }
+        }        
+        
+        // Devolvemos los valores obtenidos
+        return $listaAsientos;
+    }
+    
+    
 
 } // Fin de la clase "operacionesBD"

@@ -1,6 +1,12 @@
 // Variable globales
 var opcionesConsulta;
 
+// Objeto para las obciones de consulta
+function PreferenciaConsulta(consultaPor, seleccionado, valor) {
+    this.consultaPor = consultaPor;
+    this.seleccionado = seleccionado;
+    this.valor = valor;
+}
 
 /*
  * Función introduce los usuarios activos definidos en la base de datos
@@ -37,9 +43,14 @@ function listarDiarios() {
     });
 }
 
+/*
+ * Fución que valida los datos introducidos en la zona "Listar por:"
+ * @returns {Boolean}
+ */
 function validarDatosListar(){
     // Variable de control
     var validado = true;
+    // Array que contendrá los objetos de la consulta
     opcionesConsulta = new Array();
     
     
@@ -50,8 +61,8 @@ function validarDatosListar(){
         // Mostramos el error            
         $("#diario").focus().after("<span class='campoError'>Diario incorrecto!</span>");       
     }
-    else { // Guardamos la consulta
-        opcionesConsulta["diario"] = [true, miDiario];
+    else { //Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["diario"] = new PreferenciaConsulta("diario", true, miDiario);
     }
     
     
@@ -64,12 +75,12 @@ function validarDatosListar(){
             // Mostramos el error            
             $("#asiento").focus().after("<span class='campoError'>Asiento incorrecto!</span>");
         }
-        else {
-            opcionesConsulta["asiento"] = [true, miAsiento];
+        else {//Guardamos la opción como un nuevo objeto en el final del array
+            opcionesConsulta["asiento"]=new PreferenciaConsulta("asiento", true, miAsiento);
         }
     }
-    else {
-        opcionesConsulta["asiento"] = [false, ""];
+    else {//Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["asiento"]=new PreferenciaConsulta("asiento", false, "");  
     }
     
     
@@ -83,12 +94,12 @@ function validarDatosListar(){
             // Mostramos el error            
             $("#fecha").focus().after("<span class='campoError'>Fecha no valida!</span>");
         }
-        else {
-            opcionesConsulta["fecha"] = [true, $("#fecha").val()];
+        else {//Guardamos la opción como un nuevo objeto en el final del array
+            opcionesConsulta["fecha"]= new PreferenciaConsulta("fecha", true, $("#fecha").val()); 
         }
     }
-    else {
-        opcionesConsulta["fecha"] = [false, ""];
+    else {//Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["fecha"]=new PreferenciaConsulta("fecha", false, "");
     }
     
     
@@ -108,12 +119,12 @@ function validarDatosListar(){
             // Mostramos el error            
             $("#textoBusca").focus().after("<span class='campoError'>Introduce algún texto!</span>");
         }
-        else {
-            opcionesConsulta["texto"] = [true, miTexto];
+        else {//Guardamos la opción como un nuevo objeto en el final del array
+            opcionesConsulta["texto"]=new PreferenciaConsulta("texto", true, miTexto);
         }
     }
-    else {
-        opcionesConsulta["texto"] = [false, ""];
+    else {//Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["texto"]= new PreferenciaConsulta("texto", false, "");
     }
     
     
@@ -133,12 +144,12 @@ function validarDatosListar(){
             // Mostramos el error            
             $("#usuario").focus().after("<span class='campoError'>No existe usuario!</span>");
         }
-        else {
-            opcionesConsulta["usuario"] = [true, miUsuario];
+        else {//Guardamos la opción como un nuevo objeto en el final del array
+            opcionesConsulta["usuario"]=new PreferenciaConsulta("usuario", true, miUsuario);
         }
     }
-    else {
-        opcionesConsulta["usuario"] = [false, ""];
+    else {//Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["usuario"]=new PreferenciaConsulta("usuario", false, "");
     }
     
     
@@ -172,25 +183,26 @@ function validarDatosListar(){
                     // Mostramos el error            
                     $("#horaModifica").focus().after("<span class='campoError'>Fecha no valida!</span>");
                 }
-                else {
-                    opcionesConsulta["fechaModifica"] = [true, $("#fechaModifica").val()];
-                    opcionesConsulta["horaModifica"] = [true, horaMinutos];
+                else {//Guardamos la opción como un nuevo objeto en el final del array
+                    opcionesConsulta["fechaModifica"]=new PreferenciaConsulta("fechaModifica", true, $("#fechaModifica").val());
+                    opcionesConsulta["horaModifica"]=new PreferenciaConsulta("horaModifica", true, horaMinutos);
                 }
             }
         }
     }
     else {
-        opcionesConsulta["fechaModifica"] = [false, ""];
-        opcionesConsulta["horaModifica"] = [false, ""];
+        //Guardamos la opción como un nuevo objeto en el final del array
+        opcionesConsulta["fechaModifica"]=new PreferenciaConsulta("fechaModifica", false, "");
+        opcionesConsulta["horaModifica"]=new PreferenciaConsulta("horaModifica", false, "");
     }
     
     // Busca por asientos ACTIVOS/CERRADOS/TODOS
     if($("#buscaCerrados").is(':checked')) // Asientos cerrados
-        opcionesConsulta["activos"] = [false, true, false];
+        opcionesConsulta["buscaCerrados"]=new PreferenciaConsulta("buscaCerrados", true, "");
     else if($("#buscaTodos").is(':checked')) // Todos los asientos
-        opcionesConsulta["activos"] = [false, false, true];
+        opcionesConsulta["buscaTodos"]=new PreferenciaConsulta("buscaTodos", true, "");
     else // Por defecto buscamos los asientos activos
-        opcionesConsulta["activos"] = [true, false, false];
+        opcionesConsulta["buscaActivos"]=new PreferenciaConsulta("buscaActivos", true, "");
     
     // Devolvemos el resultado
     if(validado){
@@ -202,6 +214,29 @@ function validarDatosListar(){
     }
 }
 
+
+function listarAsientos(diarioJson, asientoJson, fechaJson, textoJson, usuarioJson, fechaModificaJson, horaModificaJson, buscaCerradosJson, buscaTodosJson, buscaActivosJson){
+    alert(diarioJson);
+    // Realizamos la petición al servidor
+    $.post("./miAjax/listarAsientos.php", {
+        diario: diarioJson,
+        asiento: asientoJson,
+        fecha: fechaJson,
+        texto: textoJson,
+        usuario: usuarioJson,
+        fechaModifica: fechaModificaJson,
+        horaModifica: horaModificaJson,
+        buscaCerrados: buscaCerradosJson,
+        buscaTodos: buscaTodosJson,
+        buscaActivos: buscaActivosJson
+    }, function(listadoAsientos){
+        
+        // FALTA CODIGO **************************************************
+        
+    }).error(function(){
+        alert("Error al ejecutar la petición de listado!");
+    });
+}
 
 /*
  * Cuando la página esté preparada
@@ -289,10 +324,21 @@ $(function() {
        $(".campoError").remove();
        // Validamos los datos introducidos
        if(validarDatosListar()) {
-            // Creamos el array con los datos
-            // var datos = JSON.parse(opcionesConsulta);
-            alert(JSON.stringify(opcionesConsulta));
-       }
+            // Convertimos los datos a una cadena JSON.
+            var diarioJson = JSON.stringify(opcionesConsulta["diario"]);
+            var asientoJson = JSON.stringify(opcionesConsulta["asiento"]);
+            var fechaJson = JSON.stringify(opcionesConsulta["fecha"]);
+            var textoJson = JSON.stringify(opcionesConsulta["texto"]);
+            var usuarioJson = JSON.stringify(opcionesConsulta["usuario"]);
+            var fechaModificaJson = JSON.stringify(opcionesConsulta["fechaModifica"]);
+            var horaModificaJson = JSON.stringify(opcionesConsulta["horaModifica"]);
+            var buscaCerradosJson = JSON.stringify(opcionesConsulta["buscaCerrados"]);
+            var buscaTodosJson = JSON.stringify(opcionesConsulta["buscaTodos"]);
+            var buscaActivosJson = JSON.stringify(opcionesConsulta["buscaActivos"]);
+            
+            // Realizamos la consulta
+            listarAsientos( diarioJson, asientoJson, fechaJson, textoJson, usuarioJson, fechaModificaJson, horaModificaJson, buscaCerradosJson, buscaTodosJson, buscaActivosJson);
+        }
        
    });
     
