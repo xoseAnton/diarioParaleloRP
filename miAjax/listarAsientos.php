@@ -21,24 +21,23 @@ $listaAsientos = array();
 // Comprobamos que el usuario está identificado
 if (isset($_SESSION['usuario'])) {
     
-    $diario = json_decode($_POST['diario']);
-    $asiento = json_decode($_POST['asiento']);
-    $fecha = json_decode($_POST['fecha']);
-    $texto = json_decode($_POST['texto']);
-    $usuario = json_decode($_POST['usuario']);
-    $fechaModifica = json_decode($_POST['fechaModifica']);
-    $horaModifica = json_decode($_POST['horaModifica']);
-    $buscaCerrados = json_decode($_POST['buscaCerrados']);
-    $buscaTodos = json_decode($_POST['buscaTodos']);
-    $buscaActivos = json_decode($_POST['buscaActivos']);
+    // Recupero los datos de la consulta realizada
+    $opcionesConsulta = $_POST['opciones'];    
+        
+    // Consultamos en la base de datos
+    $listaAsientos = operacionesBD::listarAsientos($opcionesConsulta['diario'][0]['valor']);
     
-    echo var_dump($diario['valor']);
-
-    // $listaAsientos = operacionesBD::listarAsientos($diario, $asiento, $fecha, $texto, $usuario, $fechaModifica, $horaModifica, $buscaCerrados, $buscaTodos, $buscaActivos);
-
+    // Preparo los datos para entregar
+    $resultado = array();
+    
+    foreach ($listaAsientos as $miAsiento) {
+        $resultado[] = ["asiento" => $miAsiento->getAsiento(), "fecha" => $miAsiento->getFecha(), "cerrado" => $miAsiento->getSituacion()];
+    }
+    
 
     // Retorno un "string" con los datos optenidos
-    // echo json_encode($listaAsientos);
+    //echo json_encode($listaAsientos);
+    echo json_encode($resultado);
 }
 
 ?>

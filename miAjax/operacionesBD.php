@@ -183,14 +183,18 @@ class operacionesBD {
     /*
      * Función para LISTAR LOS ASIENTOS
      */
-    public static function listarAsientos($diario, $asiento, $fecha, $texto, $usuario, $fechaModifica, $horaModifica, $buscaCerrados, $buscaTodos, $buscaActivos) {
-        
+    // public static function listarAsientos($diario, $asiento, $fecha, $texto, $usuario, $fechaModifica, $horaModifica, $buscaCerrados, $buscaTodos, $buscaActivos) {
+    public static function listarAsientos($opcionesConsulta) {    
         /* Introduzco un filtro de saneamiento para los datos que vamos
          * introducir en la base de datos (evitar ataques xss - cross-site Scripting).
          * (Añade un caracter de escape delante de: ', ", \ y NUL)
          */
-        $diarioFiltrado = filter_var($diario->valor, FILTER_SANITIZE_MAGIC_QUOTES);       
+        $miDiario = $opcionesConsulta;
+        $diarioFiltrado = filter_var($miDiario, FILTER_SANITIZE_MAGIC_QUOTES);     
         
+        $sql = "SELECT * FROM `".$miDiario."` ORDER BY asiento ASC";
+        
+        /*
         
         // Para el caso especial que seleccionemos el estado del diario a una fecha determinada
         if ($fechaModifica->seleccionado && $horaModifica->seleccionado) {
@@ -235,6 +239,11 @@ class operacionesBD {
         // Cerramos el comando para la consulta
         $sql = $sql . "ORDER BY asiento ASC"; 
         
+         * 
+         * 
+         */
+        
+        
         // Ejecuto la consulta
         $resultado = self::ejecutaConsulta($sql, "diariosparalelos");        
         
@@ -242,12 +251,12 @@ class operacionesBD {
         $listaAsientos = array();
         
         // Compruebo el resultado
-        if (isset($resultado)) {
+        if (!empty($resultado)) {
             // Añadimos un elemento por cada procedimiento
             $row = $resultado->fetch();
             while ($row != null) {
                 //Incluimos el diario en los datos obtenidos
-                $row['diario'] = $buscarPor['diario'][1];
+                $row['diario'] = $miDiario;
                 $listaAsientos[] = new Asiento($row);
                 $row = $resultado->fetch();
             }
