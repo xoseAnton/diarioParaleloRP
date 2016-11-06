@@ -57,7 +57,7 @@ function validarDatosListar(){
         $("#diario").focus().after("<span class='campoError'>Diario incorrecto!</span>");       
     }
     else { //Guardamos la opción
-        opcionesConsulta.diario.push({seleccion: true, valor: miDiario});
+        opcionesConsulta.diario.push({seleccionado: "si", valor: miDiario});
     }
     
     
@@ -71,11 +71,11 @@ function validarDatosListar(){
             $("#asiento").focus().after("<span class='campoError'>Asiento incorrecto!</span>");
         }
         else {//Guardamos la opción            
-            opcionesConsulta.asiento.push({seleccion: true, valor: miAsiento});
+            opcionesConsulta.asiento.push({seleccionado: "si", valor: miAsiento});
         }
     }
     else {//Guardamos la opción        
-        opcionesConsulta.asiento.push({seleccion: false, valor: ""});
+        opcionesConsulta.asiento.push({seleccionado: "no", valor: ""});
     }
     
     
@@ -90,11 +90,11 @@ function validarDatosListar(){
             $("#fecha").focus().after("<span class='campoError'>Fecha no valida!</span>");
         }
         else {//Guardamos la opción
-            opcionesConsulta.fecha.push({seleccion: true, valor: $("#fecha").val()}); 
+            opcionesConsulta.fecha.push({seleccionado: "si", valor: $("#fecha").val()}); 
         }
     }
     else {//Guardamos la opción
-        opcionesConsulta.fecha.push({seleccion: false, valor: ""});         
+        opcionesConsulta.fecha.push({seleccionado: "no", valor: ""});         
     }
     
     
@@ -115,11 +115,11 @@ function validarDatosListar(){
             $("#textoBusca").focus().after("<span class='campoError'>Introduce algún texto!</span>");
         }
         else {//Guardamos la opción            
-            opcionesConsulta.texto.push({seleccion: true, valor: miTexto});
+            opcionesConsulta.texto.push({seleccionado: "si", valor: miTexto});
         }
     }
     else {//Guardamos la opción
-        opcionesConsulta.texto.push({seleccion: false, valor: ""});        
+        opcionesConsulta.texto.push({seleccionado: "no", valor: ""});        
     }
     
     
@@ -140,11 +140,11 @@ function validarDatosListar(){
             $("#usuario").focus().after("<span class='campoError'>No existe usuario!</span>");
         }
         else {//Guardamos la opción
-            opcionesConsulta.usuario.push({seleccion: true, valor: miUsuario});            
+            opcionesConsulta.usuario.push({seleccionado: "si", valor: miUsuario});            
         }
     }
     else {//Guardamos la opción
-        opcionesConsulta.usuario.push({seleccion: false, valor: ""});
+        opcionesConsulta.usuario.push({seleccionado: "no", valor: ""});
     }
     
     
@@ -179,25 +179,32 @@ function validarDatosListar(){
                     $("#horaModifica").focus().after("<span class='campoError'>Fecha no valida!</span>");
                 }
                 else {//Guardamos la opción
-                    opcionesConsulta.fechaModifica.push({seleccion: true, valor: $("#fechaModifica").val()}); 
-                    opcionesConsulta.horaModifica.push({seleccion: true, valor: horaMinutos});                                         
+                    opcionesConsulta.fechaModifica.push({seleccionado: "si", valor: $("#fechaModifica").val()}); 
+                    opcionesConsulta.horaModifica.push({seleccionado: "si", valor: horaMinutos});                                         
                 }
             }
         }
     }
     else {
         //Guardamos la opción
-        opcionesConsulta.fechaModifica.push({seleccion: false, valor: ""}); 
-        opcionesConsulta.horaModifica.push({seleccion: false, valor: ""});
+        opcionesConsulta.fechaModifica.push({seleccionado: "no", valor: ""}); 
+        opcionesConsulta.horaModifica.push({seleccionado: "no", valor: ""});
     }
     
     // Busca por asientos ACTIVOS/CERRADOS/TODOS
-    if($("#buscaCerrados").is(':checked')) // Asientos cerrados
-        opcionesConsulta.buscaCerrados.push({seleccion: true, valor: ""});         
-    else if($("#buscaTodos").is(':checked')) // Todos los asientos
-        opcionesConsulta.buscaTodos.push({seleccion: true, valor: ""});
-    else // Por defecto buscamos los asientos activos
-        opcionesConsulta.buscaActivos.push({seleccion: true, valor: ""});
+    if ($("#buscaCerrados").is(':checked')) { // Asientos cerrados
+        opcionesConsulta.buscaCerrados.push({seleccionado: "si", valor: ""});
+        opcionesConsulta.buscaTodos.push({seleccionado: "no", valor: ""});
+        opcionesConsulta.buscaActivos.push({seleccionado: "no", valor: ""});
+    } else if ($("#buscaTodos").is(':checked')) { // Todos los asientos
+        opcionesConsulta.buscaTodos.push({seleccionado: "si", valor: ""});
+        opcionesConsulta.buscaCerrados.push({seleccionado: "no", valor: ""});
+        opcionesConsulta.buscaActivos.push({seleccionado: "no", valor: ""});
+    } else { // Por defecto buscamos los asientos activos
+        opcionesConsulta.buscaActivos.push({seleccionado: "si", valor: ""});
+        opcionesConsulta.buscaCerrados.push({seleccionado: "no", valor: ""});
+        opcionesConsulta.buscaTodos.push({seleccionado: "no", valor: ""});
+    }
     
     // Devolvemos el resultado
     if(validado){
@@ -233,23 +240,7 @@ function listarAsientos(consulta){
         alert("FALLO LA RESPUESTA");
     }).always(function (){
         // FALTA CODIGO
-    });   
-   
-   /*
-    // Realizamos la petición al servidor
-    $.post("./miAjax/listarAsientos.php", pruebaConsulta, function(resultado){
-        
-        // FALTA CODIGO **************************************************
-        
-        var asientos = JSON.parse(resultado);
-        // FALTA CODIGO **************************************************
-        for(var i in asientos)
-            $("#zonaRelacionAsientos").append("<h4>"+asientos[i].asiento+" mi fecha: "+asientos[i].fecha+"</h4>");
-        
-    }).fail(function(){
-        alert("Error al ejecutar la petición de listado!");
-    });
-    */
+    });      
 }
 
 /*
@@ -338,7 +329,7 @@ $(function() {
        $(".campoError").remove();
        // Validamos los datos introducidos
        if(validarDatosListar()) {          
-            // Realizamos la consulta                        
+            // Realizamos la consulta                   
             listarAsientos(opcionesConsulta);
         }
        
