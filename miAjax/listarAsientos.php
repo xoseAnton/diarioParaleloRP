@@ -18,7 +18,7 @@ $listaAsientos = array();
 
 
 
-// Comprobamos que el usuario está identificado
+//Comprobamos que el usuario está identificado para consultar los datos
 if (isset($_SESSION['usuario'])) {
     
     // Recupero los datos de la consulta realizada
@@ -27,17 +27,8 @@ if (isset($_SESSION['usuario'])) {
     // Consultamos en la base de datos
     $listaAsientos = operacionesBD::listarAsientos($opcionesConsulta);
     
-    // Preparo los datos para entregar
-    $resultado = array();
-    
-    foreach ($listaAsientos as $miAsiento) {
-        $resultado[] = ["asiento" => $miAsiento->getAsiento(), "fecha" => $miAsiento->getFecha(), "cerrado" => $miAsiento->getSituacion()];
-    }
-    
-
     // Retorno un "string" con los datos optenidos
-    //echo json_encode($listaAsientos);
-    echo json_encode($resultado);
+    echo json_encode($listaAsientos);    
 }
 
 ?>

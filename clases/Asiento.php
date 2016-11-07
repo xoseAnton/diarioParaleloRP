@@ -2,9 +2,13 @@
 
 /*
  * Clase Asiento.
+ * 
+ * Como la clase Asiento tiene variables protected, implemento la función
+ * jsonSerializable para mostrar esas variables cuando codifico con "json_encode"
+ * 
  */
 
-class Asiento {
+class Asiento implements JsonSerializable {
     
     // Variables de clase
     protected $id;
@@ -121,6 +125,26 @@ class Asiento {
 
     function setCerrado($cerrado) {
         $this->cerrado = $cerrado;
+    }
+    
+    /* 
+     * Función para implementar la serialización del objeto y mostrar
+     * aquellos atributos que tenga definidos como "protected" o "private".
+     */
+    public function jsonSerialize() {
+        return [
+        'id' => $this->getId(),
+        'asiento' => $this->getAsiento(),
+        'diario' => $this->getDiario(),
+        'fecha' => $this->getFecha(),
+        'situacion' => $this->getSituacion(),
+        'incidencia' => $this->getIncidencia(),
+        'otroTexto' => $this->getOtroTexto(),
+        'asignado' => $this->getAsignado(),
+        'fechaModificado' => $this->getFechaModificado(),
+        'usuarioModifica' => $this->getUsuarioModifica(),
+        'cerrado' => $this->getCerrado()        
+        ];
     }
   
 }

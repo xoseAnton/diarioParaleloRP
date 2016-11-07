@@ -227,15 +227,12 @@ function listarAsientos(consulta){
         url: "./miAjax/listarAsientos.php",
         type: 'POST',
         dataType: 'json',
-        data: {opciones: consulta},
-        success: function (resultado) {
-            $.each(resultado, function (i, asientos) {
-                $("#zonaRelacionAsientos").append("<h4>" + asientos.asiento + " mi fecha: " + asientos.fecha + "</h4>");
-            });                  
-        }
-    }).done(function (){
-        alert("Correcta la petición");
-        
+        data: {opciones: consulta}
+    }).done(function (asientos){                
+        // Para el caso en que se consiga respuesta de la página php, recorremos todo el array
+        for(var i in asientos) {
+                $("#zonaRelacionAsientos").append("<h4>" + asientos[i].asiento + " mi fecha: " + asientos[i].fecha + "</h4>");
+            };          
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
     }).always(function (){
