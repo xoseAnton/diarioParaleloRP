@@ -1,5 +1,6 @@
 // Variable globales
 var opcionesConsulta;
+var asientos;
 
 /*
  * Función introduce los usuarios activos definidos en la base de datos
@@ -229,10 +230,100 @@ function listarAsientos(consulta){
         dataType: 'json',
         data: {opciones: consulta}
     }).done(function (asientos){                
-        // Para el caso en que se consiga respuesta de la página php, recorremos todo el array
-        for(var i in asientos) {
-                $("#zonaRelacionAsientos").append("<h4>" + asientos[i].asiento + " mi fecha: " + asientos[i].fecha + "</h4>");
-            };          
+        // Calculo el número de elementos recibido
+        var numeroAsientos = Object.keys(asientos).length;
+
+        if (numeroAsientos == 0) {
+            $("#zonaRelacionAsientos").append(
+                // Zona para mostrar que no existen datos -->
+                "<div id='zonaNoDatos'>"+
+                    "<div id='textoNoDatos'>¡NO EXISTEN DATOS PARA ESTA CONSULTA!</div>"+
+                "</div>"                
+                );
+
+        } else {
+
+            /*
+             * Para el caso en que se consiga respuesta de la página php, recorremos todo el array
+             * y mostramos la información de cada asiento
+             * @type listarAsientos.operacionesAsientoDiarioJS_L231.asientos
+             */
+            for (var i in asientos) {
+                // Recuperamos los datos
+                var fechaAsiento = new Date(asientos[i].fecha);
+                var formatoFechaAsiento = fechaAsiento.getDate() + " / " + (fechaAsiento.getMonth() + 1) + " / " + fechaAsiento.getFullYear();
+                var condicionCerrado = ""
+                // Comprobamos si está cerrado el asiento
+                if (asientos[i].cerrado == 1)
+                    condicionCerrado = "checked />";
+                else
+                    condicionCerrado = "/>"; 
+            
+                // Incluimos un nuevo asiento en su contenedor
+                $("#zonaRelacionAsientos").append(                        
+
+                        //MOSTRAMOS UN ASIENTO
+                    "<div class='asiento'>"+
+                        "<form id='formularioID"+ i +"' name='formularioID'>"+
+                            "<div class='contenAsiento'>"+
+                                "<label class='mostraAsiento' data-asiento='"+asientos[i].asiento+"' data-diario='"+asientos[i].diario+"' title='Número de asiento'>"+ asientos[i].asiento+"</label>"+
+                            "</div>"+
+                            "<div class='contenBotons'>"+
+                                "<div class='contenBotonsArriba'>"+
+                                    "<input type='submit' class='botonAbrir' name='botonAbrir' value='' title='Apertura de los datos del asiento para poder modificar' />"+                                    
+                                "</div>"+
+                                "<div class='contenBotonsBaixo'>"+
+                                    "<input type='submit' class='botonDetalle' name='botonDetalle' value='' title='Informacion detallada del asiento' />"+
+                                "</div>"+
+                            "</div>"+
+
+                            "<div class='contenDatos'>"+
+                                "<div class='contenDatosSuperior'>"+
+                                    "<div class='contenFecha'>"+                                        
+                                        "<label class='mostrarTitulo'>Fecha:</label><label class='mostrarFecha' data-fechaAsiento='"+asientos[i].fecha+"' title='Fecha presentación del asiento'>"+formatoFechaAsiento+"</label>"+                                        
+                                    "</div>"+
+                                    "<div class='contenSituacion'>"+
+                                        "<label class='mostrarTitulo'>Situación:</label>"+
+                                        "<input type='text' class='textoSituacion' name='textoSituacion' value='"+asientos[i].situacion+"' readonly title='Texto sobre la situación del asiento'/>"+
+                                    "</div>"+
+                                    "<div class='cancelarFlotantes'></div>"+
+                                "</div>"+
+                                "<div class='contenDatosInferior'>"+
+
+                                    "<div class='contenAsignado'>"+                                        
+                                        "<label class='mostrarTitulo'>Asignado:</label>"+
+                                        "<input type='text' class='asignado' name='asignado' value='"+asientos[i].asignado+"' readonly title='Persona que despacha el asiento'/>"+                                        
+                                        "<div class='contenBotonAsignado'>"+
+                                            "<input type='button' class='botonAsignado' name='escogeAsignado' value='' disabled title='Cambia la persona que despacha el asiento' />"+
+                                        "</div>"+
+                                    "</div>"+
+
+                                    "<div class='contenIncidencia'>"+
+                                        "<label class='mostrarTitulo'>Incidencia:</label>"+
+                                        "<input type='text' class='textoIncidencia' name='textoIncidencia' readonly value='"+asientos[i].incidencia+"' title='Texto sobre las incidencias del asiento' />"+
+                                    "</div>"+
+
+                                    "<div class='contenOtros'>"+
+                                        "<label class='mostrarTitulo'>Otros:</label>"+
+                                        "<input type='text' class='textoOtros' name='textoOtros' readonly value='"+asientos[i].otroTexto+"' title='Texto para otras incidencias'/>"+
+                                    "</div>"+
+
+                                    "<div class='contenActivos'>"+
+                                        "<label class='mostrarTitulo'>Activo:</label>"+
+                                        "<input type='checkbox' class='checkActivo' name='checkActivo' disabled title='Asiento abierto o cerrado' "+ condicionCerrado +
+                                    "</div>"+
+
+                                    "<div class='cancelarFlotantes'></div>"+
+                                "</div>"+
+                            "</div>"+
+                            "<div class='cancelarFlotantes'></div>"+
+                        "</form>"+
+                    "</div>"                            
+                );
+           };     
+       }
+           
+           
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
     }).always(function (){
@@ -252,32 +343,36 @@ $(function() {
      /* 
       * Establecemos los eventos para los botones      
       */
-    $(".botonMenu").on('focus', function () {
+    $(".botonMenu").on('focus mouseenter', function () {
         mostrarBorde(this);
     });
-    $(".botonMenu").on('focusout', function () {
+    $(".botonMenu").on('focusout mouseleave', function () {
         ocultarBorde(this);
     });
-    $(".botonMenu").hover( function () {
-        mostrarBorde(this);
-    }, function () {
-        ocultarBorde(this);
+    
+    
+    /* 
+      * Establecemos los eventos para los botones:
+      * Modificar asientos e informe asientos
+      */
+    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAbrir, .botonDetalle", function () {
+        $(this).css("padding", "15px");
     });
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAbrir, .botonDetalle", function () {
+        $(this).css("padding", "");
+    });
+    
     
     /* 
       * Establecemos los eventos de los campos de selección de busqueda
       */    
-     $(".contenedorBusqueda").on('focus', '*', function() {
+     $(".contenedorBusqueda").on('focus mouseenter', '*', function() {
         mostrarBordeContenBusqueda(this);
     });
-    $(".contenedorBusqueda").on('focusout', '*', function() {
+    $(".contenedorBusqueda").on('focusout mouseleave', '*', function() {
         ocultarBordeContenBusqueda(this);
     });
-    $(".contenedorBusqueda").hover( function() {
-        mostrarBordeContenBusqueda(this);
-    }, function() {
-        ocultarBordeContenBusqueda(this);
-    });
+    
     
     /*
      * Establecemos el evento "click" para el "checkbox" de las zonas de busqueda
@@ -324,6 +419,13 @@ $(function() {
        evento.preventDefault();
        // Borramos las posibles notificaciones de errores existentes
        $(".campoError").remove();
+       
+       // Borramos los posibles datos de otras consultas
+       $(".asiento").remove();
+       
+       // Borramos el posible mensaje de NO DATOS de consultas anteriores
+       $("#zonaNoDatos").remove();
+       
        // Validamos los datos introducidos
        if(validarDatosListar()) {          
             // Realizamos la consulta                   
