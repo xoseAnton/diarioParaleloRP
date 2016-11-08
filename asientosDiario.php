@@ -175,7 +175,7 @@ if (isset($_POST['desconectar'])) {
                                 // Si el usuario tiene un rol adecuado enseñamos el botón administrar                                
                                 if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1) {
                                     echo "<div id='botonAdministrar' class='contenBotonMenu'>";
-                                    echo "<input type='submit' id='adminDiario' class='botonMenu' name='adminDiario' value='Administrar' />";
+                                    echo "<input type='button' id='adminDiario' class='botonMenu' name='adminDiario' value='Administrar' />";
                                     echo "</div>";
                                 }
                             }

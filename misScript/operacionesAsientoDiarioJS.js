@@ -263,17 +263,17 @@ function listarAsientos(consulta){
                 $("#zonaRelacionAsientos").append(                        
 
                         //MOSTRAMOS UN ASIENTO
-                    "<div class='asiento'>"+
-                        "<form id='formularioID"+ i +"' name='formularioID'>"+
+                    "<div class='asiento' id='asientoID"+i+"'>"+
+                        "<form id='formularioID' name='formularioID'>"+
                             "<div class='contenAsiento'>"+
                                 "<label class='mostraAsiento' data-asiento='"+asientos[i].asiento+"' data-diario='"+asientos[i].diario+"' title='Número de asiento'>"+ asientos[i].asiento+"</label>"+
                             "</div>"+
                             "<div class='contenBotons'>"+
                                 "<div class='contenBotonsArriba'>"+
-                                    "<input type='submit' class='botonAbrir' name='botonAbrir' value='' title='Apertura de los datos del asiento para poder modificar' />"+                                    
+                                    "<input type='button' class='botonAbrir' name='botonAbrir' value='' data-id='"+i+"' title='Apertura de los datos del asiento para poder modificar' />"+                                    
                                 "</div>"+
                                 "<div class='contenBotonsBaixo'>"+
-                                    "<input type='submit' class='botonDetalle' name='botonDetalle' value='' title='Informacion detallada del asiento' />"+
+                                    "<input type='button' class='botonDetalle' name='botonDetalle' value='' title='Informacion detallada del asiento' />"+
                                 "</div>"+
                             "</div>"+
 
@@ -293,9 +293,7 @@ function listarAsientos(consulta){
                                     "<div class='contenAsignado'>"+                                        
                                         "<label class='mostrarTitulo'>Asignado:</label>"+
                                         "<input type='text' class='asignado' name='asignado' value='"+asientos[i].asignado+"' readonly title='Persona que despacha el asiento'/>"+                                        
-                                        "<div class='contenBotonAsignado'>"+
-                                            "<input type='button' class='botonAsignado' name='escogeAsignado' value='' disabled title='Cambia la persona que despacha el asiento' />"+
-                                        "</div>"+
+                                        "<div class='contenBotonAsignado'></div>"+
                                     "</div>"+
 
                                     "<div class='contenIncidencia'>"+
@@ -331,6 +329,19 @@ function listarAsientos(consulta){
     });      
 }
 
+
+function desactivarCampos() {
+    // Desactivamos los eventos de selección del formulario de busqueda
+    $(".contenedorBusqueda").off("focus mouseenter focusout mouseleave", "*");
+    // Desabilitamos todos los campos del formulario de búsqueda:
+    $("#formularioBusqueda *").attr("disabled", true);
+    // Desabilitamos todos los campos de los demas asientos
+    $("#zonaRelacionAsientos *").attr("disabled", true);
+    // Cambiamos el color de fondo
+    $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "#eee");
+}
+
+
 /*
  * Cuando la página esté preparada
  * @returns {undefined}
@@ -362,6 +373,41 @@ $(function() {
         $(this).css("padding", "");
     });
     
+    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function(){
+        //LLamamos a la función para desactivar campos
+        desactivarCampos();        
+        // Recupero el ID asignado al asiento seleccionado para modificar
+        var miID = "#asientoID"+$(this).data("id");        
+        
+        // Habilitamos los campos solicitados para modificar       
+         $(miID+" *").attr("disabled", false);
+         // Activo como modificables los campos de texto:
+         $(miID+" .textoSituacion,"+miID+" .textoIncidencia,"+miID+" .textoOtros").attr("readonly", false);
+         // Cambio el color de fondo al original         
+         $(miID+" .contenAsiento, "+miID+" .mostrarFecha, "+miID+" .contenDatos").css("background-color", "white");
+         // Muestro un borde rojo en el asiento que modifico
+         $(miID+" .contenAsiento, "+miID+" .contenDatos").css("border", "2px solid red");
+         $(miID+" .contenBotonsBaixo").css("border-top", "3px solid red");
+         // Introduzco el boton para introducir nuevos "asignados"
+          $(miID+" .contenBotonAsignado").append(
+                  "<input type='button' class='botonAsignado' name='escogeAsignado' value='' title='Cambia la persona que despacha el asiento' />");
+          $("#usuario").clone(true).appendTo(miID+" .contenAsignado").removeAttr("id");
+    });
+    
+    
+    /* 
+      * Establezco los eventos para el botón:
+      * Incluir nuevo asignado
+      */
+    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAsignado", function () {
+        $(this).css("padding", "4px 8px");
+    });
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAsignado", function () {
+        $(this).css("padding", "");
+    });
+    $("#zonaRelacionAsientos").on('click', ".botonAsignado", function(){
+        
+    });
     
     /* 
       * Establecemos los eventos de los campos de selección de busqueda
@@ -410,6 +456,7 @@ $(function() {
             }
        }
     });
+    
     
     /*
      * Establecemos el evento "click" para el botón listar
