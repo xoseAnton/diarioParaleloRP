@@ -391,7 +391,7 @@ $(function() {
          // Introduzco el boton para introducir nuevos "asignados"
           $(miID+" .contenBotonAsignado").append(
                   "<input type='button' class='botonAsignado' name='escogeAsignado' value='' title='Cambia la persona que despacha el asiento' />");
-          $("#usuario").clone(true).appendTo(miID+" .contenAsignado").removeAttr("id");
+          $("#usuario").clone(true).appendTo(miID+" .contenAsignado").removeAttr("id").addClass("asignadoUsuario");
     });
     
     
@@ -406,6 +406,11 @@ $(function() {
         $(this).css("padding", "");
     });
     $("#zonaRelacionAsientos").on('click', ".botonAsignado", function(){
+        $(this).attr("display", "none");
+        $(".asignado").css("display", "none");
+        $(".asignadoUsuario").fadeIn("slow"); 
+        // var todosElementos = $(".asignadoUsuario").val();
+        // alert(todosElementos + "==>"+typeof(todosElementos));
         
     });
     
