@@ -367,6 +367,8 @@ function activarCampos() {
     $("#formularioBusqueda *").attr("disabled", false);
     // Habilito todos los campos de los demas asientos
     $("#zonaRelacionAsientos *").attr("disabled", false);
+    // Desabilitamos los "checkActivo"
+    $("#zonaRelacionAsientos .checkActivo").attr("disabled", true);
     // Cambiamos el color de fondo
     $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "white");
 }
@@ -404,6 +406,9 @@ $(function() {
     });
     
     $("#zonaRelacionAsientos").on('click', ".botonAbrir", function () {
+        // Borro los posibles botones ocultos de "cerrar" creados en otras llamadas
+        $(".botonCerrar").remove();
+        
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
         
@@ -462,11 +467,33 @@ $(function() {
     $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonCerrar", function () {
         $(this).css("padding", "");
     });
+    
+    
     // Evento click para el botón cancelar:
     $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {
         //LLamamos a la función para desactivar campos
         activarCampos();
+        
+        // Muestro el borde original en el asiento seleccionado
+        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "");
+        $(miID + " .contenBotonsBaixo").css("border-top", "");
+        
+        // Elimino los elementos creados especificamente para modificar datos
+        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario").remove();
+        // Oculto el botón de "reset" para que se produzca la acción "reset"
+        $(miID + " .botonCerrar").css("display", "none");
+        
+        // Introduzco nuevamente solo lectura en los campos        
+        $(miID + " .textoSituacion," + miID + " .textoIncidencia," + miID + " .textoOtros").attr("readonly", true);
+        
+        // Muestro nuevamente los botones de abrir/información
+        $(miID + " .botonAbrir").css("display", "");
+        $(miID + " .botonDetalle").css("display", "");
+                
+        //Mostramos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "");
     });
+    
     
     
     /* 

@@ -365,7 +365,7 @@
     background-color: #eee;
     border: 0.5px solid purple;
     width: 110px;
-    height: 260px;
+    height: 275px;
     /*No mostrar barra desplazamiento horizontal */    
     overflow-x: hidden;
 }
