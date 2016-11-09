@@ -348,7 +348,7 @@
     width: 195px;
 }
 
-.asignado {         
+.asignado {     
     width: 100px;
     height: 18px;
     color: blue;
@@ -356,11 +356,27 @@
     border: 0.5px solid purple;
 }
 
-.asignadoUsuario {
-    display: none;
-    color: blue;
-    height: 20px;
+.contenAsignadoUsuario {
+    display: none;    
+    position: relative;
+    padding: 4px;
+    margin-left: 80px;
+    margin-top: -20px;    
+    background-color: #eee;
     border: 0.5px solid purple;
+    width: 110px;
+    height: 260px;
+    /*No mostrar barra desplazamiento horizontal */    
+    overflow-x: hidden;
+}
+
+.asignadoUsuario {    
+    margin: 0;
+    padding-left: 5px;
+    width: 100px;    
+    color: blue;    
+    font-size: 9pt;
+    border: none;
 }
 
 .contenIncidencia {
@@ -427,6 +443,30 @@
     height:27px;            
     background-image: url(../imagenes/informacion_boton.png);
     background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+}
+
+.botonGuardar {     
+    padding: 2px 0 2px 0;
+    font-size: 9pt;
+    font-weight: bold; 
+    text-align: center;
+    outline: none;
+    width: 58px;
+    height:28px;    
+    background-color: yellow;
+    border-radius: 0.8em; 
+}
+
+.botonCerrar {      
+    outline: none;
+    margin: 3px 0 0 15px;
+    width:25px;
+    height:25px;            
+    background-image: url(../imagenes/cancelar_boton.png);    
+    background-size: 100%;  
     background-repeat: no-repeat;
     border: none;
     background-color: transparent;

@@ -1,6 +1,8 @@
 // Variable globales
 var opcionesConsulta;
 var asientos;
+var usuarios; // Contiene los usuarios definidos
+var miID;   // Contiene la variable de control del asiento seleccionado
 
 /*
  * Función introduce los usuarios activos definidos en la base de datos
@@ -10,6 +12,8 @@ var asientos;
 function listarUsuarios() {
     // Enviamos la solicitud ajax a la página del servidor
     $.getJSON("./miAjax/listarUsuarios.php", function (resultado) {
+        // Guardamos la consulta en la variable global
+        usuarios = resultado;
         // Recorro todos los valores optenidos
         $.each(resultado, function (i, usuario) {
             if(usuario.porDefecto == true)
@@ -34,6 +38,20 @@ function listarDiarios() {
             if(miDiario.cerrado == 1)
                 $("#diario").append("<option value='" + miDiario.diario + "'>" + miDiario.diario + "</option>");
         });
+    });
+}
+
+
+/*
+ * Establece los eventos del formularío de busqueda
+ * @returns {undefined}
+ */
+function establecerEventosFormularioBusqueda(){
+     $(".contenedorBusqueda").on('focus mouseenter', '*', function() {
+        mostrarBordeContenBusqueda(this);
+    });
+    $(".contenedorBusqueda").on('focusout mouseleave', '*', function() {
+        ocultarBordeContenBusqueda(this);
     });
 }
 
@@ -292,7 +310,7 @@ function listarAsientos(consulta){
 
                                     "<div class='contenAsignado'>"+                                        
                                         "<label class='mostrarTitulo'>Asignado:</label>"+
-                                        "<input type='text' class='asignado' name='asignado' value='"+asientos[i].asignado+"' readonly title='Persona que despacha el asiento'/>"+                                        
+                                        "<input type='text' class='asignado' name='asignado' value='"+asientos[i].asignado+"' readonly title='Persona que despacha el asiento'/>"+                                                                                
                                         "<div class='contenBotonAsignado'></div>"+
                                     "</div>"+
 
@@ -342,6 +360,18 @@ function desactivarCampos() {
 }
 
 
+function activarCampos() {
+    // Activo los eventos de selección del formulario de busqueda
+    establecerEventosFormularioBusqueda();
+    // Habilito todos los campos del formulario de búsqueda:
+    $("#formularioBusqueda *").attr("disabled", false);
+    // Habilito todos los campos de los demas asientos
+    $("#zonaRelacionAsientos *").attr("disabled", false);
+    // Cambiamos el color de fondo
+    $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "white");
+}
+
+
 /*
  * Cuando la página esté preparada
  * @returns {undefined}
@@ -373,25 +403,69 @@ $(function() {
         $(this).css("padding", "");
     });
     
-    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function(){
-        //LLamamos a la función para desactivar campos
-        desactivarCampos();        
+    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function () {
         // Recupero el ID asignado al asiento seleccionado para modificar
-        var miID = "#asientoID"+$(this).data("id");        
+        miID = "#asientoID" + $(this).data("id");
         
+        //LLamamos a la función para desactivar campos
+        desactivarCampos();
+        
+        // Oculto los botones de abrir/información
+        $(miID + " .botonAbrir").css("display", "none");
+        $(miID + " .botonDetalle").css("display", "none");
+        
+        // Introduzco los nuevos botones
+        $(miID+ " .contenBotonsArriba").append("<input type='button' class='botonGuardar' name='botonGuardarConfir' value='Guardar' disabled title='Guardar las modificaciones realizadas en el asiento'/>");
+        $(miID+ " .contenBotonsBaixo").append("<input type='reset' class='botonCerrar' name='botonCerrarConfir' value='' title='Cancelar las modificaciones realizadas en el asiento' />");        
+                
+        //Sacamos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "hidden");
+
         // Habilitamos los campos solicitados para modificar       
-         $(miID+" *").attr("disabled", false);
-         // Activo como modificables los campos de texto:
-         $(miID+" .textoSituacion,"+miID+" .textoIncidencia,"+miID+" .textoOtros").attr("readonly", false);
-         // Cambio el color de fondo al original         
-         $(miID+" .contenAsiento, "+miID+" .mostrarFecha, "+miID+" .contenDatos").css("background-color", "white");
-         // Muestro un borde rojo en el asiento que modifico
-         $(miID+" .contenAsiento, "+miID+" .contenDatos").css("border", "2px solid red");
-         $(miID+" .contenBotonsBaixo").css("border-top", "3px solid red");
-         // Introduzco el boton para introducir nuevos "asignados"
-          $(miID+" .contenBotonAsignado").append(
-                  "<input type='button' class='botonAsignado' name='escogeAsignado' value='' title='Cambia la persona que despacha el asiento' />");
-          $("#usuario").clone(true).appendTo(miID+" .contenAsignado").removeAttr("id").addClass("asignadoUsuario");
+        $(miID + " *").attr("disabled", false);
+        // Activo como modificables los campos de texto:
+        $(miID + " .textoSituacion," + miID + " .textoIncidencia," + miID + " .textoOtros").attr("readonly", false);
+        // Cambio el color de fondo al original         
+        $(miID + " .contenAsiento, " + miID + " .mostrarFecha, " + miID + " .contenDatos").css("background-color", "white");
+        // Muestro un borde rojo en el asiento que modifico
+        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "2px solid red");
+        $(miID + " .contenBotonsBaixo").css("border-top", "3px solid red");
+        // Introduzco el boton para introducir nuevos "asignados"
+        $(miID + " .contenBotonAsignado").append(
+                "<input type='button' class='botonAsignado' name='escogeAsignado' value='' title='Cambia la persona que despacha el asiento' />");
+        
+        // Creamos el panel de usuarios para poder escoger uno nuevo o ninguno
+        $(miID+" .asignado").after("<div class='contenAsignadoUsuario'></div>");
+        $(miID+ " .contenAsignadoUsuario").append("<input type='text' class='asignadoUsuario' name='asignadoUsuario' value='' readonly title='Persona que despachará el asiento'/>");
+        $.each(usuarios, function (i, usuario) {                        
+                $(miID+ " .contenAsignadoUsuario").append("<input type='text' class='asignadoUsuario' name='asignadoUsuario' value='"+usuario.nombre+"' readonly title='Persona que despachará el asiento'/>");
+        });
+        
+    });
+    
+    
+    /* 
+      * Establezco los eventos para los botones:
+      * Guardar modificaciones y Cancelar modificaciones
+      */
+    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonGuardar", function () {
+        $(this).css("border-color", "red");
+        $(this).css("color", "red");
+    });
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonGuardar", function () {
+        $(this).css("border-color", "");
+        $(this).css("color", "");
+    });
+    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonCerrar", function () {
+        $(this).css("padding", "15px");
+    });
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonCerrar", function () {
+        $(this).css("padding", "");
+    });
+    // Evento click para el botón cancelar:
+    $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {
+        //LLamamos a la función para desactivar campos
+        activarCampos();
     });
     
     
@@ -406,23 +480,61 @@ $(function() {
         $(this).css("padding", "");
     });
     $("#zonaRelacionAsientos").on('click', ".botonAsignado", function(){
-        $(this).attr("display", "none");
-        $(".asignado").css("display", "none");
-        $(".asignadoUsuario").fadeIn("slow"); 
-        // var todosElementos = $(".asignadoUsuario").val();
-        // alert(todosElementos + "==>"+typeof(todosElementos));
+        // Ocultamos el texto donde muestra el usuario asignado
+        $(miID+ " .asignado").css("display", "none");
+        // Ocultamos el boton para no poder seleccionar nuevamente
+        $(miID+ " .botonAsignado").css("display", "none");     
+        
+        /* Comprobamos la posición del elemento seleccionado para mostrar en la
+         * posición visible el panel de usuarios
+         */
+        var posicion = $(miID).position();
+        if(posicion.top > 550){
+            $(miID+ " .contenAsignadoUsuario").css("margin-top", "-267px");
+        }
+        // Mostramos el panel para seleccionar usuarios
+        $(miID+ " .contenAsignadoUsuario").css("display", "block");
         
     });
+    
+    
+    /* 
+     * Establezco los eventos para el contenedor de nuevos usuarios asignados
+     */
+    
+    /* Para el caso de que salgamos del contenedor */
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".contenAsignadoUsuario", function () {
+        // Ocultamos el contenedor
+        $(this).css("display", "none");
+        // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
+        $(miID + " .asignado").css("display", "");
+        $(miID + " .botonAsignado").css("display", "");
+
+    });
+    /* Para el caso de que nos pongamos sobre un usuario */
+    $("#zonaRelacionAsientos").on('focus mouseenter', ".asignadoUsuario", function () {
+        $(this).css("border", "2px solid purple");
+    });
+    $("#zonaRelacionAsientos").on('focusout mouseleave', ".asignadoUsuario", function () {
+        $(this).css("border", "");
+    });
+    /* Para el caso de que seleccionemos un usuario */
+    $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function(){
+        //Cambiamos el valor de lo seleccionado.
+        $(miID+ " .asignado").val($(this).val());
+        // Ocultamos el panel de selección de nuevos usuarios
+        $(miID+ " .contenAsignadoUsuario").css("display", "none");
+        // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
+        $(miID + " .asignado").css("display", "");
+        $(miID + " .botonAsignado").css("display", "");
+    });
+    
+    
     
     /* 
       * Establecemos los eventos de los campos de selección de busqueda
       */    
-     $(".contenedorBusqueda").on('focus mouseenter', '*', function() {
-        mostrarBordeContenBusqueda(this);
-    });
-    $(".contenedorBusqueda").on('focusout mouseleave', '*', function() {
-        ocultarBordeContenBusqueda(this);
-    });
+    establecerEventosFormularioBusqueda();
     
     
     /*
@@ -486,9 +598,11 @@ $(function() {
        
    });
     
-});
+}); // Fin de la página preparada
 
-// Cunado la página esta cargada
+
+
+// Cuando la página esta cargada
 $(document).ready(function (){
     // Cargamos los usuarios
     listarUsuarios();
