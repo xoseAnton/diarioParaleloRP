@@ -33,6 +33,11 @@
     color:purple;
 }
 
+#textoLengMostrar {
+    font-size: 10pt;
+    color: blue;
+}
+
 .contenedorBusqueda {
     float: left;
     margin-right: 15px;

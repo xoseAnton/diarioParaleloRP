@@ -261,6 +261,11 @@ function listarAsientos(consulta){
                 );
 
         } else {
+            
+            // Mostramos la leyenda de los datos adquiridos
+            var tiempo = new Date();
+            $("#legendAñadir").append("<div id='leyendaListado'>Listado de asientos del diario "+asientos[0].diario+
+                    "<label id='textoLengMostrar'> (actualizado "+tiempo.getHours()+":"+tiempo.getMinutes()+"  h)</label></div>");
 
             /*
              * Para el caso en que se consiga respuesta de la página php, recorremos todo el array
@@ -349,16 +354,21 @@ function listarAsientos(consulta){
 }
 
 function datosPendientes() {
-    if (pendienteGrabar == false) {
-        
-        var posicion = $(miID).position();
-        if(posicion.top > 600){
-            var posicionBarra = $("#zonaRelacionAsientos").scrollTop();        
-            $("#zonaRelacionAsientos").scrollTop(posicionBarra+75);
-        }
+    if (pendienteGrabar == false) {   
+        // Introducimos el recordatorio "pendiente grabar"
         $(miID+ ".asiento").before("<span class='campoPendienteGrabar'>¡Pendiente grabar modificaciones!</span>");        
         // Cambiamos la variable de control
-        pendienteGrabar = true;        
+        pendienteGrabar = true;  
+        
+        /* Miramos la posición del asiento por si está muy al final de la
+         * página (se puede ocultar con el recordatorio de grabar), entonces
+         * bajamos un poco la barra de desplazamiento.
+         */
+        var posicion = $(miID).position();        
+        if(posicion.top > 700){            
+            var posicionBarra = $("#zonaRelacionAsientos").scrollTop();             
+            $("#zonaRelacionAsientos").scrollTop(posicionBarra+50);
+        } 
     }
 }
 
@@ -493,7 +503,7 @@ $(function() {
     
     
     // Evento click para el botón cancelar:
-    $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {
+    $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {        
         //LLamamos a la función para desactivar campos
         activarCampos();
         
@@ -501,8 +511,10 @@ $(function() {
         $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "");
         $(miID + " .contenBotonsBaixo").css("border-top", "");
         
-        // Elimino los elementos creados especificamente para modificar datos
-        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario").remove();
+        // Elimino los elementos creados especificamente para modificar datos        
+        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar").remove();
+        pendienteGrabar = false; // Borrado el aviso, cambio la variable de control
+        
         // Oculto el botón de "reset" para que se produzca la acción "reset"
         $(miID + " .botonCerrar").css("display", "none");
         
@@ -577,6 +589,8 @@ $(function() {
         // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
         $(miID + " .asignado").css("display", "");
         $(miID + " .botonAsignado").css("display", "");
+        // Mostramos el aviso de pendiente grabar modificaciones
+        datosPendientes();
     });
     
     
@@ -639,6 +653,9 @@ $(function() {
        
        // Borramos el posible mensaje de NO DATOS de consultas anteriores
        $("#zonaNoDatos").remove();
+       
+       // Borramos la leyenda de posibles consultas anteriores
+       $("#leyendaListado").remove();
        
        // Validamos los datos introducidos
        if(validarDatosListar()) {          

@@ -2,6 +2,8 @@
 // Antes de nada inicio una nueva sesión o reanudo la existente
 session_start();
 
+// Establecemos por defecto la zona horaria
+date_default_timezone_set('Europe/Berlin');
 
 // Comprobamos que el usuario está identificado
 if (!isset($_SESSION['usuario'])) {    
@@ -198,7 +200,7 @@ if (isset($_POST['desconectar'])) {
             <!-- ZONA PARA MOSTRAR DATOS -->
             <div id="zonaMostrar">
                 <fieldset id="zonaMostrarDatos">
-                    <legend id="legendAñadir">Zona Prueba</legend>
+                    <legend id="legendAñadir"></legend>
                     <!-- Zona de datos -->
                     <div id="zonaRelacionAsientos"></div>
                 </fieldset>                   
