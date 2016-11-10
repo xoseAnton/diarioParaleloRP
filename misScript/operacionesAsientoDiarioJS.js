@@ -3,6 +3,7 @@ var opcionesConsulta;
 var asientos;
 var usuarios; // Contiene los usuarios definidos
 var miID;   // Contiene la variable de control del asiento seleccionado
+var pendienteGrabar = false;
 
 /*
  * Función introduce los usuarios activos definidos en la base de datos
@@ -302,7 +303,7 @@ function listarAsientos(consulta){
                                     "</div>"+
                                     "<div class='contenSituacion'>"+
                                         "<label class='mostrarTitulo'>Situación:</label>"+
-                                        "<input type='text' class='textoSituacion' name='textoSituacion' value='"+asientos[i].situacion+"' readonly title='Texto sobre la situación del asiento'/>"+
+                                        "<input type='text' class='textoSituacion' name='textoSituacion' value='"+asientos[i].situacion+"' readonly onkeydown='datosPendientes()' title='Texto sobre la situación del asiento'/>"+
                                     "</div>"+
                                     "<div class='cancelarFlotantes'></div>"+
                                 "</div>"+
@@ -316,17 +317,17 @@ function listarAsientos(consulta){
 
                                     "<div class='contenIncidencia'>"+
                                         "<label class='mostrarTitulo'>Incidencia:</label>"+
-                                        "<input type='text' class='textoIncidencia' name='textoIncidencia' readonly value='"+asientos[i].incidencia+"' title='Texto sobre las incidencias del asiento' />"+
+                                        "<input type='text' class='textoIncidencia' name='textoIncidencia' readonly value='"+asientos[i].incidencia+"' onkeydown='datosPendientes()' title='Texto sobre las incidencias del asiento' />"+
                                     "</div>"+
 
                                     "<div class='contenOtros'>"+
                                         "<label class='mostrarTitulo'>Otros:</label>"+
-                                        "<input type='text' class='textoOtros' name='textoOtros' readonly value='"+asientos[i].otroTexto+"' title='Texto para otras incidencias'/>"+
+                                        "<input type='text' class='textoOtros' name='textoOtros' readonly value='"+asientos[i].otroTexto+"' onkeydown='datosPendientes()' title='Texto para otras incidencias'/>"+
                                     "</div>"+
 
                                     "<div class='contenActivos'>"+
                                         "<label class='mostrarTitulo'>Activo:</label>"+
-                                        "<input type='checkbox' class='checkActivo' name='checkActivo' disabled title='Asiento abierto o cerrado' "+ condicionCerrado +
+                                        "<input type='checkbox' class='checkActivo' name='checkActivo' disabled onchange='datosPendientes()' title='Asiento abierto o cerrado' "+ condicionCerrado +
                                     "</div>"+
 
                                     "<div class='cancelarFlotantes'></div>"+
@@ -347,7 +348,25 @@ function listarAsientos(consulta){
     });      
 }
 
+function datosPendientes() {
+    if (pendienteGrabar == false) {
+        
+        var posicion = $(miID).position();
+        if(posicion.top > 600){
+            var posicionBarra = $("#zonaRelacionAsientos").scrollTop();        
+            $("#zonaRelacionAsientos").scrollTop(posicionBarra+75);
+        }
+        $(miID+ ".asiento").before("<span class='campoPendienteGrabar'>¡Pendiente grabar modificaciones!</span>");        
+        // Cambiamos la variable de control
+        pendienteGrabar = true;        
+    }
+}
 
+
+/*
+ * Función que desactiva los campos para que no se produzcan dobles peticiones
+ * @returns {undefined}
+ */
 function desactivarCampos() {
     // Desactivamos los eventos de selección del formulario de busqueda
     $(".contenedorBusqueda").off("focus mouseenter focusout mouseleave", "*");
@@ -359,6 +378,10 @@ function desactivarCampos() {
     $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "#eee");
 }
 
+/*
+ * Función que activa los campos para poder realizar cualquier otra petición.
+ * @returns {undefined}
+ */
 
 function activarCampos() {
     // Activo los eventos de selección del formulario de busqueda
@@ -624,6 +647,16 @@ $(function() {
         }
        
    });
+   
+   
+    /*
+     * Establecemos el evento "click" para el botón GUARDAR
+     */
+    $("#zonaRelacionAsientos").on('click', ".botonGuardar", function(){
+        alert("Datos pendientes de guardar!");
+   });
+   
+   
     
 }); // Fin de la página preparada
 

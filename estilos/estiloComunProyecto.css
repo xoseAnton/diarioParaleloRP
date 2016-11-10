@@ -115,3 +115,37 @@ body {
     position: absolute;
     top: 5px;    
 }
+
+/*
+* ZONA PARA MOSTRAR RECORDATORIO "PENDIENTE GRABAR"
+*/
+.campoPendienteGrabar {    
+    background-color: #BC1010;
+    padding: 0px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12pt;
+    font-weight: bold;    
+    position: relative;
+    width: 240px;
+}
+
+/* Creamos un elemento hijo del anterior
+*  (crea un efecto punta de lanza)
+*/
+.campoPendienteGrabar:before {
+    content: '';
+    margin-left: 70px;
+    /*
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #BC1010;
+    border-left: 10px solid transparent;
+    */
+    border-top: 10px solid #BC1010;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid transparent;
+    position: absolute;
+    bottom: -20px;
+}
