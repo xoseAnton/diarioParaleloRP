@@ -310,32 +310,32 @@
     height: 30px;    
 }
 
-.contenFecha {     
+.contenFecha {          
     float: left;
     padding-top: 6px;
     margin-left: 15px;
-    width: 135px;
+    width: 145px;
 }
 
 .mostrarTitulo {
     font-weight: bold;
 }
 
-.mostrarFecha {
+.mostrarFecha {        
     color: black;
-    padding: 2px;
+    padding: 2px;            
     border:0.5px solid purple;    
 }
 
-.contenSituacion {
+.contenSituacion {    
     float: left;
     padding-top: 3px;
     margin-left: 10px;
-    width: 920px;    
+    width: 900px;    
 }
 
 .textoSituacion {
-    width: 832px;
+    width: 820px;
     padding-left: 5px;
     height: 18px;
     color: blue;

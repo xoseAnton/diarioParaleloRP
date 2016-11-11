@@ -119,15 +119,22 @@ body {
 /*
 * ZONA PARA MOSTRAR RECORDATORIO "PENDIENTE GRABAR"
 */
-.campoPendienteGrabar {    
+.bloquePendienteGrabar {       
+    margin: 0;
+    pading: 0;
+    height: 30px;
+}
+
+.campoPendienteGrabar {
+    display: none;
     background-color: #BC1010;
-    padding: 0px 12px;
+    padding: 3px 12px;
     border-radius: 20px;
     color: white;
     font-size: 12pt;
-    font-weight: bold;    
+    font-weight: bold;        
+    width: 240px;    
     position: relative;
-    width: 240px;
 }
 
 /* Creamos un elemento hijo del anterior
@@ -135,11 +142,11 @@ body {
 */
 .campoPendienteGrabar:before {
     content: '';
-    margin-left: 70px;    
-    border-top: 10px solid #BC1010;
+    margin-left: 68px;    
+    border-top: 15px solid #BC1010;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid transparent;
-    border-left: 10px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-left: 10px solid transparent;    
+    bottom: -30px;
     position: absolute;
-    bottom: -20px;
 }

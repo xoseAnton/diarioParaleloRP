@@ -273,9 +273,21 @@ function listarAsientos(consulta){
              * @type listarAsientos.operacionesAsientoDiarioJS_L231.asientos
              */
             for (var i in asientos) {
-                // Recuperamos los datos
+                /*
+                 * Función para incluir dos digitos en el dia y fecha
+                 * @param {type} dato
+                 * @returns {listarAsientos.operacionesAsientoDiarioJS_L251.digitosFecha.digito|String}
+                 */
+                function digitosFecha(datoFecha){
+                    var digitos = new String(datoFecha);
+                    if(digitos.length < 2)
+                        digitos = '0'+datoFecha;
+                    return digitos;
+                    }
+                // Recuperamos los datos:
                 var fechaAsiento = new Date(asientos[i].fecha);
-                var formatoFechaAsiento = fechaAsiento.getDate() + " / " + (fechaAsiento.getMonth() + 1) + " / " + fechaAsiento.getFullYear();
+                
+                var formatoFechaAsiento = digitosFecha(fechaAsiento.getDate()) + " / " + digitosFecha((fechaAsiento.getMonth() + 1)) + " / " + fechaAsiento.getFullYear();
                 var condicionCerrado = ""
                 // Comprobamos si está cerrado el asiento
                 if (asientos[i].cerrado == 1)
@@ -356,19 +368,10 @@ function listarAsientos(consulta){
 function datosPendientes() {
     if (pendienteGrabar == false) {   
         // Introducimos el recordatorio "pendiente grabar"
-        $(miID+ ".asiento").before("<span class='campoPendienteGrabar'>¡Pendiente grabar modificaciones!</span>");        
+        $("#bloqueInformaSuperior").append("<span class='campoPendienteGrabar'>¡Pendiente grabar modificaciones!</span>");
+        $(".campoPendienteGrabar").fadeIn();
         // Cambiamos la variable de control
         pendienteGrabar = true;  
-        
-        /* Miramos la posición del asiento por si está muy al final de la
-         * página (se puede ocultar con el recordatorio de grabar), entonces
-         * bajamos un poco la barra de desplazamiento.
-         */
-        var posicion = $(miID).position();        
-        if(posicion.top > 700){            
-            var posicionBarra = $("#zonaRelacionAsientos").scrollTop();             
-            $("#zonaRelacionAsientos").scrollTop(posicionBarra+50);
-        } 
     }
 }
 
@@ -395,9 +398,11 @@ function desactivarCampos() {
 
 function activarCampos() {
     // Activo los eventos de selección del formulario de busqueda
-    establecerEventosFormularioBusqueda();
+    establecerEventosFormularioBusqueda();    
+    
     // Habilito todos los campos del formulario de búsqueda:
     $("#formularioBusqueda *").attr("disabled", false);
+        
     // Habilito todos los campos de los demas asientos
     $("#zonaRelacionAsientos *").attr("disabled", false);
     // Desabilitamos los "checkActivo"
@@ -438,12 +443,32 @@ $(function() {
         $(this).css("padding", "");
     });
     
+    
+    /*
+     * Establezco el evento "ABRIR" para modificar asiento
+     */
     $("#zonaRelacionAsientos").on('click', ".botonAbrir", function () {
         // Borro los posibles botones ocultos de "cerrar" creados en otras llamadas
         $(".botonCerrar").remove();
         
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
+        
+        /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
+         * posibles mensajes (y destacar el asiento que se modifica).
+         */
+        $(miID).before("<div id='bloqueInformaSuperior' class='bloquePendienteGrabar'></div>");
+        $(miID).after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");        
+        
+        /* Miramos la posición del asiento por si está muy al final de la
+         * página (se puede ocultar con el recordatorio de grabar), entonces
+         * bajamos un poco la barra de desplazamiento.
+         */
+        var posicion = $(miID).position();        
+        if(posicion.top > 700){            
+            var posicionBarra = $("#zonaRelacionAsientos").scrollTop();              
+            $("#zonaRelacionAsientos").scrollTop(posicionBarra+90);
+        }      
         
         //LLamamos a la función para desactivar campos
         desactivarCampos();
@@ -512,7 +537,7 @@ $(function() {
         $(miID + " .contenBotonsBaixo").css("border-top", "");
         
         // Elimino los elementos creados especificamente para modificar datos        
-        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar").remove();
+        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
         pendienteGrabar = false; // Borrado el aviso, cambio la variable de control
         
         // Oculto el botón de "reset" para que se produzca la acción "reset"
