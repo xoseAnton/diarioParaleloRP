@@ -408,7 +408,27 @@ function activarCampos() {
     // Desabilitamos los "checkActivo"
     $("#zonaRelacionAsientos .checkActivo").attr("disabled", true);
     // Cambiamos el color de fondo
-    $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "white");
+    $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "white");    
+    
+    
+    $("#formularioBusqueda .checkBusqueda").each(function(){                
+        // Recupero los elementos que controla el check.
+        var elemento = JSON.parse('['+$(this).data("controla")+']');  
+        if ($(this).is(':checked')) {
+            // Recorremos todos los elementos por si tenemos más de uno               
+            for (i in elemento) {
+                $(elemento[i]).attr("disabled", false);
+                $(elemento[i]).css("background-color", "white");
+            }
+        }
+        else {
+            // Recorremos todos los elementos por si tenemos más de uno               
+            for (i in elemento) {
+                $(elemento[i]).attr("disabled", true);                
+                $(elemento[i]).css("background-color", "");
+            }
+        }
+    });
 }
 
 
@@ -441,7 +461,7 @@ $(function() {
     });
     $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAbrir, .botonDetalle", function () {
         $(this).css("padding", "");
-    });
+    });    
     
     
     /*
@@ -504,120 +524,128 @@ $(function() {
                 $(miID+ " .contenAsignadoUsuario").append("<input type='text' class='asignadoUsuario' name='asignadoUsuario' value='"+usuario.nombre+"' readonly title='Persona que despachará el asiento'/>");
         });
         
-    });
-    
-    
-    /* 
-      * Establezco los eventos para los botones:
-      * Guardar modificaciones y Cancelar modificaciones
-      */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonGuardar", function () {
-        $(this).css("border-color", "red");
-        $(this).css("color", "red");
-    });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonGuardar", function () {
-        $(this).css("border-color", "");
-        $(this).css("color", "");
-    });
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonCerrar", function () {
-        $(this).css("padding", "15px");
-    });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonCerrar", function () {
-        $(this).css("padding", "");
-    });
-    
-    
-    // Evento click para el botón cancelar:
-    $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {        
-        //LLamamos a la función para desactivar campos
-        activarCampos();
-        
-        // Muestro el borde original en el asiento seleccionado
-        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "");
-        $(miID + " .contenBotonsBaixo").css("border-top", "");
-        
-        // Elimino los elementos creados especificamente para modificar datos        
-        $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
-        pendienteGrabar = false; // Borrado el aviso, cambio la variable de control
-        
-        // Oculto el botón de "reset" para que se produzca la acción "reset"
-        $(miID + " .botonCerrar").css("display", "none");
-        
-        // Introduzco nuevamente solo lectura en los campos        
-        $(miID + " .textoSituacion," + miID + " .textoIncidencia," + miID + " .textoOtros").attr("readonly", true);
-        
-        // Muestro nuevamente los botones de abrir/información
-        $(miID + " .botonAbrir").css("display", "");
-        $(miID + " .botonDetalle").css("display", "");
-                
-        //Mostramos la barra de desplazamiento
-        $("#zonaRelacionAsientos").css("overflow-y", "");
-    });
-    
-    
-    
-    /* 
-      * Establezco los eventos para el botón:
-      * Incluir nuevo asignado
-      */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAsignado", function () {
-        $(this).css("padding", "4px 8px");
-    });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAsignado", function () {
-        $(this).css("padding", "");
-    });
-    $("#zonaRelacionAsientos").on('click', ".botonAsignado", function(){
-        // Ocultamos el texto donde muestra el usuario asignado
-        $(miID+ " .asignado").css("display", "none");
-        // Ocultamos el boton para no poder seleccionar nuevamente
-        $(miID+ " .botonAsignado").css("display", "none");     
-        
-        /* Comprobamos la posición del elemento seleccionado para mostrar en la
-         * posición visible el panel de usuarios
+        /* 
+         * Establezco los eventos para los botones:
+         * Guardar modificaciones y Cancelar modificaciones
          */
-        var posicion = $(miID).position();
-        if(posicion.top > 550){
-            $(miID+ " .contenAsignadoUsuario").css("margin-top", "-267px");
-        }
-        // Mostramos el panel para seleccionar usuarios
-        $(miID+ " .contenAsignadoUsuario").css("display", "block");
+        $("#zonaRelacionAsientos").on('focus mouseenter', ".botonGuardar", function () {
+            $(this).css("border-color", "red");
+            $(this).css("color", "red");
+        });
+        $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonGuardar", function () {
+            $(this).css("border-color", "");
+            $(this).css("color", "");
+        });
+        $("#zonaRelacionAsientos").on('focus mouseenter', ".botonCerrar", function () {
+            $(this).css("padding", "15px");
+        });
+        $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonCerrar", function () {
+            $(this).css("padding", "");
+        });
+        
+        // Evento click para el botón cancelar:
+        $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {
+            //LLamamos a la función para desactivar campos
+            activarCampos();
+
+            // Muestro el borde original en el asiento seleccionado
+            $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "");
+            $(miID + " .contenBotonsBaixo").css("border-top", "");
+
+            // Elimino los elementos creados especificamente para modificar datos        
+            $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
+            pendienteGrabar = false; // Borrado el aviso, cambio la variable de control
+
+            // Oculto el botón de "reset" para que se produzca la acción "reset"
+            $(miID + " .botonCerrar").css("display", "none");
+
+            // Introduzco nuevamente solo lectura en los campos        
+            $(miID + " .textoSituacion," + miID + " .textoIncidencia," + miID + " .textoOtros").attr("readonly", true);
+
+            // Muestro nuevamente los botones de abrir/información
+            $(miID + " .botonAbrir").css("display", "");
+            $(miID + " .botonDetalle").css("display", "");
+
+            //Mostramos la barra de desplazamiento
+            $("#zonaRelacionAsientos").css("overflow-y", "");
+        });
+        
+        
+        /* 
+         * Establezco los eventos para el botón:
+         * Incluir nuevo asignado
+         */
+        $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAsignado", function () {
+            $(this).css("padding", "4px 8px");
+        });
+        $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAsignado", function () {
+            $(this).css("padding", "");
+        });
+        $("#zonaRelacionAsientos").on('click', ".botonAsignado", function () {
+            // Ocultamos el texto donde muestra el usuario asignado
+            $(miID + " .asignado").css("display", "none");
+            // Ocultamos el boton para no poder seleccionar nuevamente
+            $(miID + " .botonAsignado").css("display", "none");
+
+            /* Comprobamos la posición del elemento seleccionado para mostrar en la
+             * posición visible el panel de usuarios
+             */
+            var posicion = $(miID).position();
+            if (posicion.top > 550) {
+                $(miID + " .contenAsignadoUsuario").css("margin-top", "-267px");
+            }
+            // Mostramos el panel para seleccionar usuarios
+            $(miID + " .contenAsignadoUsuario").css("display", "block");
+
+        });
+        
+        
+        /* 
+         * Establezco los eventos para el contenedor de nuevos usuarios asignados
+         */
+
+        /* Para el caso de que salgamos del contenedor */
+        $("#zonaRelacionAsientos").on('focusout mouseleave', ".contenAsignadoUsuario", function () {
+            // Ocultamos el contenedor
+            $(this).css("display", "none");
+            // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
+            $(miID + " .asignado").css("display", "");
+            $(miID + " .botonAsignado").css("display", "");
+
+        });
+        /* Para el caso de que nos pongamos sobre un usuario */
+        $("#zonaRelacionAsientos").on('focus mouseenter', ".asignadoUsuario", function () {
+            $(this).css("border", "2px solid purple");
+        });
+        $("#zonaRelacionAsientos").on('focusout mouseleave', ".asignadoUsuario", function () {
+            $(this).css("border", "");
+        });
+        /* Para el caso de que seleccionemos un usuario */
+        $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function () {
+            //Cambiamos el valor de lo seleccionado.
+            $(miID + " .asignado").val($(this).val());
+            // Ocultamos el panel de selección de nuevos usuarios
+            $(miID + " .contenAsignadoUsuario").css("display", "none");
+            // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
+            $(miID + " .asignado").css("display", "");
+            $(miID + " .botonAsignado").css("display", "");
+            // Mostramos el aviso de pendiente grabar modificaciones
+            datosPendientes();
+        });
+        
+        /*
+         * Establecemos el evento "click" para el botón GUARDAR
+         */
+        $("#zonaRelacionAsientos").on('click', ".botonGuardar", function () {
+            alert("Datos pendientes de guardar!");
+            
+            // *************************** FALTA CODIGO 
+            
+            
+        });
+   
         
     });
-    
-    
-    /* 
-     * Establezco los eventos para el contenedor de nuevos usuarios asignados
-     */
-    
-    /* Para el caso de que salgamos del contenedor */
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".contenAsignadoUsuario", function () {
-        // Ocultamos el contenedor
-        $(this).css("display", "none");
-        // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
-        $(miID + " .asignado").css("display", "");
-        $(miID + " .botonAsignado").css("display", "");
-
-    });
-    /* Para el caso de que nos pongamos sobre un usuario */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".asignadoUsuario", function () {
-        $(this).css("border", "2px solid purple");
-    });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".asignadoUsuario", function () {
-        $(this).css("border", "");
-    });
-    /* Para el caso de que seleccionemos un usuario */
-    $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function(){
-        //Cambiamos el valor de lo seleccionado.
-        $(miID+ " .asignado").val($(this).val());
-        // Ocultamos el panel de selección de nuevos usuarios
-        $(miID+ " .contenAsignadoUsuario").css("display", "none");
-        // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
-        $(miID + " .asignado").css("display", "");
-        $(miID + " .botonAsignado").css("display", "");
-        // Mostramos el aviso de pendiente grabar modificaciones
-        datosPendientes();
-    });
-    
     
     
     /* 
@@ -691,13 +719,7 @@ $(function() {
    });
    
    
-    /*
-     * Establecemos el evento "click" para el botón GUARDAR
-     */
-    $("#zonaRelacionAsientos").on('click', ".botonGuardar", function(){
-        alert("Datos pendientes de guardar!");
-   });
-   
+    
    
     
 }); // Fin de la página preparada
