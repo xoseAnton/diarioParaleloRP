@@ -31,10 +31,10 @@ if (isset($_SESSION['usuario'])) {
         // Se añadió los nuevos datos al asiento, creamos la incidencia
         $_SESSION['incidencias'][] = date("H:i:s") . "-> Se MODIFICO el asiento Nº: " . $datos['asiento'] . "/" . $datos['diario'] . ".";
         // Retorno un "string" con el resultado
-        echo json_encode(["resultado" => TRUE]);
+        echo json_encode(["grabado" => TRUE]);
     }
     else
-        echo json_encode(["resultado" => FALSE]);
+        echo json_encode(["grabado" => FALSE]);
 }
 
 ?>

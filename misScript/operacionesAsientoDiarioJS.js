@@ -66,7 +66,7 @@ function guardarDatosAsientos(){
     datosGrabar = new Array(); 
         
     // Definimos el array JSON con los indices
-    datosGrabar = {asiento: asiento , diario: diario, fecha: fecha, situacion: situacion, incidencia: incidencia, otroTexto: otroTexto, asigna: asignado, cerrado: cerrado};
+    datosGrabar = {asiento: asiento , diario: diario, fecha: fecha, situacion: situacion, incidencia: incidencia, otroTexto: otroTexto, asignado: asignado, cerrado: cerrado};
     
     $.ajax({
         url: "./miAjax/grabarDatosAsientos.php",
@@ -74,9 +74,27 @@ function guardarDatosAsientos(){
         dataType: 'json',
         data: {datos: datosGrabar}
     }).done(function (resultado){
-        alert(JSON.stringify(resultado));
+        if (resultado.grabado == true) {
+            // Elimino el elemento de aviso para guardar datos
+            $(".campoPendienteGrabar").remove();
+            // Introducimos el recordatorio "pendiente grabar"
+            $("#bloqueInformaSuperior").append("<span class='campoAvisoGrabado'>¡Datos GRABADOS correctamente!</span>");
+            $(".campoAvisoGrabado").fadeIn();
+            // Cambiamos la variable de control
+            pendienteGrabar = false;  
+            
+            
+            
+            // PENDIENTE CODIGO
+            
+            
+            
+            
+        } else {
+            alert("No su pudo grabar las modificaciones!");            
+        }
     }).fail(function() {
-        return false;        
+         alert("No su pudo grabar las modificaciones!");        
     }).always(function (){
         // FALTA CODIGO
     });
@@ -683,6 +701,8 @@ $(function() {
         $("#zonaRelacionAsientos").on('click', ".botonGuardar", function () {
             // Guardamos los datos introducidos
             guardarDatosAsientos();
+                
+            
             
         });
    
