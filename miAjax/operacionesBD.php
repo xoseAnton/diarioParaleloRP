@@ -68,7 +68,6 @@ class operacionesBD {
     /*
      * Función para ejecutar consultas en la base de datos
      */
-
     protected static function ejecutaConsulta($sql, $baseDatos) {
         // Declaro las variables                
         $resultado = null;
@@ -86,7 +85,18 @@ class operacionesBD {
             die ("<h1>ERROR</h1><p>".$error->getMessage()."</p>");
         }
     }
+        
     
+    /*
+     * Función para introducir un filtro de saneamiento en los datos que vamos
+     * grabar en la base de datos (evitar ataques xss - cross-site Scripting).
+     * (Añade un caracter de escape delante de: ', ", \ y NUL)
+     */
+
+    protected static function filtrar($datos) {
+        return filter_var($datos, FILTER_SANITIZE_MAGIC_QUOTES);    
+    }
+
     
     /*
      * Función para LISTAR USUARIOS ACTIVOS
@@ -128,8 +138,8 @@ class operacionesBD {
          * introducir en la base de datos (evitar ataques xss - cross-site Scripting).
          * (Añade un caracter de escape delante de: ', ", \ y NUL)
          */
-        $idFiltrado = filter_var($miId, FILTER_SANITIZE_MAGIC_QUOTES);
-        $contrasenaFiltrada = filter_var($miContraseña, FILTER_SANITIZE_MAGIC_QUOTES);
+        $idFiltrado = self::filtrar($miId);
+        $contrasenaFiltrada = self::filtrar($miContraseña);
 
         // Comando para la consulta
         $sql = "SELECT id, nombre, rol FROM usuarios "
@@ -190,14 +200,14 @@ class operacionesBD {
          * (Añade un caracter de escape delante de: ', ", \ y NUL)
          */
         $diario = $opcionesConsulta['diario'][0]['valor'];
-        $diarioFiltrado = filter_var($diario, FILTER_SANITIZE_MAGIC_QUOTES);
+        $diarioFiltrado = self::filtrar($diario);
         
         
         // Para el caso especial que seleccionemos el estado del diario a una fecha determinada
         if ($opcionesConsulta['fechaModifica'][0]['seleccionado'] == "si"  && $opcionesConsulta['horaModifica'][0]['seleccionado'] == "si") {            
             $fecha = date_create($opcionesConsulta['fechaModifica'][0]['valor'] . " " . $opcionesConsulta['horaModifica'][0]['valor']);
             $fecha = date_format($fecha, "Y-m-d H:i");
-            $fechaFiltrada = filter_var($fecha, FILTER_SANITIZE_MAGIC_QUOTES);
+            $fechaFiltrada = self::filtrar($fecha);
             
             $sql = "SELECT listaAsientos.* FROM `" . $diarioFiltrado . "` listaAsientos INNER JOIN " .
                    "(SELECT asiento, MAX(id) AS ultimaModific FROM `" . $diarioFiltrado . "` WHERE fechaModificado<='" . $fechaFiltrada . "' GROUP BY asiento)" .
@@ -211,19 +221,19 @@ class operacionesBD {
         }
         
         if($opcionesConsulta['asiento'][0]['seleccionado'] == "si") {
-            $asientoFiltrado = filter_var($opcionesConsulta['asiento'][0]['valor'], FILTER_SANITIZE_MAGIC_QUOTES);
+            $asientoFiltrado = self::filtrar($opcionesConsulta['asiento'][0]['valor']);
             $sql = $sql ."listaAsientos.asiento='".$asientoFiltrado."' AND ";
         }
         if($opcionesConsulta['fecha'][0]['seleccionado'] == "si") {
-            $fechaFiltrada = filter_var($opcionesConsulta['fecha'][0]['valor'], FILTER_SANITIZE_MAGIC_QUOTES);
+            $fechaFiltrada = self::filtrar($opcionesConsulta['fecha'][0]['valor']);
             $sql = $sql ."listaAsientos.fecha='".$fechaFiltrada."' AND ";
         }
         if($opcionesConsulta['texto'][0]['seleccionado'] == "si") {
-            $textoFiltrado = filter_var($opcionesConsulta['texto'][0]['valor'], FILTER_SANITIZE_MAGIC_QUOTES);
+            $textoFiltrado = self::filtrar($opcionesConsulta['texto'][0]['valor']);
             $sql = $sql ."(listaAsientos.situacion LIKE '%".$textoFiltrado."%' OR listaAsientos.incidencia LIKE '%".$textoFiltrado."%' OR listaAsientos.otroTexto LIKE '%".$textoFiltrado."%') AND ";
         }
         if($opcionesConsulta['usuario'][0]['seleccionado'] == "si") {
-            $usuarioFiltrado = filter_var($opcionesConsulta['usuario'][0]['valor'], FILTER_SANITIZE_MAGIC_QUOTES);
+            $usuarioFiltrado = self::filtrar($opcionesConsulta['usuario'][0]['valor']);
             $sql = $sql ."listaAsientos.asignado='".$usuarioFiltrado."' AND ";        
         }
         
@@ -260,7 +270,38 @@ class operacionesBD {
         // Devolvemos los valores obtenidos
         return $listaAsientos;
     }
+        
     
-    
+    /*
+     * Función para insertar datos en un Asiento
+     */
+
+    public static function altaDatosAsiento($datos) {
+
+        $retorno = FALSE;
+        
+        // Filtramos los datos introducidos por el usuario
+        $filDiario = self::filtrar($datos['diario']);
+        $filAsiento = self::filtrar($datos['asiento']);
+        $filFecha = self::filtrar($datos['fecha']);
+        $filSituacion = self::filtrar($datos['situacion']);
+        $filIncidencia = self::filtrar($datos['incidencia']);
+        $filOtroTexto = self::filtrar($datos['otroTexto']);
+        $filAsignado = self::filtrar($datos['asignado']);
+        $filCerrado = self::filtrar($datos["cerrado"]);
+        
+
+        $sql = "INSERT INTO `" . $filDiario . "` (`asiento`, `fecha`, `situacion`, `incidencia`, `otroTexto`, `asignado`, `fechaModificado`, `usuarioModifica`, `cerrado`) "
+                . "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $arrayParametros = array($filAsiento, $filFecha, $filSituacion, $filIncidencia, $filOtroTexto, $filAsignado, $datos['fechaModificado'], $datos['usuarioModifica'], $filCerrado);
+        $resultado = self::consultaPreparada($sql, $arrayParametros, 'ACCION', 'diariosparalelos');
+
+        if ($resultado === 1 || $resultado === "1")            
+            $retorno = TRUE;
+        
+        // Retornamos el resultado
+        return $retorno;
+    }
 
 } // Fin de la clase "operacionesBD"

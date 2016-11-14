@@ -3,6 +3,7 @@ var opcionesConsulta;
 var asientos;
 var usuarios; // Contiene los usuarios definidos
 var miID;   // Contiene la variable de control del asiento seleccionado
+var datosGrabar; // Contienen los datos que se quieren modificar
 var pendienteGrabar = false;
 
 /*
@@ -41,6 +42,46 @@ function listarDiarios() {
         });
     });
 }
+
+
+
+function guardarDatosAsientos(){
+    
+    // Recuperamos los datos a guardar   
+    var asiento = $(miID+" label.mostraAsiento").data("asiento");
+    var diario = $(miID+" label.mostraAsiento").data("diario");
+    var fecha = $(miID+" label.mostrarFecha").data("fechaasiento");
+    var situacion = $(miID+" input.textoSituacion").val();
+    var incidencia = $(miID+" input.textoIncidencia").val();
+    var otroTexto = $(miID+" input.textoOtros").val();
+    var asignado = $(miID+" input.asignado").val(); 
+    var cerrado;    
+    if ($(miID + " input.checkActivo").is(':checked')) {
+        cerrado = 1;
+    } else {
+        cerrado = 0;
+    }
+    
+    // Inicializamos el array
+    datosGrabar = new Array(); 
+        
+    // Definimos el array JSON con los indices
+    datosGrabar = {asiento: asiento , diario: diario, fecha: fecha, situacion: situacion, incidencia: incidencia, otroTexto: otroTexto, asigna: asignado, cerrado: cerrado};
+    
+    $.ajax({
+        url: "./miAjax/grabarDatosAsientos.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {datos: datosGrabar}
+    }).done(function (resultado){
+        alert(JSON.stringify(resultado));
+    }).fail(function() {
+        return false;        
+    }).always(function (){
+        // FALTA CODIGO
+    });
+}
+    
 
 
 /*
@@ -316,7 +357,7 @@ function listarAsientos(consulta){
                             "<div class='contenDatos'>"+
                                 "<div class='contenDatosSuperior'>"+
                                     "<div class='contenFecha'>"+                                        
-                                        "<label class='mostrarTitulo'>Fecha:</label><label class='mostrarFecha' data-fechaAsiento='"+asientos[i].fecha+"' title='Fecha presentación del asiento'>"+formatoFechaAsiento+"</label>"+                                        
+                                        "<label class='mostrarTitulo'>Fecha:</label><label class='mostrarFecha' data-fechaasiento='"+asientos[i].fecha+"' title='Fecha presentación del asiento'>"+formatoFechaAsiento+"</label>"+                                        
                                     "</div>"+
                                     "<div class='contenSituacion'>"+
                                         "<label class='mostrarTitulo'>Situación:</label>"+
@@ -368,7 +409,7 @@ function listarAsientos(consulta){
 function datosPendientes() {
     if (pendienteGrabar == false) {   
         // Introducimos el recordatorio "pendiente grabar"
-        $("#bloqueInformaSuperior").append("<span class='campoPendienteGrabar'>¡Pendiente grabar modificaciones!</span>");
+        $("#bloqueInformaSuperior").append("<span class='campoPendienteGrabar'>¡Pendiente GUARDAR modificaciones!</span>");
         $(".campoPendienteGrabar").fadeIn();
         // Cambiamos la variable de control
         pendienteGrabar = true;  
@@ -407,25 +448,28 @@ function activarCampos() {
     $("#zonaRelacionAsientos *").attr("disabled", false);
     // Desabilitamos los "checkActivo"
     $("#zonaRelacionAsientos .checkActivo").attr("disabled", true);
-    // Cambiamos el color de fondo
+    // Cambiamos el color de fondo para el contenido:
     $(".contenAsiento, .mostrarFecha, .contenDatos").css("background-color", "white");    
     
-    
+    /* Busco todos los elementos que estan seleccionados en el formulario de busqueda
+     * y los habilito y cambio color de fondo.
+     */    
     $("#formularioBusqueda .checkBusqueda").each(function(){                
-        // Recupero los elementos que controla el check.
-        var elemento = JSON.parse('['+$(this).data("controla")+']');  
-        if ($(this).is(':checked')) {
-            // Recorremos todos los elementos por si tenemos más de uno               
-            for (i in elemento) {
-                $(elemento[i]).attr("disabled", false);
-                $(elemento[i]).css("background-color", "white");
-            }
-        }
-        else {
-            // Recorremos todos los elementos por si tenemos más de uno               
-            for (i in elemento) {
-                $(elemento[i]).attr("disabled", true);                
-                $(elemento[i]).css("background-color", "");
+        // Recupero los elementos que controla el check, escepto los de tipo "radio".
+        if ($(this).attr('type') != 'radio') {
+            var elemento = JSON.parse('[' + $(this).data("controla") + ']');
+            if ($(this).is(':checked')) {
+                // Recorremos todos los elementos por si tenemos más de uno               
+                for (i in elemento) {
+                    $(elemento[i]).attr("disabled", false);
+                    $(elemento[i]).css("background-color", "white");
+                }
+            } else {
+                // Recorremos todos los elementos por si tenemos más de uno
+                for (i in elemento) {
+                    $(elemento[i]).attr("disabled", true);
+                    $(elemento[i]).css("background-color", "");
+                }
             }
         }
     });
@@ -637,10 +681,8 @@ $(function() {
          * Establecemos el evento "click" para el botón GUARDAR
          */
         $("#zonaRelacionAsientos").on('click', ".botonGuardar", function () {
-            alert("Datos pendientes de guardar!");
-            
-            // *************************** FALTA CODIGO 
-            
+            // Guardamos los datos introducidos
+            guardarDatosAsientos();
             
         });
    
