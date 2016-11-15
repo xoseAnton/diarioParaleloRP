@@ -1,10 +1,11 @@
 // Variable globales
 var opcionesConsulta;
-var asientos;
+var listadoAsientos;
 var usuarios; // Contiene los usuarios definidos
 var miID;   // Contiene la variable de control del asiento seleccionado
 var datosGrabar; // Contienen los datos que se quieren modificar
 var pendienteGrabar = false;
+
 
 /*
  * Función introduce los usuarios activos definidos en la base de datos
@@ -75,20 +76,45 @@ function guardarDatosAsientos(){
         data: {datos: datosGrabar}
     }).done(function (resultado){
         if (resultado.grabado == true) {
-            // Elimino el elemento de aviso para guardar datos
-            $(".campoPendienteGrabar").remove();
-            // Introducimos el recordatorio "pendiente grabar"
-            $("#bloqueInformaSuperior").append("<span class='campoAvisoGrabado'>¡Datos GRABADOS correctamente!</span>");
-            $(".campoAvisoGrabado").fadeIn();
-            // Cambiamos la variable de control
-            pendienteGrabar = false;  
             
+            // Guardo los nuevos datos en el array que contine el listado de asientos
+            alert($(miID+ " .botonAbrir").data("id"));
             
+            // Elimino los elementos creados especificamente para modificar datos
+            $(".campoPendienteGrabar, .botonGuardar, .botonCerrar, .botonAsignado, .contenAsignadoUsuario").remove();
             
-            // PENDIENTE CODIGO
+            // Avisamos de que los datos se grabaron correctamente
+            avisoDatosGrabados();
+
+            // Introduzco nuevamente solo lectura en los campos        
+            $(miID + " .textoSituacion," + miID + " .textoIncidencia," + miID + " .textoOtros").attr("readonly", true);
+            // Desabilito el "checkActivo"
+            $(miID + " .checkActivo").attr("disabled", true);
             
+            // Muestro el borde en verde del asiento seleccionado
+            $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border-color", "green");
+            $(miID + " .contenBotonsBaixo").css("border-top-color", "green");            
             
-            
+            // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
+            setTimeout(function () {
+                //LLamamos a la función para desactivar campos
+                activarCampos();
+
+                // Muestro el borde con otro color inidicando que fué modificado
+                $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border-color", "orange");
+                $(miID + " .contenBotonsBaixo").css("border-top-color", "orange");
+
+                // Elimino el resto de elementos creados especificamente para modificar datos
+                $(".campoAvisoGrabado, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
+
+                // Muestro nuevamente los botones de abrir/información
+                $(miID + " .botonAbrir").css("display", "");
+                $(miID + " .botonDetalle").css("display", "");
+
+                //Mostramos la barra de desplazamiento
+                $("#zonaRelacionAsientos").css("overflow-y", "");
+
+            }, 2000);
             
         } else {
             alert("No su pudo grabar las modificaciones!");            
@@ -307,7 +333,11 @@ function listarAsientos(consulta){
         type: 'POST',
         dataType: 'json',
         data: {opciones: consulta}
-    }).done(function (asientos){                
+    }).done(function (asientos){
+        // Inicializamos la variable
+        listadoAsientos = new Array();
+        // Guardamos la consulta
+        listadoAsientos = asientos;
         // Calculo el número de elementos recibido
         var numeroAsientos = Object.keys(asientos).length;
 
@@ -424,14 +454,31 @@ function listarAsientos(consulta){
     });      
 }
 
+
+
+/*
+ * Función para crear elemento de aviso: "Datos pendientes grabar".
+ * @returns {undefined}
+ */
 function datosPendientes() {
     if (pendienteGrabar == false) {   
-        // Introducimos el recordatorio "pendiente grabar"
-        $("#bloqueInformaSuperior").append("<span class='campoPendienteGrabar'>¡Pendiente GUARDAR modificaciones!</span>");
+        // Vaciamos el contenedor e introducimos el recordatorio "pendiente grabar"
+        $("#bloqueInformaSuperior").empty().append("<span class='campoPendienteGrabar'>¡Pendiente GUARDAR modificaciones!</span>");
         $(".campoPendienteGrabar").fadeIn();
         // Cambiamos la variable de control
         pendienteGrabar = true;  
     }
+}
+
+
+/*
+ * Función para crear elemento de aviso: "Datos grabados".
+ * @returns {undefined}
+ */
+function avisoDatosGrabados() {
+    // Vaciamos el contenedor e introducimos el recordatorio "pendiente grabar"
+    $("#bloqueInformaSuperior").empty().append("<span class='campoAvisoGrabado'>¡Datos GRABADOS correctamente!</span>");
+    $(".campoAvisoGrabado").fadeIn();
 }
 
 
@@ -529,10 +576,13 @@ $(function() {
     /*
      * Establezco el evento "ABRIR" para modificar asiento
      */
-    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function () {
-        // Borro los posibles botones ocultos de "cerrar" creados en otras llamadas
-        $(".botonCerrar").remove();
+    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function (evento) {
         
+        evento.preventDefault();
+        
+        // Borro los posibles botones ocultos y avisos creados en otras llamadas
+        $(".botonCerrar").remove();
+                
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
         
@@ -606,7 +656,10 @@ $(function() {
         });
         
         // Evento click para el botón cancelar:
-        $("#zonaRelacionAsientos").on('click', ".botonCerrar", function () {
+        $("#zonaRelacionAsientos").on('click', ".botonCerrar", function (evento) {
+            
+            evento.preventDefault();
+            
             //LLamamos a la función para desactivar campos
             activarCampos();
 
@@ -630,6 +683,8 @@ $(function() {
 
             //Mostramos la barra de desplazamiento
             $("#zonaRelacionAsientos").css("overflow-y", "");
+            
+            evento.stopPropagation(); 
         });
         
         
@@ -643,7 +698,8 @@ $(function() {
         $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAsignado", function () {
             $(this).css("padding", "");
         });
-        $("#zonaRelacionAsientos").on('click', ".botonAsignado", function () {
+        $("#zonaRelacionAsientos").on('click', ".botonAsignado", function (evento) {
+            evento.preventDefault();
             // Ocultamos el texto donde muestra el usuario asignado
             $(miID + " .asignado").css("display", "none");
             // Ocultamos el boton para no poder seleccionar nuevamente
@@ -658,7 +714,8 @@ $(function() {
             }
             // Mostramos el panel para seleccionar usuarios
             $(miID + " .contenAsignadoUsuario").css("display", "block");
-
+            
+            evento.stopPropagation(); 
         });
         
         
@@ -683,7 +740,8 @@ $(function() {
             $(this).css("border", "");
         });
         /* Para el caso de que seleccionemos un usuario */
-        $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function () {
+        $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function (evento) {
+            evento.preventDefault();
             //Cambiamos el valor de lo seleccionado.
             $(miID + " .asignado").val($(this).val());
             // Ocultamos el panel de selección de nuevos usuarios
@@ -693,20 +751,23 @@ $(function() {
             $(miID + " .botonAsignado").css("display", "");
             // Mostramos el aviso de pendiente grabar modificaciones
             datosPendientes();
+            
+            evento.stopPropagation(); 
         });
+        
         
         /*
          * Establecemos el evento "click" para el botón GUARDAR
          */
-        $("#zonaRelacionAsientos").on('click', ".botonGuardar", function () {
+        $("#zonaRelacionAsientos").on('click', ".botonGuardar", function (event) {                        
+            event.preventDefault();            
             // Guardamos los datos introducidos
-            guardarDatosAsientos();
-                
+            guardarDatosAsientos(); 
             
-            
+            event.stopPropagation();
         });
    
-        
+       evento.stopPropagation(); 
     });
     
     
@@ -719,7 +780,8 @@ $(function() {
     /*
      * Establecemos el evento "click" para el "checkbox" de las zonas de busqueda
      */
-    $(".checkBusqueda").click(function (){
+    $(".checkBusqueda").click(function (evento){
+        evento.preventDefault();
        // Recupero la información del contenedor 
        var contenedor = $(this).data("contenedor");
        // Compruebo si está seleccionado
@@ -751,6 +813,8 @@ $(function() {
                 $(elemento[i]).css("background-color", "");
             }
        }
+       
+       evento.stopPropagation(); 
     });
     
     
@@ -778,6 +842,7 @@ $(function() {
             listarAsientos(opcionesConsulta);
         }
        
+       evento.stopPropagation(); 
    });
    
    
