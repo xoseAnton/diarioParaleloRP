@@ -284,9 +284,9 @@ class operacionesBD {
         $filDiario = self::filtrar($datos['diario']);
         $filAsiento = self::filtrar($datos['asiento']);
         $filFecha = self::filtrar($datos['fecha']);
-        $filSituacion = self::filtrar($datos['situacion']);
-        $filIncidencia = self::filtrar($datos['incidencia']);
-        $filOtroTexto = self::filtrar($datos['otroTexto']);
+        $filSituacion = $datos['situacion']; // Introducimos texto no filtramos
+        $filIncidencia = $datos['incidencia']; // Introducimos texto no filtramos
+        $filOtroTexto = $datos['otroTexto']; // Introducimos texto no filtramos
         $filAsignado = self::filtrar($datos['asignado']);
         $filCerrado = self::filtrar($datos["cerrado"]);
         
