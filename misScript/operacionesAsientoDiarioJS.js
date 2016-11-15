@@ -78,8 +78,17 @@ function guardarDatosAsientos(){
         if (resultado.grabado == true) {
             
             // Guardo los nuevos datos en el array que contine el listado de asientos
-            alert($(miID+ " .botonAbrir").data("id"));
+            var indice = $(miID+ " .botonAbrir").data("id");
             
+            /* Guardo las modificaciones del asiento seleccionado 
+             * en la lista de asientos totales
+             */ 
+            listadoAsientos[indice].situacion = datosGrabar.situacion;
+            listadoAsientos[indice].incidencia = datosGrabar.incidencia;
+            listadoAsientos[indice].otroTexto = datosGrabar.otroTexto;
+            listadoAsientos[indice].asignado = datosGrabar.asignado;
+            listadoAsientos[indice].cerrado = datosGrabar.cerrado;
+                        
             // Elimino los elementos creados especificamente para modificar datos
             $(".campoPendienteGrabar, .botonGuardar, .botonCerrar, .botonAsignado, .contenAsignadoUsuario").remove();
             
@@ -96,7 +105,7 @@ function guardarDatosAsientos(){
             $(miID + " .contenBotonsBaixo").css("border-top-color", "green");            
             
             // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
-            setTimeout(function () {
+            setTimeout(function () {                
                 //LLamamos a la función para desactivar campos
                 activarCampos();
 
@@ -859,6 +868,41 @@ $(function() {
             // Realizamos la consulta                   
             listarAsientos(opcionesConsulta);
         }
+
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+     /*
+     * Establecemos el evento "click" para el botón imprimir
+     */
+    $("#mostrarImprimir").click(function (evento) {
+        
+        alert(JSON.stringify(listadoAsientos));
+        
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();        
+        $.ajax({
+        url: "./miAjax/pdfListadoAsientos.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {datos: listadoAsientos}
+    }).done(function (){
+                  
+        /*
+        var a = document.createElement("a");
+        a.target = "_blank";  
+        a.href = "./miAjax/pdfListadoAsientos.php"
+        a.click();
+    */
+        
+    }).fail(function() {
+         alert("No su pudo grabar las modificaciones!");        
+    }).always(function (){
+        // FALTA CODIGO
+    });
+        
 
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
