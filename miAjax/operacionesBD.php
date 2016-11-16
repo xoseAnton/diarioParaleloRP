@@ -303,5 +303,43 @@ class operacionesBD {
         // Retornamos el resultado
         return $retorno;
     }
+    
+    
+    /*
+     * Función para INFORMAR ASIENTO
+     */
+    public static function informeAsiento($datos) {
+        
+        $diario = $datos['diario'];
+        // Filtramos los datos introducidos por el usuario        
+        $filDiario = self::filtrar($diario);
+        $filAsiento = self::filtrar($datos['asiento']);
+        
+        // Construimos la orden de consulta
+        $sql = "SELECT * FROM `" . $filDiario . "` WHERE asiento= '".$filAsiento."' ORDER BY id DESC";
+        
+        // Ejecuto la consulta
+        $resultado = self::ejecutaConsulta($sql, "diariosparalelos");        
+        
+        // Variable de sesion que contendrá un array de objetos "Asiento"
+        $listaAsientos = array();
+        
+        // Compruebo el resultado
+        if (isset($resultado)) {
+            // Añadimos un elemento por cada procedimiento
+            $row = $resultado->fetch();
+            while ($row != null) {
+                //Incluimos el diario en los datos obtenidos
+                $row['diario'] = $diario;
+                $listaAsientos[] = new Asiento($row);
+                $row = $resultado->fetch();
+            }
+        }        
+        
+        // Devolvemos los valores obtenidos
+        return $listaAsientos;
+    }
+    
+    
 
 } // Fin de la clase "operacionesBD"
