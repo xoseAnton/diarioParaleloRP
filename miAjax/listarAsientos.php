@@ -22,7 +22,10 @@ $listaAsientos = array();
 if (isset($_SESSION['usuario'])) {
     
     // Recupero los datos de la consulta realizada
-    $opcionesConsulta = $_POST['opciones'];    
+    $opcionesConsulta = $_POST['opciones']; 
+    
+    // Guardamos las opciones de la consulta en la variable de sesión
+    $_SESSION['opcionesConsulta'] = $opcionesConsulta;
         
     // Consultamos en la base de datos
     $listaAsientos = operacionesBD::listarAsientos($opcionesConsulta);

@@ -1,6 +1,5 @@
 // Variable globales
 var opcionesConsulta;
-var listadoAsientos;
 var usuarios; // Contiene los usuarios definidos
 var miID;   // Contiene la variable de control del asiento seleccionado
 var datosGrabar; // Contienen los datos que se quieren modificar
@@ -76,18 +75,6 @@ function guardarDatosAsientos(){
         data: {datos: datosGrabar}
     }).done(function (resultado){
         if (resultado.grabado == true) {
-            
-            // Guardo los nuevos datos en el array que contine el listado de asientos
-            var indice = $(miID+ " .botonAbrir").data("id");
-            
-            /* Guardo las modificaciones del asiento seleccionado 
-             * en la lista de asientos totales
-             */ 
-            listadoAsientos[indice].situacion = datosGrabar.situacion;
-            listadoAsientos[indice].incidencia = datosGrabar.incidencia;
-            listadoAsientos[indice].otroTexto = datosGrabar.otroTexto;
-            listadoAsientos[indice].asignado = datosGrabar.asignado;
-            listadoAsientos[indice].cerrado = datosGrabar.cerrado;
                         
             // Elimino los elementos creados especificamente para modificar datos
             $(".campoPendienteGrabar, .botonGuardar, .botonCerrar, .botonAsignado, .contenAsignadoUsuario").remove();
@@ -343,10 +330,7 @@ function listarAsientos(consulta){
         dataType: 'json',
         data: {opciones: consulta}
     }).done(function (asientos){
-        // Inicializamos la variable
-        listadoAsientos = new Array();
-        // Guardamos la consulta
-        listadoAsientos = asientos;
+        
         // Calculo el número de elementos recibido
         var numeroAsientos = Object.keys(asientos).length;
 
@@ -363,7 +347,7 @@ function listarAsientos(consulta){
             // Mostramos la leyenda de los datos adquiridos
             var tiempo = new Date();
             $("#legendAñadir").append("<div id='leyendaListado'>Listado de asientos del diario "+asientos[0].diario+
-                    "<label id='textoLengMostrar'> (actualizado "+tiempo.getHours()+":"+tiempo.getMinutes()+"  h)</label></div>");
+                    "<label class='textoLengMostrar'> (actualizado "+tiempo.getHours()+":"+tiempo.getMinutes()+"  h)</label></div>");
 
             /*
              * Para el caso en que se consiga respuesta de la página php, recorremos todo el array
@@ -407,7 +391,7 @@ function listarAsientos(consulta){
                                     "<input type='button' class='botonAbrir' name='botonAbrir' value='' data-id='"+i+"' title='Apertura de los datos del asiento para poder modificar' />"+                                    
                                 "</div>"+
                                 "<div class='contenBotonsBaixo'>"+
-                                    "<input type='button' class='botonDetalle' name='botonDetalle' value='' title='Informacion detallada del asiento' />"+
+                                    "<input type='button' class='botonDetalle' name='botonDetalle' value='' data-id='"+i+"' title='Informacion detallada del asiento' />"+
                                 "</div>"+
                             "</div>"+
 
@@ -548,6 +532,208 @@ function activarCampos() {
         }
     });
 }
+
+
+function informeAsiento(consulta){     
+    $.ajax({
+        url: "./miAjax/informeAsiento.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {opciones: consulta}
+    }).done(function (infoAsiento){
+        
+        // Calculo el número de elementos recibidos
+        var numeroAsientos = Object.keys(infoAsiento).length;
+
+        if (numeroAsientos != 0){
+            
+            // Mostramos la leyenda de los datos adquiridos
+            var tiempo = new Date();
+            $("#legendInfoAsientos").append("<div class='leyendaListado'>Informe del asiento "+infoAsiento[0].asiento+" / "+infoAsiento[0].diario+
+                    "<label class='textoLengMostrar'> (actualizado "+tiempo.getHours()+":"+tiempo.getMinutes()+"  h)</label></div>");
+
+            /*
+             * Para el caso en que se consiga respuesta de la página php, recorremos todo el array
+             * y mostramos la información de cada asiento
+             * @type listarAsientos.operacionesAsientoDiarioJS_L231.asientos
+             */
+            for (var i in infoAsiento) {
+                /*
+                 * Función para incluir dos digitos en el dia y fecha
+                 * @param {type} dato
+                 * @returns {listarAsientos.operacionesAsientoDiarioJS_L251.digitosFecha.digito|String}
+                 */
+                function digitosFecha(datoFecha){
+                    var digitos = new String(datoFecha);
+                    if(digitos.length < 2)
+                        digitos = '0'+datoFecha;
+                    return digitos;
+                    }
+                // Recuperamos los datos:
+                var fechaAsiento = new Date(infoAsiento[i].fecha);
+                var formatoFechaAsiento = digitosFecha(fechaAsiento.getDate()) + " / " + digitosFecha((fechaAsiento.getMonth() + 1)) + " / " + fechaAsiento.getFullYear();
+                var fechaModificado = new Date(infoAsiento[i].fechaModificado);
+                var formatoFechaModificado = digitosFecha(fechaModificado.getDate()) + " / " + digitosFecha((fechaModificado.getMonth() + 1)) + " / " + fechaModificado.getFullYear();
+                
+                var condicionCerrado = ""
+                // Comprobamos si está cerrado el asiento
+                if (infoAsiento[i].cerrado == 1)
+                    condicionCerrado = "checked />";
+                else
+                    condicionCerrado = "/>"; 
+            
+                // Incluimos un nuevo asiento en su contenedor
+                $("#zonaRelacionInfoAsientos").append(    
+                        
+                        
+                        
+
+                        //MOSTRAMOS UN ASIENTO
+                    "<div class='asiento' id='asientoID"+i+"'>"+
+                        "<form id='formularioID' name='formularioID'>"+
+                            "<div class='contenAsiento'>"+
+                                "<label class='mostraAsiento' data-asiento='"+asientos[i].asiento+"' data-diario='"+asientos[i].diario+"' title='Número de asiento'>"+ asientos[i].asiento+"</label>"+
+                            "</div>"+
+                            "<div class='contenBotons'>"+
+                                "<div class='contenBotonsArriba'>"+
+                                    "<input type='button' class='botonAbrir' name='botonAbrir' value='' data-id='"+i+"' title='Apertura de los datos del asiento para poder modificar' />"+                                    
+                                "</div>"+
+                                "<div class='contenBotonsBaixo'>"+
+                                    "<input type='button' class='botonDetalle' name='botonDetalle' value='' data-id='"+i+"' title='Informacion detallada del asiento' />"+
+                                "</div>"+
+                            "</div>"+
+
+
+
+
+
+
+                    //-- MOSTRAMOS UN ASIENTO --
+                        "<div id='zonaAsientoID"+i+"' class='asiento'>"+
+                            "<form name='formularioID'>"+
+                                "<div class='contenAsiento'>"+
+                                    "<div class='contenFechaHora'>"+                                    
+                                        "<input type='text' class='textoFechaHora' name='textoFechaActualizar' readonly value='"+formatoFechaModificado+"' title='Fecha de grabación de los datos' />"+
+                                    echo "<input type='text' class='textoFechaHora' name='textoHoraActualizar' readonly value='".date_format($fechaModificaAsiento, "H:i")."' title='Hora de grabación de los datos' />";
+                                echo "</div>";
+                                echo "<div class='contenUsuarioModif'>";
+                                    echo "<input type='text' class='textoUsuarioModif' name='textoUsuarioModif' readonly value='".$asiento->getUsuarioModifica()."' title='Usuario que grabo los datos'/>";
+                                echo "</div>";
+                                
+                                //-- Envios de datos Asiento/Diario ocultos --
+                                echo "<input type='hidden' name='numeroAsiento' value='".$asiento->getAsiento()."' />";
+                                echo "<input type='hidden' name='numeroDiario' value='".$asiento->getDiario()."' />";
+                            echo "</div>";
+                            echo "<div class='contenBotons'>";
+                                echo "<div class='contenBotonsArriba'>";
+                                    // Si es el primer elemento no se podrá poner como actual (ya es el actual)
+                                    if($numeroInforme != 0)
+                                        echo "<input type='button' id='botonGuardarConfir".$asiento->getId()."' class='botonGuardar' name='botonGuardarConfir' value='Actual' onclick='mostrarConfirmarActualizar(".$asiento->getId().")' title='Guardar como ACTUAL los datos introducidos en esta fecha/hora'/>";
+                                echo "</div>";
+                                echo "<div id='contenBotonsBaixo".$asiento->getId()."' class='contenBotonsBaixo'>";
+                                // Si es el primer elemento no se podrá poner como actual (ya es el actual)
+                                if($numeroInforme != 0) {                                
+                                    //-- Contenedor de Confirmaci/Cancelación Modificar Datos --
+                                    echo "<div id='contenConfirmacion".$asiento->getId()."' class='contenConfirmacion'>";
+                                        echo "<div class='zonaConfirmacion'>";
+                                            echo "<div class='zonaConfirmacion1'>";
+                                            echo "</div>";
+                                            echo "<div class='zonaConfirmacion2'>";
+                                                echo "<div class='zonaTextoConfirmacion'>";
+                                                    echo "<input type='text' id='textoConfir".$asiento->getId()."' class='textoConfir' name='textoConfir' value='Guardar como ACTUALES los datos introducidos el: ".date_format($fechaModificaAsiento, "d/m/Y")." a las: ".date_format($fechaModificaAsiento, "H:i")."' readonly />";
+                                                echo "</div>";
+                                                echo "<div class='zonaBotonesConfirmacion'>";
+                                                    echo "<div class='zonaBotonGuardar'>";
+                                                        echo "<input type='submit' class='botonGuardarConfirma' name='botonGuardar' value='Si' title='Guardar las modificaciones realizadas en el asiento'/>";
+                                                    echo "</div>";
+                                                    echo "<div class='zonaBotonCancelar'>";
+                                                        echo "<input type='button' class='botonCerrarConfirma' name='botonCancelar' value='No' onclick='ocultarConfirmarActualizar(".$asiento->getId().")' title='Salir' />";
+                                                    echo "</div>";
+                                                    echo "<div class='cancelarFlotantes'></div>";
+                                                echo "</div>";
+                                                echo "<div class='cancelarFlotantes'></div>";
+                                            echo "</div>";
+                                        echo "</div>";
+                                    echo "</div>";
+                                }
+                                    
+                                echo "</div>";
+                            echo "</div>";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            "<div class='contenDatos'>"+
+                                "<div class='contenDatosSuperior'>"+
+                                    "<div class='contenFecha'>"+                                        
+                                        "<label class='mostrarTitulo'>Fecha:</label><label class='mostrarFecha' data-fechaasiento='"+asientos[i].fecha+"' title='Fecha presentación del asiento'>"+formatoFechaAsiento+"</label>"+                                        
+                                    "</div>"+
+                                    "<div class='contenSituacion'>"+
+                                        "<label class='mostrarTitulo'>Situación:</label>"+
+                                        "<input type='text' class='textoSituacion' name='textoSituacion' value='"+asientos[i].situacion+"' readonly onkeydown='datosPendientes()' title='Texto sobre la situación del asiento'/>"+
+                                    "</div>"+
+                                    "<div class='cancelarFlotantes'></div>"+
+                                "</div>"+
+                                "<div class='contenDatosInferior'>"+
+
+                                    "<div class='contenAsignado'>"+                                        
+                                        "<label class='mostrarTitulo'>Asignado:</label>"+
+                                        "<input type='text' class='asignado' name='asignado' value='"+asientos[i].asignado+"' readonly title='Persona que despacha el asiento'/>"+                                                                                
+                                        "<div class='contenBotonAsignado'></div>"+
+                                    "</div>"+
+
+                                    "<div class='contenIncidencia'>"+
+                                        "<label class='mostrarTitulo'>Incidencia:</label>"+
+                                        "<input type='text' class='textoIncidencia' name='textoIncidencia' readonly value='"+asientos[i].incidencia+"' onkeydown='datosPendientes()' title='Texto sobre las incidencias del asiento' />"+
+                                    "</div>"+
+
+                                    "<div class='contenOtros'>"+
+                                        "<label class='mostrarTitulo'>Otros:</label>"+
+                                        "<input type='text' class='textoOtros' name='textoOtros' readonly value='"+asientos[i].otroTexto+"' onkeydown='datosPendientes()' title='Texto para otras incidencias'/>"+
+                                    "</div>"+
+
+                                    "<div class='contenActivos'>"+
+                                        "<label class='mostrarTitulo'>Activo:</label>"+
+                                        "<input type='checkbox' class='checkActivo' name='checkActivo' disabled onchange='datosPendientes()' title='Asiento abierto o cerrado' "+ condicionCerrado +
+                                    "</div>"+
+
+                                    "<div class='cancelarFlotantes'></div>"+
+                                "</div>"+
+                            "</div>"+
+                            "<div class='cancelarFlotantes'></div>"+
+                        "</form>"+
+                    "</div>"  
+                    
+                    
+                    
+                    
+                    
+                    
+                );
+           };     
+       }
+           
+           
+    }).fail(function() {
+        alert("FALLO LA RESPUESTA");
+    }).always(function (){
+        // FALTA CODIGO
+    });      
+}
+
+
 
 
 /*
@@ -807,9 +993,7 @@ $(function() {
     /*
      * Establecemos el evento "click" para el "checkbox" de las zonas de busqueda
      */
-    $(".checkBusqueda").click(function (evento) {
-        // Detenemos la acción predeterminada del evento
-        evento.preventDefault();
+    $(".checkBusqueda").click(function (evento) {        
         // Recupero la información del contenedor 
         var contenedor = $(this).data("contenedor");
         // Compruebo si está seleccionado
@@ -839,9 +1023,6 @@ $(function() {
                 $(elemento[i]).css("background-color", "");
             }
         }
-
-        // Paramos la propagación indeseada del evento
-        evento.stopPropagation();
     });
     
     
@@ -879,31 +1060,44 @@ $(function() {
      */
     $("#mostrarImprimir").click(function (evento) {
         
-        alert(JSON.stringify(listadoAsientos));
-        
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();        
-        $.ajax({
-        url: "./miAjax/pdfListadoAsientos.php",
-        type: 'POST',
-        dataType: 'json',
-        data: {datos: listadoAsientos}
-    }).done(function (){
-                  
-        /*
+        
         var a = document.createElement("a");
         a.target = "_blank";  
         a.href = "./miAjax/pdfListadoAsientos.php"
         a.click();
-    */
         
-    }).fail(function() {
-         alert("No su pudo grabar las modificaciones!");        
-    }).always(function (){
-        // FALTA CODIGO
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
     });
-        
+    
+    
+    /*
+     * Establezco el evento "INFORME" para modificar asiento
+     */
+    $("#zonaRelacionAsientos").on('click', ".botonDetalle", function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+                
+        // Borro los posibles botones ocultos y avisos creados en otras llamadas
+        $(".botonCerrar").remove();
 
+        // Recupero el ID asignado al asiento seleccionado para modificar
+        miID = "#asientoID" + $(this).data("id");
+
+        //LLamamos a la función para desactivar campos
+        desactivarCampos();
+        
+        //Sacamos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "hidden");
+        
+        // Muestro un borde azul en el asiento que solicito información        
+        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border-color", "blue");
+        $(miID + " .contenBotonsBaixo").css("border-top-color", "blue");            
+        
+        
+        
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
     });

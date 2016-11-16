@@ -33,7 +33,7 @@
     color:purple;
 }
 
-#textoLengMostrar {
+.textoLengMostrar {
     font-size: 10pt;
     color: blue;
 }
