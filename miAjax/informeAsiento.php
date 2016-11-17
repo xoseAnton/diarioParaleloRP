@@ -25,7 +25,7 @@ if (isset($_SESSION['usuario'])) {
     $datosConsulta = $_POST['opciones'];
 
     // Consultamos en la base de datos
-    $listaAsientos = operacionesBD::listarAsientos($datosConsulta);
+    $listaAsientos = operacionesBD::informeAsiento($datosConsulta);
 
     // Retorno un "string" con los datos optenidos
     echo json_encode($listaAsientos);

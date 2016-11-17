@@ -499,27 +499,38 @@
 * ZONA PARA MOSTRAR INFORME DE ASIENTOS
 */
 
-#zonaInfoAsientos {
-    display: none;
-    position: absolute;
+#zonaInfoAsientos {    
+    display: none;    
     margin: 0;
     padding: 0 0 0 5px;
     height: 715px;
-    background-color: white;    
-    opacity: 0.5;
-    border:none;    
+    background-color: beige;
+    border:2px solid purple;
+    border-radius: 1em;    
     color: purple;
     font-weight: bold;
 }
 
 #legendInfoAsientos {
+    text-align: center;
     font-family : Arial, sans-serif;
     font-size: 16pt;
-    font-weight:bold;
+    font-weight:bold;    
+    width: 1200px;
+    height: 35px;
+    background-color: white;
     color:purple;
+    border:2px solid purple;
+    border-radius: 1em;    
 }
 
-#zonaRelacionInfoAsientos {
+.leyendaInfoListado {
+    float: left;
+    margin-left: 400px;
+    margin-top: 5px;
+}
+
+#zonaRelacionInfoAsientos {    
     margin: 0;
     padding: 0;
     height: 675px;
@@ -559,6 +570,14 @@
     background-color: #eee;
 }
 
+.contenBotonsInfo {
+    margin: 0;
+    padding: 0;
+    float: left;
+    height: 60px;
+    width: 40px;    
+}
+
 .contenInfoBotonsArriba {
     margin: 0;
     padding: 0 0 0 1px;
@@ -570,9 +589,134 @@
     margin: 0;
     padding: 0;
     height: 30px;
-    width: 60px;
+    width: 40px;
     border-top: 3px solid purple;
 }
+
+.botonActualInfo {     
+    padding: 1px 0 1px 0;
+    font-size: 7.5pt;
+    font-weight: bold; 
+    text-align: center;
+    outline: none;
+    width: 38px;
+    height:28px;    
+    background-color: yellow;
+    border-radius: 0.8em; 
+}
+
+#botonCerrarInfo {
+    float: right;
+    margin-right: 10px;
+}
+
+
+/*
+*   Zona de BOTONES CONFIRMACIÓN/CANCELACIÓN
+*/
+
+.contenConfirmacion {        
+    padding: 0;
+    left: 0;
+    background-color: transparent;    
+}
+
+.zonaConfirmacion {    
+    border: 2px solid red;
+    background-color: #ffff00;
+    width: 720px;
+    height: 26px;    
+    border-radius: 4em;    
+}
+
+.zonaConfirmacion1 {
+    float: left;
+    width:26px;
+    height: 26px;        
+    border: none;
+    margin-left: 5px;    
+    background-image: url(../imagenes/confirmacion.png);    
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.zonaConfirmacion2 {
+    float: left;
+    height: 26px;        
+    margin-left: 5px;
+    padding: 0;        
+}
+
+.zonaTextoConfirmacion { 
+    float: left;
+    height: 25px;        
+    padding: 0;
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+.zonaBotonesConfirmacion{    
+    float: left;
+}
+
+.textoConfir{
+    text-align: left;    
+    color: red;
+    width: 475px;
+    height: 26px;
+    margin-left: 5px;
+    display: block;
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+}
+
+.zonaBotonGuardarConfirmacion {
+    margin-right: 25px;
+    margin-top: 1px;
+    float: left;    
+}
+
+.botonGuardarConfirma {
+    outline: none;
+    width:65px;
+    height:24px;
+    padding-left:0px;
+    text-align: right;
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: aliceblue;
+    background-image: url(../imagenes/aceptar_boton.png);            
+    background-size: 40%;
+    background-position: 2%;
+    background-repeat: no-repeat;   
+    border-radius: 0.8em;
+}
+
+.zonaBotonCancelarConfirmacion {
+    margin-right: 25px;
+    margin-top: 1px;
+    float: left;
+}
+
+.botonCerrarConfirma {
+    outline: none;
+    width:65px;
+    height:24px;
+    padding-left:0px;
+    text-align: right;
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: aliceblue;
+    background-image: url(../imagenes/cancelar_boton.png);            
+    background-size: 35%;
+    background-position: 8%;
+    background-repeat: no-repeat;   
+    border-radius: 0.8em;
+}
+
+
 
 /*
 *   ZONA NO DATOS

@@ -543,19 +543,24 @@ function informeAsiento(consulta){
         dataType: 'json',
         data: {opciones: consulta}
     }).done(function (infoAsiento){
-
+        
         // Calculo el número de elementos recibidos
         var numeroAsientos = Object.keys(infoAsiento).length;
         if (numeroAsientos != 0) {
 
             // Variable de control
             var numeroInforme = 0;
-
-            // Mostramos la leyenda de los datos adquiridos
+            
+            /* 
+             * Borramos las leyendas anteriores y mostramos la nueva
+             * leyenda de los datos adquiridos
+             */
             var tiempo = new Date();
-            $("#legendInfoAsientos").append("<div class='leyendaInfoListado'>Informe del asiento " + infoAsiento[0].asiento + " / " + infoAsiento[0].diario +
-                    "<label class='textoLengMostrar'> (actualizado " + tiempo.getHours() + ":" + tiempo.getMinutes() + "  h)</label></div>");
-
+            $("#legendInfoAsientos").empty().append("<div class='leyendaInfoListado'>Informe del asiento " + infoAsiento[0].asiento + " / " + infoAsiento[0].diario +
+                    "<label class='textoLengMostrar'> (actualizado " + tiempo.getHours() + ":" + tiempo.getMinutes() + "  h)</label></div>"+
+                    "<input type='button' id='botonCerrarInfo' class='botonCerrar' name='botonCerrarConfir' value='' title='Cancelar las modificaciones realizadas en el asiento' />"+
+                    "<div class='cancelarFlotantes'></div>"
+                    );
 
             /*
              * Función para incluir dos digitos en el dia y fecha
@@ -583,10 +588,10 @@ function informeAsiento(consulta){
 
                 // Recuperamos los datos:
                 var fechaAsiento = new Date(infoAsiento[i].fecha);
-                var formatoFechaAsiento = digitosFecha(fechaAsiento.getDate()) + " / " + digitosFecha((fechaAsiento.getMonth() + 1)) + " / " + fechaAsiento.getFullYear();
+                var formatoFechaAsiento = digitosFecha(fechaAsiento.getDate()) + "/" + digitosFecha((fechaAsiento.getMonth() + 1)) + "/" + fechaAsiento.getFullYear();
                 var fechaModificado = new Date(infoAsiento[i].fechaModificado);
-                var formatoFechaModificado = digitosFecha(fechaModificado.getDate()) + " / " + digitosFecha((fechaModificado.getMonth() + 1)) + " / " + fechaModificado.getFullYear();
-                var formatoHoraModificado = digitosFecha(fechaModificado.getHours()) + " : " + digitosFecha(fechaModificado.getMinutes());
+                var formatoFechaModificado = digitosFecha(fechaModificado.getDate()) + "/" + digitosFecha((fechaModificado.getMonth() + 1)) + "/" + fechaModificado.getFullYear();
+                var formatoHoraModificado = digitosFecha(fechaModificado.getHours()) + ":" + digitosFecha(fechaModificado.getMinutes());
 
                 var condicionCerrado = ""
                 // Comprobamos si está cerrado el asiento
@@ -599,7 +604,7 @@ function informeAsiento(consulta){
                 $("#zonaRelacionInfoAsientos").append(
 
                 //-- MOSTRAMOS DETALLE DEL ASIENTO --
-                    "<div id='zonaAsientoID"+i+"' class='asiento'>"+
+                    "<div id='zonaAsientoID"+i+"' data-asiento='" + asiento + "' data-diario='" + diario + "' class='asiento'>"+
                         "<form name='formularioID'>"+
                             "<div class='contenInfoAsiento'>"+
                                 "<div class='contenFechaHora'>"+                                    
@@ -610,7 +615,7 @@ function informeAsiento(consulta){
                                     "<input type='text' class='textoUsuarioModif' name='textoUsuarioModif' readonly value='"+infoAsiento[i].usuarioModifica+"' title='Usuario que grabo los datos'/>"+
                                 "</div>"+
                             "</div>"+
-                            "<div class='contenBotons'>"+
+                            "<div class='contenBotonsInfo'>"+
                                 "<div id='contenBotonsArribaID"+i+"' class='contenInfoBotonsArriba'></div>"+
                                 "<div id='contenBotonsBaixoID"+i+"' class='contenInfoBotonsBaixo'></div>"+
                             "</div>"+
@@ -657,15 +662,20 @@ function informeAsiento(consulta){
                 );
         
                 // Si es el primer elemento no se podrá poner como actual (ya es el actual)
-                if ($numeroInforme != 0) {
+                if (numeroInforme != 0) {
                     $("#contenBotonsArribaID" + i + "").append(
-                            "<input type='button' class='botonGuardar' name='botonGuardarConfir' value='Actual' data-id='" + i + "' data-asiento='" + asiento + "' data-diario='" + diario + "' title='Guardar como ACTUAL los datos introducidos en esta fecha/hora'/>");
+                            "<input type='button' class='botonActualInfo' name='botonActualInfo' value='Actual' data-id='" + i + "' data-fecha='"+formatoFechaModificado+"' data-hora='"+formatoHoraModificado+"' title='Guardar como ACTUAL los datos introducidos en esta fecha/hora'/>");
                 }
+                // Incrementamos la variable
+                numeroInforme++;
            }  
            
+            // Ocultamos el contenedor con el listado de asientos
+            $("#zonaMostrarDatos").css("display", "none");
+            
             // Mostramos el contenedor para enseñar los datos
             $("#zonaInfoAsientos").css("display", "block");
-       }   
+       }
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
     }).always(function (){
@@ -1018,10 +1028,7 @@ $(function() {
      */
     $("#zonaRelacionAsientos").on('click', ".botonDetalle", function (evento) {
         // Detenemos la acción predeterminada del evento
-        evento.preventDefault();
-                
-       // Borramos los posibles datos de otras consultas
-        $("#zonaRelacionInfoAsientos").empty();
+        evento.preventDefault();       
 
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
@@ -1032,10 +1039,6 @@ $(function() {
         //Sacamos la barra de desplazamiento
         $("#zonaRelacionAsientos").css("overflow-y", "hidden");
         
-        // Muestro un borde azul en el asiento que solicito información        
-        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border-color", "blue");
-        $(miID + " .contenBotonsBaixo").css("border-top-color", "blue");
-        
         // Recuperamos los datos a guardar   
         var asiento = $(miID + " label.mostraAsiento").data("asiento");
         var diario = $(miID + " label.mostraAsiento").data("diario");
@@ -1045,6 +1048,114 @@ $(function() {
         
         // Realizamos la consulta                   
         informeAsiento(consulta);
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+    // Eventos para el botón Cerrar cuadro de información asiento
+    $("#legendInfoAsientos").on('focus mouseenter', "#botonCerrarInfo", function () {
+        $(this).css("padding", "15px");
+    });
+    $("#legendInfoAsientos").on('focusout mouseleave', "#botonCerrarInfo", function () {
+        $(this).css("padding", "");
+    });
+    
+    $("#legendInfoAsientos").on('click', "#botonCerrarInfo", function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Ocultamos el contenedor con el detalle del asiento
+        $("#zonaInfoAsientos").css("display", "none");
+        
+        // Borramos los elementos de la consulta
+        $("#zonaRelacionInfoAsientos").empty();
+
+        //LLamamos a la función para activar campos
+        activarCampos();        
+        
+        //Mostramos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "");
+        
+        // Mostramos el contenedor para enseñar los datos del listado de asientos
+        $("#zonaMostrarDatos").css("display", "block");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+    // Eventos para el botón Actualizar Información Asiento
+    $("#zonaRelacionInfoAsientos").on('focus mouseenter', ".botonActualInfo", function () {
+        $(this).css("border-color", "red");
+        $(this).css("color", "red");
+    });
+    $("#zonaRelacionInfoAsientos").on('focusout mouseleave', ".botonActualInfo", function () {
+        $(this).css("border-color", "");
+        $(this).css("color", "");
+    });
+        
+    $("#zonaRelacionInfoAsientos").on('click', ".botonActualInfo", function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Recupero el ID asignado al asiento seleccionado para modificar
+        miID = "#zonaAsientoID" + $(this).data("id");
+        // Recupero los datos
+        var fechaModifica = $(this).data("fecha");
+        var horaModifica = $(this).data("hora");
+        
+        // Muestro un borde rojo en el asiento que modifico
+        $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border", "2px solid red");
+        $(miID + " .contenInfoBotonsBaixo").css("border-top", "3px solid red");
+
+        /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
+         * posibles mensajes (y destacar el asiento que se modifica).
+         */
+        $(miID).before("<div id='bloqueInformaSuperior' class='bloquePendienteGrabar'></div>");
+        $(miID).after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");
+
+        /* Miramos la posición del asiento por si está muy al final de la
+         * página (se puede ocultar con el recordatorio de grabar), entonces
+         * bajamos un poco la barra de desplazamiento.
+         */
+        var posicion = $(miID).position();
+        if (posicion.top > 700) {
+            var posicionBarra = $("#zonaRelacionInfoAsientos").scrollTop();
+            $("#zonaRelacionInfoAsientos").scrollTop(posicionBarra + 90);
+        }
+        
+        // Ocultamos los botones de "Actulizar" para no repetir el proceso
+        $("#zonaRelacionInfoAsientos .botonActualInfo").css("display", "none");
+        // Ocultamos el boton de cerrar la información de los asientos
+        $("#botonCerrarInfo").css("display", "none");
+
+        // Introduzco los botones para confirmar la grabación
+        $("#bloqueInformaSuperior").append(                
+                "<div class='contenConfirmacion'>"+
+                    "<div class='zonaConfirmacion'>"+
+                        "<div class='zonaConfirmacion1'></div>"+
+                        "<div class='zonaConfirmacion2'>"+
+                            "<div class='zonaTextoConfirmacion'>"+
+                                "<input type='text' class='textoConfir' name='textoConfir' value='Quieres poner como actuales los datos de fecha: "+fechaModifica+" y hora: "+horaModifica+" ?' readonly />"+
+                            "</div>"+
+                            "<div class='zonaBotonesConfirmacion'>"+
+                                "<div class='zonaBotonGuardarConfirmacion'>"+
+                                    "<input type='button' class='botonGuardarConfirma' name='botonGuardarDiario' value='Si' title='Poner como actual este detalle de asiento'/>"+
+                                "</div>"+
+                                "<div class='zonaBotonCancelarConfirmacion'>"+
+                                    "<input type='button' class='botonCerrarConfirma' name='botonCancelarDiario' value='No' title='Cancelar la actualización del detalle de este asiento' />"+
+                                "</div>"+
+                                "<div class='cancelarFlotantes'></div>"+
+                            "</div>"+
+                            "<div class='cancelarFlotantes'></div>"+
+                        "</div>"+
+                    "</div>"+
+                "</div>");
+
+        //Sacamos la barra de desplazamiento
+        $("#zonaRelacionInfoAsientos").css("overflow-y", "hidden");        
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
