@@ -121,7 +121,98 @@ function guardarDatosAsientos(){
         // FALTA CODIGO
     });
 }
+   
+   
+/*
+ * Función para guardar los datos actuales de un detalle de asiento 
+ * seleccionado.
+ * 
+ * @returns {undefined}
+ */ 
+ function guardarDatosActuales() {
+     // Recuperamos los datos a guardar   
+    var asiento = $(miID).data("asiento");
+    var diario = $(miID).data("diario");
+    var fecha = $(miID+" label.mostrarFecha").data("fechaasiento");
+    var situacion = $(miID+" input.textoSituacion").val();
+    var incidencia = $(miID+" input.textoIncidencia").val();
+    var otroTexto = $(miID+" input.textoOtros").val();
+    var asignado = $(miID+" input.asignado").val(); 
+    var cerrado;    
+    if ($(miID + " input.checkActivo").is(':checked')) {
+        cerrado = 1;
+    } else {
+        cerrado = 0;
+    }
     
+    // Inicializamos el array
+    datosGrabar = new Array(); 
+        
+    // Definimos el array JSON con los indices
+    datosGrabar = {asiento: asiento , diario: diario, fecha: fecha, situacion: situacion, incidencia: incidencia, otroTexto: otroTexto, asignado: asignado, cerrado: cerrado};
+    
+    $.ajax({
+        url: "./miAjax/grabarDatosAsientos.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {datos: datosGrabar}
+    }).done(function (resultado){
+        if (resultado.grabado == true) {
+            
+            /* 
+             * Vaciamos el contenedor con el informe de los asientos para enseñar
+             * los nuevos.
+             */
+             $("#zonaRelacionInfoAsientos").empty();            
+
+            // Realizamos la nueva consulta para enseñar los datos nuevos
+            informeAsiento(datosGrabar);
+            
+            $(document).ready(function (){
+                // Creo el ID del primer elemento (que se creo al grabar)
+                miID = "#zonaAsientoID0";
+                
+                /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
+                 * posibles mensajes (y destacar el asiento que se modifica).
+                 */
+                $(miID + "div").before("<div id='bloqueInformaSuperior' class='bloquePendienteGrabar'></div>");
+                $(miID + "div").after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");
+                
+                // Avisamos de que los datos se grabaron correctamente
+                avisoDatosGrabados();
+
+                // Muestro el borde en verde del asiento seleccionado
+                $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border-color", "green");
+                $(miID + " .contenInfoBotonsBaixo").css("border-top-color", "green");
+                
+                // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
+                setTimeout(function () {
+
+                    // Muestro el borde original del elemento                 
+                    $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border", "");
+                    $(miID + " .contenInfoBotonsBaixo").css("border-top", "");
+
+                    // Elimino el resto de elementos creados especificamente para modificar datos
+                    // $(".campoAvisoGrabado, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
+
+                    // Muestro el boton de cerrar la información de los asientos
+                    $("#botonCerrarInfo").css("display", "block");
+
+                    //Mostramos la barra de desplazamiento
+                    $("#zonaRelacionInfoAsientos").css("overflow-y", "");
+
+                }, 4000);
+            });
+
+        } else {
+            alert("No su pudo grabar las modificaciones!");
+        }
+    }).fail(function() {
+         alert("No su pudo grabar las modificaciones!");   
+    }).always(function (){
+        // FALTA CODIGO
+    });
+}
 
 
 /*
@@ -1142,10 +1233,10 @@ $(function() {
                             "</div>"+
                             "<div class='zonaBotonesConfirmacion'>"+
                                 "<div class='zonaBotonGuardarConfirmacion'>"+
-                                    "<input type='button' class='botonGuardarConfirma' name='botonGuardarDiario' value='Si' title='Poner como actual este detalle de asiento'/>"+
+                                    "<input type='button' class='botonGuardarConfirma' name='botonGuardarDiario' data-miid='" + miID + "' value='Si' title='Poner como actual este detalle de asiento'/>"+
                                 "</div>"+
                                 "<div class='zonaBotonCancelarConfirmacion'>"+
-                                    "<input type='button' class='botonCerrarConfirma' name='botonCancelarDiario' value='No' title='Cancelar la actualización del detalle de este asiento' />"+
+                                    "<input type='button' class='botonCerrarConfirma' name='botonCancelarDiario' data-miid='" + miID + "' value='No' title='Cancelar la actualización del detalle de este asiento' />"+
                                 "</div>"+
                                 "<div class='cancelarFlotantes'></div>"+
                             "</div>"+
@@ -1160,6 +1251,62 @@ $(function() {
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
     });
+   
+   
+   // Eventos para los botones de confirmación de "Actual detalle asiento".
+    $("#zonaRelacionInfoAsientos").on('focus mouseenter', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
+        $(this).css("border-color", "red");
+        $(this).css("color", "red");
+    });
+    $("#zonaRelacionInfoAsientos").on('focusout mouseleave', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
+        $(this).css("border-color", "");
+        $(this).css("color", "");
+    });
+        
+    $("#zonaRelacionInfoAsientos").on('click', ".botonCerrarConfirma", function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Recupero el ID asignado al asiento seleccionado para modificar
+        miID = $(this).data("miid");
+                
+        // Muestro el borde original del asiento que modifico
+        $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border", "");
+        $(miID + " .contenInfoBotonsBaixo").css("border-top", "");
+
+        /* Borro los campos introducidos en la parte superior e inferior del asiento para mostrar
+         * posibles mensajes.
+         */
+        $("#bloqueInformaSuperior").remove();
+        $("#bloqueInformaInferior").remove();
+        
+        // Muestro los botones de "Actulizar"
+        $("#zonaRelacionInfoAsientos .botonActualInfo").css("display", "block");
+        // Muestro el boton de cerrar la información de los asientos
+        $("#botonCerrarInfo").css("display", "block");
+
+        //Mostramos la barra de desplazamiento
+        $("#zonaRelacionInfoAsientos").css("overflow-y", "");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    $("#zonaRelacionInfoAsientos").on('click', ".botonGuardarConfirma", function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Recupero el ID asignado al asiento seleccionado para modificar
+        miID = $(this).data("miid");
+        
+        // Guardamos los datos introducidos
+        guardarDatosActuales();
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+   
    
     
     /*
