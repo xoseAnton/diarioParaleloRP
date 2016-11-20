@@ -168,32 +168,33 @@ function guardarDatosAsientos(){
             // Realizamos la nueva consulta para enseñar los datos nuevos
             informeAsiento(datosGrabar);
             
-            $(document).ready(function (){
+            // Realizamos una pausa para que cargue todos los elementos del informe del asiento
+            setTimeout(function (){
                 // Creo el ID del primer elemento (que se creo al grabar)
                 miID = "#zonaAsientoID0";
                 
-                /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
-                 * posibles mensajes (y destacar el asiento que se modifica).
-                 */
-                $(miID + "div").before("<div id='bloqueInformaSuperior' class='bloquePendienteGrabar'></div>");
-                $(miID + "div").after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");
-                
-                // Avisamos de que los datos se grabaron correctamente
-                avisoDatosGrabados();
-
                 // Muestro el borde en verde del asiento seleccionado
                 $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border-color", "green");
                 $(miID + " .contenInfoBotonsBaixo").css("border-top-color", "green");
                 
+                 /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
+                 * posibles mensajes (y destacar el asiento que se modifica).
+                 */
+                $(miID).before("<div id='bloqueInformaSuperior' class='bloquePendienteGrabar'></div>");
+                $(miID).after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");
+                
+                // Avisamos de que los datos se grabaron correctamente
+                avisoDatosGrabados();
+                
                 // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
                 setTimeout(function () {
-
+                    
                     // Muestro el borde original del elemento                 
                     $(miID + " .contenInfoAsiento, " + miID + " .contenDatos").css("border", "");
                     $(miID + " .contenInfoBotonsBaixo").css("border-top", "");
 
                     // Elimino el resto de elementos creados especificamente para modificar datos
-                    // $(".campoAvisoGrabado, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
+                    $(".campoAvisoGrabado, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
 
                     // Muestro el boton de cerrar la información de los asientos
                     $("#botonCerrarInfo").css("display", "block");
@@ -201,8 +202,8 @@ function guardarDatosAsientos(){
                     //Mostramos la barra de desplazamiento
                     $("#zonaRelacionInfoAsientos").css("overflow-y", "");
 
-                }, 4000);
-            });
+                }, 2000);
+            }, 100);
 
         } else {
             alert("No su pudo grabar las modificaciones!");
@@ -1306,8 +1307,57 @@ $(function() {
         evento.stopPropagation();
     });
     
-   
-   
+    
+    
+    /*
+     * Establecemos el evento "click" para el botón listar
+     */
+    $("#mostrarAcciones").click(function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault(); 
+        
+        //LLamamos a la función para desactivar campos
+        desactivarCampos();
+        
+        //Sacamos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "hidden");
+        
+        // Mostramos el panel del listado de acciones
+        $("#contenedorZonaAcciones").css("display", "block");
+
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+    // Eventos para el botón CERRAR cuadro de ACCIONES
+    $("#cerrarAcciones").on('focus mouseenter', function () {
+        $(this).css("padding", "15px");
+    });
+    $("#cerrarAcciones").on('focusout mouseleave', function () {
+        $(this).css("padding", "");
+    });
+    
+    $("#cerrarAcciones").click( function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Ocultamos el contenedor la información de las acciones
+        $("#contenedorZonaAcciones").css("display", "none");
+        
+        // Borramos los elementos de la consulta
+        $("#contenedorTextoIncidencias").empty();
+
+        //LLamamos a la función para activar campos
+        activarCampos();        
+        
+        //Mostramos la barra de desplazamiento
+        $("#zonaRelacionAsientos").css("overflow-y", "");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
     
     /*
      * FIN DE LA DEFINICIÓN DE EVENTOS

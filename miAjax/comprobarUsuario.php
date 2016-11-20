@@ -6,6 +6,9 @@ session_start();
 // Insertamos la clase para utilizar la base de datos
 require_once 'operacionesBD.php';
 
+// Establecemos por defecto la zona horaria
+date_default_timezone_set('Europe/Berlin');
+
 //Recupero las variables
 $miId = $_GET['id'];
 $miContraseña = $_GET['contraseña'];
@@ -20,6 +23,10 @@ if(isset($resultado)) {
         // Si encontramos una coincidencia guardamos el usuario en la variable de sesión
         $_SESSION['usuario'] = array();
         $_SESSION['usuario'] = ["id" => $resultado['id'], "nombre" => $resultado['nombre'], "rol" => $resultado['rol']];        
+        
+        // Definio el nuevo array de incidencias del usuario
+        $_SESSION['incidencias'] = array();
+        $_SESSION['incidencias'][] = date("H:i:s") . "-> Se conecta el usuario: " . $resultado['nombre'] . ".";
     }
 }
 else {

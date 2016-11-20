@@ -34,7 +34,7 @@ function cabeceraHorizontal($pdf, $diario, $fechaListado, $horaListado) {
     $pdf->SetFont('Arial', 'B', 15);
     $pdf->Cell(50, 10, utf8_decode('Diario: ' . $diario . ''), 0, 0, 'L');
     $pdf->SetFont('Arial', '', 8);
-    $pdf->Cell(0, 10, utf8_decode(' Fecha listado: '). $fechaListado . utf8_decode('     Hora: '). $horaListado , 0, 0, 'C');
+    $pdf->Cell(0, 10, utf8_decode(' Fecha listado: '). $fechaListado . utf8_decode('     Consulta: '). $horaListado. utf8_decode(' h') , 0, 0, 'C');
     $pdf->SetFont('Arial', 'BI', 8);
     // El parametro {nb} es generado por la función llamada AliasNbPages()
     $pdf->Cell(0, 10, utf8_decode('Página: ') . $pdf->PageNo() . ' / {nb}', 0, 0, 'R');

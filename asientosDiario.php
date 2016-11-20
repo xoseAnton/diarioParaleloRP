@@ -53,6 +53,23 @@ if (isset($_POST['desconectar'])) {
          <!-- Zona de PROGRAMA -->        
         <div id="zonaPrograma"> 
             
+            
+            
+            <!-- Zona para mostrar las acciones realizadas -->
+            <div id="contenedorZonaAcciones">                
+                    <div id="zonaAcciones">
+                        <div id="zonaTextoAcciones">
+                            <label id="portadaAcciones">Acciones:</label>
+                            <div id="contenedorTextoIncidencias"></div>                                
+                        </div>
+                        <div id="zonaBotonAcciones">
+                            <input type="button" id="cerrarAcciones" name="cerrarAcciones"/>
+                        </div>
+                    </div>
+            </div>
+            
+            
+            
             <!-- Zona de CONTROL Y BUSQUEDAS -->
             <div id="zonaControl">
                 <form id="formularioBusqueda" name="formularioBusqueda" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
