@@ -776,6 +776,23 @@ function informeAsiento(consulta){
 }
 
 
+function mostrarAcciones() {        
+    $.ajax({
+        url: "./miAjax/listarAcciones.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (resultado){        
+        for (var i in resultado) {
+            $(".contenedorIncidencias").append(resultado[i].accion+"\n");
+        }
+    }).fail(function() {
+         alert("No su pudo listar las acciones realizadas!");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+    
+}
+
 
 
 /*
@@ -908,8 +925,6 @@ $(function() {
     
     // Evento click para el botón cancelar:
     $("#zonaRelacionAsientos").on('click', ".botonCerrar", function (evento) {
-        // Detenemos la acción predeterminada del evento
-        evento.preventDefault();
 
         //LLamamos a la función para desactivar campos
         activarCampos();
@@ -934,9 +949,6 @@ $(function() {
 
         //Mostramos la barra de desplazamiento
         $("#zonaRelacionAsientos").css("overflow-y", "");
-        
-        // Paramos la propagación indeseada del evento
-        evento.stopPropagation();
     });
         
      /* 
@@ -1324,6 +1336,8 @@ $(function() {
         
         // Mostramos el panel del listado de acciones
         $("#contenedorZonaAcciones").css("display", "block");
+        
+        mostrarAcciones();        
 
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
@@ -1343,16 +1357,33 @@ $(function() {
         evento.preventDefault();
         
         // Ocultamos el contenedor la información de las acciones
-        $("#contenedorZonaAcciones").css("display", "none");
+        $("#contenedorZonaAcciones").hide("slow"); //Desaparición con desplazamiento
         
-        // Borramos los elementos de la consulta
-        $("#contenedorTextoIncidencias").empty();
+        // Borramos los elementos de la consulta anteriores
+        $(".contenedorIncidencias").empty();
 
         //LLamamos a la función para activar campos
         activarCampos();        
         
         //Mostramos la barra de desplazamiento
         $("#zonaRelacionAsientos").css("overflow-y", "");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+     /*
+     * Establecemos el evento "click" para el botón ADMINISTRAR DIARIO
+     */
+    $("#adminDiario").click(function (evento) {
+        
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();        
+        
+        var a = document.createElement("a");        
+        a.href = "./adminDiario.php"
+        a.click();
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();

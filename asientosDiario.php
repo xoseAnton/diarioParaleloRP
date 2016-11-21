@@ -60,7 +60,9 @@ if (isset($_POST['desconectar'])) {
                     <div id="zonaAcciones">
                         <div id="zonaTextoAcciones">
                             <label id="portadaAcciones">Acciones:</label>
-                            <div id="contenedorTextoIncidencias"></div>                                
+                            <div id="contenedorTextoIncidencias">
+                                <textarea class='contenedorIncidencias' cols='54' rows='22' readonly></textarea>
+                            </div>                                
                         </div>
                         <div id="zonaBotonAcciones">
                             <input type="button" id="cerrarAcciones" name="cerrarAcciones"/>

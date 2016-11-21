@@ -1,0 +1,142 @@
+/* zona de MENU BOTONES */
+
+#menuBotones {
+    width: 1250px;
+    margin-top: 25px;    
+    padding: 0;    
+}
+
+#menuBotones1 {
+    width: 880px;
+    float: left;    
+}
+
+#menuBotones2 {    
+    width: 370px;
+    float: left;
+}
+
+.contenBotonMenu {
+    margin-right: 25px;
+    float: left;
+    padding: 5px;      
+}
+
+#regresar {    
+    background-position: 2px;    
+    background-image: url(../imagenes/volver_boton.png);        
+}
+
+#mostrarAcciones {    
+    background-image: url(../imagenes/notas_boton.png);
+    background-position: 6px;
+}
+
+#botonDesconectar {    
+    float: right;
+    padding: 5px;  
+}
+
+#desconectar {    
+    background-image: url(../imagenes/exit_boton.png);
+    background-position: 6px;
+}
+
+
+
+/*
+* ZONA PARA MOSTRAR LISTADO DE ASIENTOS
+*/
+
+#zonaMostrar {
+    height: 820px;
+    width: 1250;
+    margin-top: 15px;
+}
+
+#contenZonaMostrar { 
+    margin: 0;
+    padding: 0 0 0 5px;
+    height: 810px;
+    background-color: #eee;    
+    border:2px solid purple;
+    border-radius: 1em;    
+    color: purple;
+    font-weight: bold;
+}
+
+#contenZonaMostrar legend {
+    font-family : Arial, sans-serif;
+    font-size: 18pt;    
+    font-weight:bold;
+    color:purple;
+}
+
+#zonaRelacionControles {
+    margin: 0;
+    padding: 0;
+    height: 770px;
+    /*Barras de desplazamiento */    
+    overflow-x: hidden;
+    overflow-y: scroll;    
+}
+
+.bloqueControl {
+    margin: 20px 0 20px 15px;
+}
+
+.contenBotonActivar {
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 120px;
+    height: 120px;
+    border: none;
+    text-align: center;
+    background-color: transparent;
+    background-size: 100%;     
+    background-repeat: no-repeat; 
+    background-image: url(../imagenes/bordeBoton.png);
+}
+
+.contenTextoBoton {
+    /* Para que no se pueda seleccionar el texto */    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+    
+    padding: 42px 0px;
+    color: black;
+    font-family: Arial;    
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    
+}
+
+.contenZonaUnion {
+    display: none;    
+    margin: 0;
+    padding: 0;
+    float: left;
+    width: 60px;
+    height: 120px;
+}
+
+.contenUnionDivision {
+    display: none;
+    padding: 0;
+    width: 60px;
+    height: 60px;
+    border-bottom: 3px solid purple;
+}
+
+.contenZonaDatos {
+    display: none;    
+    float: left;
+    width: 1000px;
+    height: 120px;
+    border: 2px solid purple;
+    border-radius: 1em;
+}
