@@ -1,13 +1,50 @@
 /* zona de MENU BOTONES */
 
-#menuBotones {
+#campoMenuControl {
     width: 1250px;
-    margin-top: 25px;    
-    padding: 0;    
+    height: 65px;
+    margin: 15px 0 0 0; 
+    padding: 0;
+}
+
+#zonaControl { 
+    display: none;
+    background-color: #eee;
+    height: 60px;
+    margin: 0px;
+    padding: 0px;
+    border:2px solid purple;
+    border-radius: 1em;
+}
+
+#zonaBotonMenu{
+    border-top: 4px solid purple;
+}
+
+#botonMostrarMenu {
+    outline: none; /* No muestra el borde cuando se ejecuta */
+    width:128px;
+    height:30px;
+    margin-left: 45%;
+    padding-left:0px;
+    text-align: center;
+    font-weight: bold;
+    background-color: aliceblue;    
+    border-top: 1px solid purple;
+    border-left: 3px solid purple;
+    border-right: 3px solid purple;
+    border-bottom: 3px solid purple;
+}
+
+#menuBotones {
+    width: 1250px;    
+    padding: 10px 0px;
+    
 }
 
 #menuBotones1 {
-    width: 880px;
+    margin-left: 5px;
+    width: 865px;
     float: left;    
 }
 
@@ -115,8 +152,12 @@
     
 }
 
-.contenZonaUnion {
-    display: none;    
+.bloqueAdministrar {
+    display: none;
+    float: left;
+}
+
+.contenZonaUnion {    
     margin: 0;
     padding: 0;
     float: left;
@@ -124,8 +165,7 @@
     height: 120px;
 }
 
-.contenUnionDivision {
-    display: none;
+.contenUnionDivision {    
     padding: 0;
     width: 60px;
     height: 60px;
@@ -133,7 +173,6 @@
 }
 
 .contenZonaDatos {
-    display: none;    
     float: left;
     width: 1000px;
     height: 120px;

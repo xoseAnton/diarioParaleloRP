@@ -1322,7 +1322,7 @@ $(function() {
     
     
     /*
-     * Establecemos el evento "click" para el botón listar
+     * Establecemos el evento "click" para el botón LISTAR ACCIONES
      */
     $("#mostrarAcciones").click(function (evento) {
         // Detenemos la acción predeterminada del evento

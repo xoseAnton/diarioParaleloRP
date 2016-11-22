@@ -75,32 +75,38 @@ if (isset($_POST['desconectar'])) {
         </div>
 
 
-        <!-- Zona para mostrar los botones Generales de Control -->
-        <div id="zonaControl">
-            <form id="formularioControl" name="formularioBusqueda" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <!-- Zona para mostrar los botones Generales de Control -->        
+        <div id="campoMenuControl">
+            <div id="zonaControl">
+                <form id="formularioControl" name="formularioBusqueda" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
-                <!-- Zona de MENU - BOTONES -->
-                <div id="menuBotones">
-                    <div id="menuBotones1">                                                         
-                        <div id="botonRegresar" class="contenBotonMenu"> 
-                            <input type="submit" id="regresar" class="botonMenu" name="regresar" value="Volver"/>                                                                                              
+                    <!-- Zona de MENU - BOTONES -->
+                    <div id="menuBotones">
+                        <div id="menuBotones1">                                                         
+                            <div id="botonRegresar" class="contenBotonMenu"> 
+                                <input type="submit" id="regresar" class="botonMenu" name="regresar" value="Volver"/>                                                                                              
+                            </div>
+                            <div id="botonMostrarAcciones" class="contenBotonMenu"> 
+                                <input type="button" id="mostrarAcciones" class="botonMenu" name="mostrarAcciones" value="Acciones" />
+                            </div>
+                            <div class="cancelarFlotantes"></div>
                         </div>
-                        <div id="botonMostrarAcciones" class="contenBotonMenu"> 
-                            <input type="button" id="mostrarAcciones" class="botonMenu" name="mostrarAcciones" value="Acciones" />
-                        </div>
+                        <div id = "menuBotones2">
+                            <div id="botonDesconectar">
+                                <input type="submit" id="desconectar" class="botonMenu" name="desconectar" value="Desconectar" />
+                            </div>  
+                            <div class="cancelarFlotantes"></div>
+                        </div>                        
                         <div class="cancelarFlotantes"></div>
                     </div>
-                    <div id = "menuBotones2">
-                        <div id="botonDesconectar">
-                            <input type="submit" id="desconectar" class="botonMenu" name="desconectar" value="Desconectar" />
-                        </div>  
-                        <div class="cancelarFlotantes"></div>
-                    </div>                        
-                    <div class="cancelarFlotantes"></div>
-                </div>  
-
-            </form>
+                </form>
+            </div>
+            <div id="zonaBotonMenu">
+                <input type="button" id="botonMostrarMenu" class="botonMenuAdmin" name="botonMostrarMenu" value="MENU" />
+            </div>
         </div>
+        
+        
 
         <!-- ZONA PARA MOSTRAR LOS CONTROLES DEL DIARIO PARALELO -->
         <div id="zonaMostrar">                
@@ -115,13 +121,18 @@ if (isset($_POST['desconectar'])) {
                             
                             //-- Zona de control PARA ASIENTOS --
                             echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar'>";
+                                echo "<div class='contenBotonActivar' data-id='#bloqueCrearAsientos'>";
                                     echo "<div class='contenTextoBoton'>Añadir</br>Asientos</div>";
                                 echo "</div>";
-                                echo "<div id='contenZonaUnioID' class='contenZonaUnion'>";
-                                    echo "<div class='contenUnionDivision'></div>";
-                                echo "</div>";
-                                echo "<div id='contenZonaDatosAsiento' class='contenZonaDatos'></div>";
+                                
+                                echo "<div id='bloqueCrearAsientos' class='bloqueAdministrar'>";
+                                    echo "<div class='contenZonaUnion'>";
+                                        echo "<div class='contenUnionDivision'></div>";
+                                    echo "</div>";                                
+                                    echo "<div class='contenZonaDatos'></div>";
+                                    echo "<div class='cancelarFlotantes'></div>";
+                                echo "</div>";               
+                                
                                 echo "<div class='cancelarFlotantes'></div>";
                             echo "</div>";                
                             
@@ -132,15 +143,19 @@ if (isset($_POST['desconectar'])) {
                             
                             //-- Zona de control PARA CREAR NUEVO DIARIO --
                             echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar'>";
+                                echo "<div class='contenBotonActivar' data-id='#bloqueCrearDiario'>";
                                     echo "<div class='contenTextoBoton'>Crear</br>Diario</div>";
                                 echo "</div>";
-                                echo "<div id='contenZonaUnionCrearDiario' class='contenZonaUnion'>";
-                                    echo "<div class='contenUnionDivision'></div>";
-                                echo "</div>";
-
-                                echo "<div id='contenZonaDatosCrearDiario' class='contenZonaDatos'></div>";
-                                echo "<div class='cancelarFlotantes'></div>";
+                                
+                                echo "<div id='bloqueCrearDiario' class='bloqueAdministrar'>"; 
+                                    echo "<div class='contenZonaUnion'>";
+                                        echo "<div class='contenUnionDivision'></div>";
+                                    echo "</div>";
+                                    echo "<div class='contenZonaDatos'></div>";
+                                    echo "<div class='cancelarFlotantes'></div>";
+                                echo "</div>";               
+                                
+                                echo "<div class='cancelarFlotantes'></div>";                                
                             echo "</div>";
                         }
 
@@ -149,16 +164,20 @@ if (isset($_POST['desconectar'])) {
                             
                             //-- Zona de control ABRIR/CERRAR DIARIOS --
                             echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar'>";
+                                echo "<div class='contenBotonActivar' data-id='#bloqueCerrarAbrirDiario'>";
                                     echo "<div class='contenTextoBoton'><label>Abrir</br>Cerrar</br>Diario</label></div>";
                                 echo "</div>";
-                                echo "<div id='contenZonaUnionAbrirCerrarDiario' class='contenZonaUnion'>";
-                                    echo "<div class='contenUnionDivision'></div>";
-                                echo "</div>";
-
-                                echo "<div id='contenZonaDatosAbrirCerrarDiario' class='contenZonaDatos'></div>";
-                                echo "<div class='cancelarFlotantes'></div>";
-                            echo "</div>";                            
+                                
+                                echo "<div id='bloqueCerrarAbrirDiario' class='bloqueAdministrar'>"; 
+                                    echo "<div class='contenZonaUnion'>";
+                                        echo "<div class='contenUnionDivision'></div>";
+                                    echo "</div>";
+                                    echo "<div class='contenZonaDatos'></div>";
+                                    echo "<div class='cancelarFlotantes'></div>";
+                                echo "</div>";               
+                                
+                                echo "<div class='cancelarFlotantes'></div>";                                                                
+                            echo "</div>";
                         }
                     }
                     ?>
