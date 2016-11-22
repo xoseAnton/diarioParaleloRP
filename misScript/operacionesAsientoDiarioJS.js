@@ -33,14 +33,21 @@ function listarUsuarios() {
  * @returns Lista de los diarios activos de la base de datos.
  */
 function listarDiarios() {
-    // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/listarDiarios.php", function (resultado) {
-        // Recorro todos los valores optenidos
-        $.each(resultado, function (i, miDiario) {
-            if(miDiario.cerrado == 1)
-                $("#diario").append("<option value='" + miDiario.diario + "'>" + miDiario.diario + "</option>");
-        });
-    });
+    $.ajax({
+        url: "./miAjax/listarDiarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (diarios){        
+        for (var i in diarios) {
+            // Solo introducimos los diarios activos
+            if(diarios[i].cerrado == 1)
+                $("#diario").append("<option value='" + diarios[i].diario + "'>" + diarios[i].diario + "</option>");
+        }
+    }).fail(function() {
+         alert("No su pudo listar los DIARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });    
 }
 
 

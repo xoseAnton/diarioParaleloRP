@@ -4,9 +4,12 @@
  * 
  * Clase Diario.
  * 
+ * Como la clase Diario tiene variables protected, implemento la función
+ * jsonSerializable para mostrar esas variables cuando codifico con "json_encode"
+ * 
  */
 
-class Diario {
+class Diario implements JsonSerializable {
     
     // Variables de clase
     protected $id;
@@ -83,6 +86,22 @@ class Diario {
 
     function setCerrado($cerrado) {
         $this->cerrado = $cerrado;
+    }
+    
+    
+    /* 
+     * Función para implementar la serialización del objeto y mostrar
+     * aquellos atributos que tenga definidos como "protected" o "private".
+     */
+    public function jsonSerialize() {
+        return [
+        'id' => $this->getId(),
+        'diario' => $this->getDiario(),
+        'asientos' => $this->getAsientos(),        
+        'fechaAsiento' => $this->getFechaAsiento(),
+        'fechaCreacion' => $this->getFechaCreacion(),        
+        'cerrado' => $this->getCerrado()        
+        ];
     }
 
 }

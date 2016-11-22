@@ -37,7 +37,7 @@ function  mostrarBloqueCrearAsientos() {
                             "<legend>Datos para añadir al diario:</legend>"+
                             "<div id='contenNumeroAsientos'>"+
                                 "<label class='textoIntroducirDatos'>Número de asientos:</label>"+
-                                "<input type='number' id='numeroAsientos' name='numeroAsientos' value='1' min='1' max='9999' step='1' required onchange='calculaIntervaloAsientos()' disabled/>"+
+                                "<input type='number' id='numeroAsientos' name='numeroAsientos' value='1' min='1' max='9999' step='1' required disabled/>"+
                                 "<div class='cancelarFlotantes'></div>"+
                             "</div>"+
                             "<div id='contenFechaAsientos'>"+
@@ -48,7 +48,7 @@ function  mostrarBloqueCrearAsientos() {
                         "</fieldset>"+
                     "</div>"+
 
-                    "<div id='contenResultadoBotones' onfocus='calculaIntervaloAsientos()' onmouseover='calculaIntervaloAsientos()' >"+
+                    "<div id='contenResultadoBotones' >"+
                         "<div id='contenResultadosAsientos'>"+
                             "<div class='contenTextoResultadosAsientos'><label class='textoResultadosAsientos'>Se crearán los asientos números:</label></div>"+
                             "<div class='contenTextoResultadosAsientos'>"+
@@ -60,10 +60,10 @@ function  mostrarBloqueCrearAsientos() {
                         "</div>"+
                         "<div id='contenBotonsAsientos'>"+
                             "<div id='zonaBotonGuardarAsientosID' class='zonaBotonGuardar'>"+
-                                "<input type='button' id='botonGuardarAsientosID' class='botonGuardarConfirma' name='botonGuardarAsientos' value='Guardar' onclick='mostrarConfirmarCreacionAsientos()' title='Guardar los asientos nuevos en el diario'/>"+
+                                "<input type='button' id='botonGuardarAsientosID' class='botonGuardarConfirma' name='botonGuardarAsientos' value='Guardar' title='Guardar los asientos nuevos en el diario'/>"+
                             "</div>"+
                             "<div id='zonaBotonCancelarAsientosID' class='zonaBotonCancelar'>"+
-                                "<input type='reset' id='botonCancelarGuardarAsientosID' class='botonCerrarConfirma' name='botonCancelar' value='Cancelar' onclick='ocultarCreacionNuevosAsientos()' title='Cancelar la operación de guardar nuevos asientos'/>"+
+                                "<input type='reset' id='botonCancelarGuardarAsientosID' class='botonCerrarConfirma' name='botonCancelar' value='Cancelar' title='Cancelar la operación de guardar nuevos asientos'/>"+
                             "</div>"+
                             "<div class='cancelarFlotantes'></div>"+
                         "</div>"+
