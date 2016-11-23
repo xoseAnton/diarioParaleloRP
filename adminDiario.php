@@ -30,6 +30,82 @@ if (isset($_POST['desconectar'])) {
     header("Location: index.php");
 }
 
+function mostrarCreacionAsientos(){
+    //-- Zona de control PARA ASIENTOS --
+    echo "<div class='bloqueControl'>".
+            "<div class='contenBotonActivar' data-id='#bloqueCrearAsientos'>".
+                "<div class='contenTextoBoton'>Añadir</br>Asientos</div>".
+            "</div>".
+
+            "<div id='bloqueCrearAsientos' class='bloqueAdministrar'>".
+                "<div class='contenZonaUnion'>".
+                    "<div class='contenUnionDivision'></div>".
+                "</div>".
+                "<div class='contenZonaDatos'>".
+            
+            
+                //-- Formulario para el envio: Añadir Asientos --
+                "<form id='formularioAñadirAsientos' name='formularioAñadirAsientos'>".
+                        
+                    "<div id='contenTextoDiario'>".
+                        "<label>Diario:</label>".
+                    "</div>".
+                    "<div class='contenDiario'>".
+                        "<select id='diario' name='diario' required title='Número de diario'>".
+                        "</select>".
+                    "</div>".
+                    "<div class='contenInformeDiario'></div>".                    
+
+                    //-- Introducimos los datos para añadir al diario --
+                    "<div id='contenIntroducirDatos'>".
+                        "<fieldset id='introducirDatosAsiento'>".
+                            "<legend>Datos para añadir al diario:</legend>".
+                            "<div id='contenNumeroAsientos'>".
+                                "<label class='textoIntroducirDatos'>Número de asientos:</label>".
+                                "<input type='number' id='numeroAsientos' name='numeroAsientos' value='1' min='1' max='9999' step='1' required />".
+                                "<div class='cancelarFlotantes'></div>".
+                            "</div>".
+                            "<div id='contenFechaAsientos'>".
+                                "<label class='textoIntroducirDatos'>Fecha presentacion:</label>".
+                                "<input type='date' id='fechaAsientos' name='fechaAsientos' required/>".
+                                "<div class='cancelarFlotantes'></div>".
+                            "</div>".
+                        "</fieldset>".
+                    "</div>".
+
+                    "<div id='contenResultadoBotones' >".
+                        "<div id='contenResultadosAsientos'>".
+                            "<div class='contenTextoResultadosAsientos'><label class='textoResultadosAsientos'>Se crearán los asientos números:</label></div>".
+                            "<div class='contenTextoResultadosAsientos'>".
+                                "<input type='text' id='textoAsientoInicial' name='textoAsientoInicial' value='' readonly />".
+                                "<div class='contenTextoResultadosIntermedio'><label class='textoResultadosAsientos'>al</label></div>".
+                                "<input type='text' id='textoAsientoFinal' name='textoAsientoFinal' value='' readonly />".
+                                "<div class='cancelarFlotantes'></div>".
+                            "</div>".
+                        "</div>".
+                        "<div id='contenBotonsAsientos'>".
+                            "<div id='zonaBotonGuardarAsientosID' class='zonaBotonGuardar'>".
+                                "<input type='submit' class='botonGuardarConfirma' name='botonGuardarAsientos' data-id='#bloqueCrearAsientos' value='Guardar' title='Guardar los asientos nuevos en el diario'/>".
+                            "</div>".
+                            "<div id='zonaBotonCancelarAsientosID' class='zonaBotonCancelar'>".
+                                "<input type='reset' class='botonCerrarConfirma' name='botonCancelar' value='Cancelar' title='Cancelar la operación de guardar nuevos asientos'/>".
+                            "</div>".
+                            "<div class='cancelarFlotantes'></div>".
+                        "</div>".
+                    "</div>".
+                    "<div class='cancelarFlotantes'></div>".
+                "</form>".
+            //-- Fin formulario: Añadir Asientos --
+            
+            
+                "</div>".
+                "<div class='cancelarFlotantes'></div>".
+            "</div>".
+
+            "<div class='cancelarFlotantes'></div>".
+        "</div>";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -118,24 +194,7 @@ if (isset($_POST['desconectar'])) {
                     if (isset($_SESSION['usuario'])) {
                         // Si tenemos el rol adecuado mostramos la posibilidad de crear nuevos asientos
                         if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1){
-                            
-                            //-- Zona de control PARA ASIENTOS --
-                            echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar' data-id='#bloqueCrearAsientos'>";
-                                    echo "<div class='contenTextoBoton'>Añadir</br>Asientos</div>";
-                                echo "</div>";
-                                
-                                echo "<div id='bloqueCrearAsientos' class='bloqueAdministrar'>";
-                                    echo "<div class='contenZonaUnion'>";
-                                        echo "<div class='contenUnionDivision'></div>";
-                                    echo "</div>";                                
-                                    echo "<div class='contenZonaDatos'></div>";
-                                    echo "<div class='cancelarFlotantes'></div>";
-                                echo "</div>";               
-                                
-                                echo "<div class='cancelarFlotantes'></div>";
-                            echo "</div>";                
-                            
+                            mostrarCreacionAsientos();
                         }
 
                         // Si tenemos el rol adecuado mostramos la posibilidad de crear nuevos diarios

@@ -286,8 +286,7 @@
     height: 40px;
 }
 
-.zonaBotonGuardar {
-    visibility: hidden;
+.zonaBotonGuardar {    
     margin-left: 5px;
     float: left;
     padding: 5px;      
@@ -309,8 +308,7 @@
     border-radius: 0.8em;
 }
 
-.zonaBotonCancelar {
-    visibility: hidden;
+.zonaBotonCancelar {    
     margin-right: 5px;
     float: right;
     padding: 5px;      
@@ -343,8 +341,7 @@
     font-size: 13pt;    
 }
 
-#textoAsientoInicial {
-    visibility: hidden;
+#textoAsientoInicial {    
     border: none;
     background-color: transparent;
     float: left;
@@ -363,8 +360,7 @@
     text-align: center;
 }
 
-#textoAsientoFinal {
-    visibility: hidden;
+#textoAsientoFinal {    
     border: none;
     background-color: transparent;
     float: left;
@@ -374,4 +370,39 @@
     text-align: left;
     color: blue;
     font-weight: bold;
+}
+
+/*
+*   ZONA PARA MOSTRAR LOS DATOS DEL DIARIO SELECCIONADO
+*/
+.contenDatosInforme {      
+    margin: 38px 0 0 9px;   
+}
+
+.datosInformeDiario {
+    padding: 2px 0;
+}
+
+.tituloDatosInforme {
+    font-family: Arial;
+    color: red;
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+.textoDatosInforme {
+    font-family: Arial;
+    color: blue;
+    font-size: 11pt;
+    font-weight: bold;
+}
+
+.textoNumeroAsientosDiario {
+    font-family: Arial;
+    color: blue;
+    font-size: 11pt;
+    font-weight: bold;
+    width: 48px;
+    border: none;
+    background-color: transparent;
 }

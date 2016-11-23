@@ -1,108 +1,20 @@
+// Variable globales
+var listaDiarios;
+var datosGrabar; // Contienen los datos que se quieren modificar
+
+
+
 /*
- * Función que desactiva los campos para que no se produzcan dobles peticiones
+ * Establece los eventos de foco para los botones de la página
  * @returns {undefined}
  */
-function desactivarCampos(miEvento) {
-    // Desactivamos los eventos sobre los botones de control
-    $(".botonMenu").off("focus mouseenter focusout mouseleave");
-    $("#botonMostrarMenu").off("focus mouseenter focusout mouseleave");
-    $(".contenBotonActivar").off("focus mouseenter focusout mouseleave click");
-    
-    // Cambiamos la opacidad de los botones de administración del diario
-    $(".contenBotonActivar").css("opacity", "0.2");
-    $(miEvento).css("opacity", "");
-    
-}
-
-
-function  mostrarBloqueCrearAsientos() {
-    
-    $("#bloqueCrearAsientos .contenZonaDatos").append(
-            //-- Formulario para el envio: Añadir Asientos --
-                "<form id='formularioAñadirAsientos' name='formularioAñadirAsientos'>"+
-                        
-                    "<div id='contenTextoDiario'>"+
-                        "<label>Diario:</label>"+
-                    "</div>"+
-                    "<div class='contenDiario'>"+
-                        "<select id='diario' name='diario' required title='Número de diario' disabled>"+                        
-                        "</select>"+
-                    "</div>"+
-                    "<div class='contenInformeDiario'></div>"+
-                    
-
-                //-- Introducimos los datos para añadir al diario --
-                    "<div id='contenIntroducirDatos'>"+
-                        "<fieldset id='introducirDatosAsiento'>"+
-                            "<legend>Datos para añadir al diario:</legend>"+
-                            "<div id='contenNumeroAsientos'>"+
-                                "<label class='textoIntroducirDatos'>Número de asientos:</label>"+
-                                "<input type='number' id='numeroAsientos' name='numeroAsientos' value='1' min='1' max='9999' step='1' required disabled/>"+
-                                "<div class='cancelarFlotantes'></div>"+
-                            "</div>"+
-                            "<div id='contenFechaAsientos'>"+
-                                "<label class='textoIntroducirDatos'>Fecha presentacion:</label>"+
-                                "<input type='date' id='fechaAsientos' name='fechaAsientos' required disabled/>"+
-                                "<div class='cancelarFlotantes'></div>"+
-                            "</div>"+
-                        "</fieldset>"+
-                    "</div>"+
-
-                    "<div id='contenResultadoBotones' >"+
-                        "<div id='contenResultadosAsientos'>"+
-                            "<div class='contenTextoResultadosAsientos'><label class='textoResultadosAsientos'>Se crearán los asientos números:</label></div>"+
-                            "<div class='contenTextoResultadosAsientos'>"+
-                                "<input type='text' id='textoAsientoInicial' name='textoAsientoInicial' value='' readonly />"+
-                                "<div class='contenTextoResultadosIntermedio'><label class='textoResultadosAsientos'>al</label></div>"+
-                                "<input type='text' id='textoAsientoFinal' name='textoAsientoFinal' value='' readonly />"+
-                                "<div class='cancelarFlotantes'></div>"+
-                            "</div>"+
-                        "</div>"+
-                        "<div id='contenBotonsAsientos'>"+
-                            "<div id='zonaBotonGuardarAsientosID' class='zonaBotonGuardar'>"+
-                                "<input type='button' id='botonGuardarAsientosID' class='botonGuardarConfirma' name='botonGuardarAsientos' value='Guardar' title='Guardar los asientos nuevos en el diario'/>"+
-                            "</div>"+
-                            "<div id='zonaBotonCancelarAsientosID' class='zonaBotonCancelar'>"+
-                                "<input type='reset' id='botonCancelarGuardarAsientosID' class='botonCerrarConfirma' name='botonCancelar' value='Cancelar' title='Cancelar la operación de guardar nuevos asientos'/>"+
-                            "</div>"+
-                            "<div class='cancelarFlotantes'></div>"+
-                        "</div>"+
-                    "</div>"+            
-                    "<div class='cancelarFlotantes'></div>"+
-                "</form>"
-            //-- Fin formulario: Añadir Asientos --
-            );
-    
-    $("#bloqueCrearAsientos").show("slow");
-    
-}
-
-
-/*
- * Cuando la página esté preparada
- * 
- */
-
-$(function () {
-    
-    // Introducimos la información del proyecto en su campo
-    mostrarInformacion();
-
-    /*
-     * 
-     * DEFINIMOS LOS EVENTOS:
-     * 
-     */
-    
-    /* 
-     * Establecemos los eventos para los botones      
-     */
+function establecerEventosPagina(){
     $(".botonMenu").on('focus mouseenter', function () {
         mostrarBorde(this);
     });
     $(".botonMenu").on('focusout mouseleave', function () {
         ocultarBorde(this);
-    });
+    });    
     
     /*
      * Eventos para mostrar/ocultar el menu de botones
@@ -116,7 +28,6 @@ $(function () {
         $("#zonaBotonMenu").slideDown("slow"); // Muestro el botón
         $("#zonaControl").slideUp("slow");  // Oculto el menu de botones
     });    
-    
     
      /* 
       * Establecemos los eventos para los botones de control del diario
@@ -151,23 +62,305 @@ $(function () {
      * Establecemos el evento "click" para el botón ADMINISTRAR DIARIO
      */
     $(".contenBotonActivar").click(function (evento) {
-        
         // Detenemos la acción predeterminada del evento
-        evento.preventDefault();       
-        
+        evento.preventDefault();
+
         // Recupero el ID asignado al campo seleccionado para modificar
-        var miID = $(this).data("id");        
-        
+        var miID = $(this).data("id");
+
         // Desactivamos los campos de los demás elementos
         desactivarCampos(this);
+
+        // Comprobamos que evento fué seleccionado
+        if (miID == "#bloqueCrearAsientos")
+            mostrarBloqueCrearAsientos();
+
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });    
+}
+
+
+/*
+ * Función que desactiva los campos para que no se produzcan dobles peticiones
+ * @returns {undefined}
+ */
+function desactivarCampos(miEvento) {
+    // Desactivamos los eventos sobre los botones de control
+    $(".botonMenu").off("focus mouseenter focusout mouseleave");
+    $("#botonMostrarMenu").off("focus mouseenter focusout mouseleave");
+    $("#zonaControl").off("focus mouseenter focusout mouseleave");
+    $(".contenBotonActivar").off("focus mouseenter focusout mouseleave click");
+    
+    // Cambiamos la opacidad de los botones de administración del diario
+    $(".contenBotonActivar").css("opacity", "0.2");
+    $(miEvento).css("opacity", "");
+    
+}
+
+
+/*
+ * Función que activa los campos para poder acceder al menú de administración diario
+ * @returns {undefined}
+ */
+function activarCampos() {    
+    // Establecemos los eventos
+    establecerEventosPagina();    
+    
+    // Cambiamos las propiedades del elemento a las iniciales    
+    $(".contenBotonActivar").css({
+        "opacity": "",
+        "border": "",
+        "border-radius": "",
+        "color": "",
+        "cursor": ""
+    });
+    $(".contenTextoBoton").css({
+        "color": "",
+        "cursor": ""
+    });    
+}
+
+
+/*
+ * Función para incluir dos digitos en el dia y fecha
+ * @param {type} dato
+ * @returns {listarAsientos.operacionesAsientoDiarioJS_L251.digitosFecha.digito|String}
+ */
+function digitosFecha(datoFecha) {
+    var digitos = new String(datoFecha);
+    if (digitos.length < 2)
+        digitos = '0' + datoFecha;
+    return digitos;
+}
+
+/*
+ * Función para mostrar los datos de un DIARIO SELECCIONADO
+ * @param {type} id
+ * @returns {undefined}
+ */
+function mostrarDatosDiario(id) {
+    
+    // Recuperamos los datos:
+    var fechaAsiento = new Date(listaDiarios[id].fechaAsiento);
+
+    var formatoFechaAsiento = digitosFecha(fechaAsiento.getDate()) + " / " + digitosFecha((fechaAsiento.getMonth() + 1)) + " / " + fechaAsiento.getFullYear();
+    
+    //Vaciamos la información anterior y cargamos la nueva
+    $("#bloqueCrearAsientos .contenInformeDiario").empty().append(
+            
+            "<div class='contenDatosInforme'>"+
+                "<div class='datosInformeDiario'>"+
+                    "<label class='tituloDatosInforme'>Diario: </label>"+
+                    "<input type='text' class='textoNumeroAsientosDiario' name='textoNumeroDiario' value='"+listaDiarios[id].diario+"' readonly/>"+
+                "</div>"+
+                "<div class='datosInformeDiario'>"+
+                    "<label class='tituloDatosInforme'>Último asiento: </label>"+
+                    "<input type='text' class='textoNumeroAsientosDiario' name='totalAsientosDiario' value='"+listaDiarios[id].asientos+"' readonly/>"+
+                "</div>"+
+                "<div class='datosInformeDiario'>"+                        
+                    "<label class='tituloDatosInforme'>Fecha: </label><label class='textoDatosInforme'>"+formatoFechaAsiento+"</label>"+
+                "</div>"+
+            "</div>"
+            );
+}
+
+function mostrarInicialFinalAsientos(id, nAsientos){
+    
+    /* Comprobamos si introducimos un número para realizar el calculo de asientos
+    * que se crearán
+    */
+    if (isNaN(nAsientos) || nAsientos < 1 || nAsientos == "") {
+        // Eliminamos los resultados
+        $("#textoAsientoInicial").val("");
+        $("#textoAsientoFinal").val("");
+    } else {
+        var primerAsiento = parseInt(listaDiarios[id].asientos) + 1;
+        var ultimoAsiento = parseInt(listaDiarios[id].asientos) + nAsientos;
+
+        // Mostramos los valores en los campos correspondientes
+        $("#textoAsientoInicial").val(primerAsiento);
+        $("#textoAsientoFinal").val(ultimoAsiento);
+
+    }
+}
+
+
+/*
+ * Función para mostrar datos en el campo ADMINISTRAR-CREAR ASIENTOS
+ * 
+ */
+
+function  mostrarBloqueCrearAsientos() {
+    
+    // Recuperamos la lista de diarios
+    $.ajax({
+        url: "./miAjax/listarDiarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (diarios){        
+        // Guardamos en la variable golbal
+        listaDiarios = diarios;
+        
+        // Borramos los datos anteriores
+        $("#bloqueCrearAsientos #diario").empty();
+        
+        // Recorremos todos los diarios
+        for (var i in diarios) {            
+            // Solo introducimos los diarios activos
+            if(diarios[i].cerrado == 1)
+                $("#bloqueCrearAsientos #diario").append("<option value='" + i + "'>" + diarios[i].diario + "</option>");
+        }
+        
+        // Mostramos los datos del primer diario seleccionado
+        mostrarDatosDiario(0);
+        
+        // Recuperamos el valor del número de asientos que se quiere crear
+        var nAsientos = parseInt($("#numeroAsientos").val());
+        
+        // Mostramos los datos de los asientos que se crearan
+        mostrarInicialFinalAsientos(0, nAsientos);        
+        
+    }).fail(function() {
+         alert("No su pudo listar los DIARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+    
+    $("#bloqueCrearAsientos").show("slow");
+}
+
+
+function  validarDatosNuevosAsientos(miID) {
+    // Variable de control
+    var validado = true;
+    // Inicializamos el array
+    datosGrabar = new Array(); 
+    
+    /*
+     * VALIDO LOS DATOS INTRODUCIDOS
+     * @type jQuery
+     */
+    
+    
+    var nAsientos = $(miID + " #numeroAsientos").val(); 
+    // Valido el número de Asientos    
+    if (isNaN(nAsientos) || nAsientos == "" || nAsientos < 1) {
+        validado = false;   // Cambiamos la variable de control
+        // Mostramos el error            
+        $(miID + " #numeroAsientos").focus().after("<span class='campoError'>Número incorrecto!</span>");
+    }
+    else { //Guardamos la opción
+        datosGrabar.push({nAsientos: nAsientos});
+    }
+       
+    
+    // Recupero el valor introducido
+    var miFecha = new Date($(miID + " #fechaAsientos").val());
+    
+    // Compruebo que el formato introducido de la fecha es correcto
+    if (validado && ((miFecha.getDate() < 1 || miFecha.getDate() > 31) || ((miFecha.getMonth() + 1) < 1 || (miFecha.getMonth() + 1) > 12) || miFecha.getFullYear() < 2016 || $(miID + " #fechaAsientos").val() == "")) {
+        validado = false;   // Cambiamos la variable de control            
+        // Mostramos el error            
+        $(miID + " #fechaAsientos").focus().after("<span class='campoError'>Fecha no valida!</span>");
+    } else {//Guardamos la opción
+        datosGrabar.push({fechaAsiento: $(miID + " #fechaAsientos").val()});
+    }
+    
+     // Devolvemos el resultado
+    if(validado){
+        return validado;
+    }
+    else {
+        // Ocultamos los errores pasados 3 segundos.
+        setTimeout("$('.campoError').hide('slow');", 3000);       
+    }
+    
+}
+
+
+function crearNuevosAsientos(){
+    
+}
+
+
+/*
+ * Cuando la página esté preparada
+ * 
+ */
+
+$(function () {
+    
+    // Introducimos la información del proyecto en su campo
+    mostrarInformacion();
+
+    /*
+     * 
+     * DEFINIMOS LOS EVENTOS:
+     * 
+     */
+    
+    establecerEventosPagina();
+    
+    /*
+     * Establecemos el evento para el boton diario de ADMINISTRAR ASIENTOS
+     */
+    $("#bloqueCrearAsientos #diario, #bloqueCrearAsientos #numeroAsientos").on('change keyup', function(){
+        // Recuperamos la posición del diario seleccionado en el array de diarios
+        var idDiario = $("#bloqueCrearAsientos #diario").val();        
+        
+        // Mostramos los datos del diario seleccionado
+        mostrarDatosDiario(idDiario);
+        
+        // Recuperamos el valor del número de asientos que se quiere crear
+        var nAsientos = parseInt($("#numeroAsientos").val());
+        
+        // Mostramos los datos de los asientos que se crearan
+        mostrarInicialFinalAsientos(idDiario, nAsientos);        
+        
+    });
+    
+    
+    /* 
+     * Establecemos los eventos para los botones:
+     * GUARDAR/CANCELAR las modificaciones      
+     */
+    $(".botonGuardarConfirma, .botonCerrarConfirma").on('focus mouseenter', function () {
+        mostrarBorde(this);
+    });
+    $(".botonGuardarConfirma, .botonCerrarConfirma").on('focusout mouseleave', function () {
+        ocultarBorde(this);
+    });
+    
+    $(".botonCerrarConfirma").click(function () {         
+        // Desactivamos los campos de los demás elementos
+        activarCampos();        
+        // Ocultamos
+        $(".bloqueAdministrar").css("display", "");    
+    });
+    
+    $(".botonGuardarConfirma").click(function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Borramos las posibles notificaciones de errores existentes
+        $(".campoError").remove();
+        
+        // Recupero el ID asignado al campo seleccionado para modificar
+        var miID = $(this).data("id");
         
         // Comprobamos que evento fué seleccionado
-        if(miID == "#bloqueCrearAsientos")
-            mostrarBloqueCrearAsientos();
+        if (miID == "#bloqueCrearAsientos") {
+            if (validarDatosNuevosAsientos(miID)) {
+                crearNuevosAsientos();
+            }
+        }
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
     });
+    
+    
     
     /*
      * FIN DE LA DEFINICIÓN DE EVENTOS
