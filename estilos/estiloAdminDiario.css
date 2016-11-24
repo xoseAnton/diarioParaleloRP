@@ -406,3 +406,114 @@
     border: none;
     background-color: transparent;
 }
+
+
+/*
+*   Zona de BOTONES CONFIRMACIÓN/CANCELACIÓN
+*/
+
+.contenConfirmacion {  
+    display: none;
+    float: left;
+    padding: 0;
+    margin: 0;    
+    width: 1000px;
+    height: 120px;
+}
+
+.zonaConfirmacion {   
+    margin-top: 16px;    
+    border: 2px solid red;
+    background-color: #ffff00;
+    padding: 10px 0 0 10px;
+    width: 575px;
+    height: 75px;
+    border-radius: 4em;
+}
+
+.zonaConfirmacion1 {
+    float: left;
+    width: 50px;
+    height: 75px;
+    border: none;
+    margin-left: 5px;    
+    background-image: url(../imagenes/confirmacion.png);    
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+.zonaConfirmacion2 {
+    float: left;
+    height: 25px;        
+    margin-left: 5px;
+    padding: 0;        
+}
+
+.zonaTextoConfirmacion {     
+    height: 25px;        
+    padding: 0;
+    margin-left: 5px;
+    margin-right: 15px;
+}
+
+.zonaBotonesConfirmacion{    
+    padding: 10px;
+    height: 50px;
+}
+
+.textoConfir{
+    text-align: left;    
+    color: red;
+    width: 475px;
+    height: 26px;
+    margin-left: 5px;
+    display: block;
+    font-size: 10pt;
+    font-weight: bold;    
+    background-color: #ffff00;
+    border: none;
+}
+
+.zonaBotonGuardarConfirmacion {
+    margin-right: 25px;
+    margin-top: 1px;
+    float: left;    
+}
+
+.botonConfirmaGrabar {
+    outline: none;
+    width:65px;
+    height:24px;
+    padding-left:0px;
+    text-align: right;
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: aliceblue;
+    background-image: url(../imagenes/aceptar_boton.png);            
+    background-size: 40%;
+    background-position: 2%;
+    background-repeat: no-repeat;   
+    border-radius: 0.8em;
+}
+
+.zonaBotonCancelarConfirmacion {
+    margin-right: 25px;
+    margin-top: 1px;
+    float: left;
+}
+
+.botonConfirmaCerrar {
+    outline: none;
+    width:65px;
+    height:24px;
+    padding-left:0px;
+    text-align: right;
+    font-size: 10pt;
+    font-weight: bold;
+    background-color: aliceblue;
+    background-image: url(../imagenes/cancelar_boton.png);            
+    background-size: 35%;
+    background-position: 8%;
+    background-repeat: no-repeat;   
+    border-radius: 0.8em;
+}

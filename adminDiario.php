@@ -31,7 +31,7 @@ if (isset($_POST['desconectar'])) {
 }
 
 function mostrarCreacionAsientos(){
-    //-- Zona de control PARA ASIENTOS --
+    //-- Zona de control PARA ASIENTOS --    
     echo "<div class='bloqueControl'>".
             "<div class='contenBotonActivar' data-id='#bloqueCrearAsientos'>".
                 "<div class='contenTextoBoton'>Añadir</br>Asientos</div>".
@@ -40,10 +40,11 @@ function mostrarCreacionAsientos(){
             "<div id='bloqueCrearAsientos' class='bloqueAdministrar'>".
                 "<div class='contenZonaUnion'>".
                     "<div class='contenUnionDivision'></div>".
-                "</div>".
-                "<div class='contenZonaDatos'>".
+                "</div>".          
+                // Zona de confirmación guardar datos
+                "<div class='contenConfirmacion'></div>".
             
-            
+                "<div class='contenZonaDatos'>".            
                 //-- Formulario para el envio: Añadir Asientos --
                 "<form id='formularioAñadirAsientos' name='formularioAñadirAsientos'>".
                         
