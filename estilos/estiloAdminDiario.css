@@ -424,7 +424,7 @@
 .zonaConfirmacion {   
     margin-top: 16px;    
     border: 2px solid red;
-    background-color: #ffff00;
+    background-color: #ffff00;    
     padding: 10px 0 0 10px;
     width: 575px;
     height: 75px;
@@ -516,4 +516,17 @@
     background-position: 8%;
     background-repeat: no-repeat;   
     border-radius: 0.8em;
+}
+
+.textoExitoGrabar{
+    text-align: center;    
+    color: white;
+    width: 550px;
+    height: 60px;
+    margin-left: 5px;
+    display: block;
+    font-size: 12pt;
+    font-weight: bold;    
+    background-color: green;
+    border: none;
 }

@@ -341,5 +341,34 @@ class operacionesBD {
     }
     
     
+    /*
+     * Función para ACTUALIZAR EL DIARIO
+     */
+    public static function modificaDatosDiario($datos) {
+        // Variable de control
+        $retorno = FALSE;
+        
+        // Filtramos los datos introducidos por el usuario        
+        $filAsientos = self::filtrar($datos['asientos']);
+        $filFechaAsiento = self::filtrar($datos['fechaAsiento']);        
+        $filID = self::filtrar($datos['id']);
+        
+        // Construimos la consulta
+        $sql = "UPDATE diarios SET asientos=:asientos, fechaAsiento=:fechaAsiento WHERE id=:id";
+        
+        // Construimos los parámetros
+        $arrayParametros = array(':asientos' => $filAsientos, ':fechaAsiento' => $filFechaAsiento, ':id' => $filID);
+
+        $resultado = self::consultaPreparada($sql, $arrayParametros, 'ACCION', 'diariosparalelos');
+
+        if ($resultado === 1 || $resultado === "1") {        
+            $retorno = TRUE;
+        } else {
+            // Hubo un error al actualizar los datos en el diario            
+            $retorno = FALSE;
+        }
+
+        return $retorno;
+    }
 
 } // Fin de la clase "operacionesBD"

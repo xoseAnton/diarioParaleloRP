@@ -161,6 +161,39 @@ function mostraCampoConfirmacion(miID, texto){
     $(miID + " .contenConfirmacion").css("display", "block");
 }
 
+function mostrarCampoResultadoGrabar(resultado, miID,texto) {
+    
+    // Cargamos el campo que contiene el texto
+    $(miID + " .zonaConfirmacion").empty().append("<input type='text' class='textoExitoGrabar' name='textoExitoGrabar' value='" + texto + "' readonly />");
+    
+    // Compruebo que tivo de resultado muestro
+    if (resultado == "correcto") {
+        $(miID + " .zonaConfirmacion").css({
+            "background-color": "green",
+            "border-color": "purple"
+        });
+    }
+    if (resultado == "error") {
+        $(miID + " .zonaConfirmacion").css("background-color", "#ffff00");
+        $(miID + " .textoExitoGrabar").css({
+            "background-color": "#ffff00",
+            "color": "red"
+        });
+    }
+    
+    
+    // Mostramos el resultado
+    $(miID + " .contenConfirmacion").css("display", "block");
+    
+    // Ocultamos los errores pasados 3 segundos.
+    setTimeout(function (){
+        $(miID + " .contenConfirmacion").empty().css("display", "none");
+        activarCampos();
+        $(".bloqueAdministrar").css("display", "");
+        $(miID + " .contenZonaDatos").css("display", "");            
+    }, 3000);
+}
+
 /*
  * Función para mostrar los datos de un DIARIO SELECCIONADO
  * @param {type} id
@@ -306,7 +339,7 @@ function  validarDatosNuevosAsientos(miID) {
     
      // Devolvemos el resultado
     if(validado){        
-        datosGrabar = {diario: miDiario, ultimoAsiento: listaDiarios[idDiario].asientos, nAsientos: nAsientos , fechaAsiento: $(miID + " #fechaAsientos").val()};        
+        datosGrabar = {idDiario: listaDiarios[idDiario].id, diario: miDiario, ultimoAsiento: listaDiarios[idDiario].asientos, nAsientos: nAsientos , fechaAsiento: $(miID + " #fechaAsientos").val()};        
         return validado;
     }
     else {
@@ -317,18 +350,21 @@ function  validarDatosNuevosAsientos(miID) {
 }
 
 
-function crearNuevosAsientos(){
+function crearNuevosAsientos(miID){
     $.ajax({
         url: "./miAjax/grabarNuevosAsientos.php",
         type: 'POST',
         dataType: 'json',
         data: {datos: datosGrabar}
     }).done(function (resultado){
-        if (resultado.grabado == true) {
-            
+        
+        if (resultado[0].noGrabados == 0 && resultado[0].grabadoDiario == true) {
+            var texto = "¡ Creados correctamente: " + datosGrabar.nAsientos + " asientos en el diario: " + datosGrabar.diario + " !";
+            mostrarCampoResultadoGrabar("correcto", miID, texto);
         } else {
-            alert("No su pudo grabar las modificaciones!");            
-        }
+            var texto = "¡ Error al crear los asientos en el diario: " + datosGrabar.diario + " (ver acciones) !";
+            mostrarCampoResultadoGrabar("error", miID, texto);
+        }                
     }).fail(function() {
          alert("No su pudo grabar los nuevos asientos!");
     }).always(function (){
@@ -453,10 +489,13 @@ $(function () {
         // Recupero el ID asignado al campo seleccionado para modificar
         var miID = $(this).data("id");
         
+        // Ocultamos el campo de confirmación
+        $(miID + " .contenConfirmacion").css("display", "none");
+        
         // Comprobamos que evento fué seleccionado
         if (miID == "#bloqueCrearAsientos") {
             // Grabo los datos correspondientes
-            crearNuevosAsientos();
+            crearNuevosAsientos(miID);
         }
         
     });
