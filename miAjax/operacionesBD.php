@@ -370,5 +370,83 @@ class operacionesBD {
 
         return $retorno;
     }
+    
+    
+    /*
+     * Función para la CREACIÓN DE UN NUEVO DIARIO
+     */
+    public static function creaNuevaTablaDiario($datos) {
+       $retorno = FALSE;
+       
+       // Filtramos los datos introducidos por el usuario
+        $filDiario = self::filtrar($datos['diario']);        
+        $filFecha = self::filtrar($datos['fechaAsiento']);        
+       
+       // Sentencia para crear la nueva tabla del diario
+       $sql = "CREATE TABLE `".$filDiario."` (".
+                "`id` int(64) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Entero que identifica unicamente una linea',".
+                "`asiento` int(32) NOT NULL COMMENT 'Numero del asiento',".
+                "`fecha` date NOT NULL COMMENT 'Fecha del asiento',".
+                "`situacion` text NOT NULL COMMENT 'Texto descriptivo de la situación del asiento',".
+                "`incidencia` text NOT NULL COMMENT 'Texto que muestra las incidencias del asiento',".
+                "`otroTexto` text NOT NULL COMMENT 'Campo para texto complementario',".
+                "`asignado` varchar(20) NOT NULL COMMENT 'Nombre del usuario que despacha el asiento',".
+                "`fechaModificado` datetime NOT NULL COMMENT 'Fecha y hora completa de la modificación introducida',".
+                "`usuarioModifica` varchar(20) NOT NULL COMMENT 'Nombre del usuario que realiza la modificacion',".
+                "`cerrado` int(8) NOT NULL COMMENT 'Entero que representa: Valor 1=abierto, 0=cerrado'".
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8 ";
+       
+       // Ejecuto la consulta
+        $resultado = self::ejecutaConsulta($sql, "diariosparalelos");
+        
+        if(empty($resultado)) {            
+            $retorno = FALSE;
+        }
+        else {
+
+            $sql = "INSERT INTO `diarios` (`diario`, `asientos`, `fechaAsiento`, `fechaCreacion`, `usuarioCreacion`, `cerrado`) "
+                    . "VALUES ( ?, ?, ?, ?, ?, ?)";
+
+            $arrayParametros = array($filDiario, $datos['asientos'], $filFecha, $datos['fechaCreacion'], $datos['usuarioCreacion'], $datos["cerrado"]);
+            $resultado = self::consultaPreparada($sql, $arrayParametros, 'ACCION', 'diariosparalelos');
+
+            if ($resultado === 1 || $resultado === "1") {                                
+                $retorno = TRUE;
+            } else
+                $retorno = FALSE;
+        }
+        
+        return $retorno;
+    }
+    
+    
+    /*
+     * Función para MODIFICAR APERTURA/CIERRE del DIARIO
+     */
+    public static function modificaAbrirCerrarDiario($datos) {
+       $retorno = FALSE;
+       
+       // Filtramos los datos introducidos por el usuario
+       $filID = self::filtrar($datos['id']);        
+       $filCerrado = self::filtrar($datos['cerrado']);  
+        
+       
+        // Construimos la consulta
+        $sql = "UPDATE diarios SET cerrado=:cerrado WHERE id=:id";
+        
+        // Construimos los parámetros
+        $arrayParametros = array(':cerrado' => $filCerrado, ':id' => $filID);
+        
+        $resultado = self::consultaPreparada($sql, $arrayParametros, 'ACCION', 'diariosparalelos');        
+
+        if ($resultado === 1 || $resultado === "1")            
+            $retorno = TRUE;
+        else
+            $retorno = FALSE;       
+
+        return $retorno;
+    }
+    
+    
 
 } // Fin de la clase "operacionesBD"

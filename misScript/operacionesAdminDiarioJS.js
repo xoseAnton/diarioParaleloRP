@@ -74,6 +74,10 @@ function establecerEventosPagina(){
         // Comprobamos que evento fué seleccionado
         if (miID == "#bloqueCrearAsientos")
             mostrarBloqueCrearAsientos();
+        if (miID == "#bloqueCrearDiario")
+            mostrarBloqueCrearDiario();
+        if (miID == "#bloqueCerrarAbrirDiario")
+            mostrarBloqueAbrirCerrarDiario();
 
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
@@ -225,6 +229,37 @@ function mostrarDatosDiario(id) {
             );
 }
 
+
+/*
+ * Función para mostrar los datos ABIERTO/CERRADO de un DIARIO SELECCIONADO
+ * @param {type} id
+ * @returns {undefined}
+ */
+function mostrarDatosAbiertoCerradoDiario(id) {
+    var textoAbiertoCerrado = "";
+    var claseAbiertoCerrado = ""
+    // Comprobamos si esta abierto o cerrado el diario
+    if(listaDiarios[id].cerrado == 0){
+        textoAbiertoCerrado = "CERRADO";
+        claseAbiertoCerrado = "contenImgDiarioCerrado";
+        $("#bloqueCerrarAbrirDiario #botonAbrirCerrarDiario").val("Abrir");        
+    }
+    else {
+        textoAbiertoCerrado = "ABIERTO";
+        claseAbiertoCerrado = "contenImgDiarioAbierto";
+        $("#bloqueCerrarAbrirDiario #botonAbrirCerrarDiario").val("Cerrar");        
+    }
+    
+    //Vaciamos la información anterior y cargamos la nueva
+    $("#bloqueCerrarAbrirDiario .informaCerradoAbiertoDiario").empty().append(
+            "<div class='contenDatosInformeAbrirCerrarDiario'>" +
+                "<input type='text' class='textoInformeAbrirCerrar' name='textoInformeAbrirCerrarDiario' value='" + textoAbiertoCerrado + "' readonly/>" +
+                "<div class='" + claseAbiertoCerrado + "'></div>" +
+            "<div class='cancelarFlotantes'></div>" +
+            "</div>"
+            );
+}
+
 function mostrarInicialFinalAsientos(id, nAsientos){
     
     /* Comprobamos si introducimos un número para realizar el calculo de asientos
@@ -291,6 +326,81 @@ function  mostrarBloqueCrearAsientos() {
 }
 
 
+/*
+ *  Función para mostrar datos en el campo ADMINISTRAR-CREAR DIARIO
+ */
+function  mostrarBloqueCrearDiario() {
+    
+    // Recuperamos la lista de diarios
+    $.ajax({
+        url: "./miAjax/listarDiarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (diarios){        
+        // Guardamos en la variable golbal        
+        listaDiarios = diarios;
+        
+        $ultimoDiario = parseInt(diarios[0].diario);
+        
+        // Mostramos el último diario creado
+        $("#bloqueCrearDiario .textoUltimoDiario").val($ultimoDiario);
+        
+        // Mostramos el diario correlativo que se puede crear
+        $("#bloqueCrearDiario #numeroDiario").val($ultimoDiario+1);
+        
+    }).fail(function() {
+         alert("No su pudo listar los DIARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+    
+    $("#bloqueCrearDiario").show("slow");
+}
+
+
+/*
+ * Función para mostrar datos en el campo ADMINISTRAR-CERRAR/ABRIR DIARIO
+ */
+function  mostrarBloqueAbrirCerrarDiario() {
+    
+    // Recuperamos la lista de diarios
+    $.ajax({
+        url: "./miAjax/listarDiarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (diarios){        
+        // Guardamos en la variable golbal
+        listaDiarios = diarios;
+        
+        // Borramos los datos anteriores
+        $("#bloqueCerrarAbrirDiario #diarioAbrirCerrar").empty();
+        
+        // Recorremos todos los diarios
+        for (var i in diarios) {                        
+                $("#bloqueCerrarAbrirDiario #diarioAbrirCerrar").append("<option value='" + i + "'>" + diarios[i].diario + "</option>");
+        }        
+        
+        // Mostramos los datos del primer diario seleccionado
+        mostrarDatosAbiertoCerradoDiario(0);
+        
+    }).fail(function() {
+         alert("No su pudo listar los DIARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+    
+    $("#bloqueCerrarAbrirDiario").show("slow");
+}
+
+
+
+/*
+ * FUNCIÓN PARA VALIDAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO DE CREACIÓN
+ * DE NUEVOS ASIENTOS.
+ * 
+ * @param {type} miID
+ * @returns {Boolean}
+ */
 function  validarDatosNuevosAsientos(miID) {
     // Variable de control
     var validado = true;
@@ -349,6 +459,55 @@ function  validarDatosNuevosAsientos(miID) {
     
 }
 
+/*
+ * FUNCIÓN PARA VALIDAR LOS DATOS INTRODUCIDOS EN EL FORMULARIO DE CREACIÓN
+ * DE NUEVOS DIARIOS.
+ * 
+ * @param {type} miID
+ * @returns {Boolean}
+ */
+function  validarDatosNuevoDiario(miID) {
+    // Variable de control
+    var validado = true;
+    
+    // Inicializamos el array
+    datosGrabar = new Array(); 
+    
+    
+    /*
+     * VALIDO LOS DATOS INTRODUCIDOS
+     *     
+     */        
+    // Valido el número de Diario
+    var miDiario = parseInt($(miID + " #numeroDiario").val());        
+    if (isNaN(miDiario) || miDiario == "" || miDiario < 1) {
+        validado = false;   // Cambiamos la variable de control
+        // Mostramos el error            
+        $(miID + " #numeroDiario").focus().after("<span class='campoError'>Número incorrecto!</span>");
+    }  
+    
+    // Recupero el valor introducido
+    var miFecha = new Date($(miID + " #fechaDiario").val());
+    
+    // Compruebo que el formato introducido de la fecha es correcto
+    if (validado && ((miFecha.getDate() < 1 || miFecha.getDate() > 31) || ((miFecha.getMonth() + 1) < 1 || (miFecha.getMonth() + 1) > 12) || miFecha.getFullYear() < 2016 || $(miID + " #fechaDiario").val() == "")) {
+        validado = false;   // Cambiamos la variable de control            
+        // Mostramos el error            
+        $(miID + " #fechaDiario").focus().after("<span class='campoError'>Fecha no valida!</span>");
+    }
+    
+     // Devolvemos el resultado
+    if(validado){        
+        datosGrabar = {diario: miDiario, fechaAsiento: $(miID + " #fechaDiario").val()};        
+        return validado;
+    }
+    else {
+        // Ocultamos los errores pasados 3 segundos.
+        setTimeout("$('.campoError').hide('slow');", 3000);       
+    }
+    
+}
+
 
 function crearNuevosAsientos(miID){
     $.ajax({
@@ -372,6 +531,65 @@ function crearNuevosAsientos(miID){
     });
     
     
+}
+
+function crearNuevoDiario(miID){
+    $.ajax({
+        url: "./miAjax/grabarNuevoDiario.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {datos: datosGrabar}
+    }).done(function (resultado){
+        
+        if (resultado[0].grabadoDiario == true) {
+            var miFecha = new Date(datosGrabar.fechaAsiento);
+            var formatoFechaDiario = digitosFecha(miFecha.getDate()) + "/" + digitosFecha((miFecha.getMonth() + 1)) + "/" + miFecha.getFullYear();                
+            var texto = "¡ Creado correctamente el diario: " + datosGrabar.diario + " con fecha apertura: " + formatoFechaDiario + " !";
+            mostrarCampoResultadoGrabar("correcto", miID, texto);
+        } else {
+            var texto = "¡ Error al crear el diario: " + datosGrabar.diario + " (ver acciones) !";
+            mostrarCampoResultadoGrabar("error", miID, texto);
+        }                
+    }).fail(function() {
+         alert("No su pudo grabar el NUEVO DIARIO !");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+}
+
+
+function modificarAbrirCerrarDiario(miID){
+    $.ajax({
+        url: "./miAjax/modificarAbrirCerrarDiario.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {datos: datosGrabar}
+    }).done(function (resultado){
+        // Formo el texto para mostrar en el campo resultados
+        var textoAbiertoCerrado = "";
+        var textoErrorAbiertoCerrado = "";
+        // Comprobamos si esta abierto o cerrado el diario
+        if (datosGrabar.cerrado == 0) {
+            textoAbiertoCerrado = "CERRADO";
+            textoErrorAbiertoCerrado = "CERRAR";
+        }
+        else {
+            textoAbiertoCerrado = "ABIERTO";
+            textoErrorAbiertoCerrado = "ABRIR";
+        }
+        
+        if (resultado[0].grabadoDiario == true) {           
+            var texto = "¡ "+textoAbiertoCerrado+ " correctamente el diario: " + datosGrabar.diario  + " !";
+            mostrarCampoResultadoGrabar("correcto", miID, texto);
+        } else {
+            var texto = "¡ Error al " + textoErrorAbiertoCerrado + " el diario: " + datosGrabar.diario + " !";
+            mostrarCampoResultadoGrabar("error", miID, texto);
+        }                
+    }).fail(function() {
+         alert("No su pudo MODIFICAR el diario seleccionado !");
+    }).always(function (){
+        // FALTA CODIGO
+    });
 }
 
 
@@ -409,6 +627,18 @@ $(function () {
         // Mostramos los datos de los asientos que se crearan
         mostrarInicialFinalAsientos(idDiario, nAsientos);        
         
+    });
+    
+    
+    /*
+     * Establecemos el evento para el boton diario de ADMINISTRAR CERRAR/ABRIR DIARIO
+     */
+    $("#bloqueCerrarAbrirDiario #diarioAbrirCerrar").on('change', function(){
+        // Recuperamos la posición del diario seleccionado en el array de diarios
+        var idDiario = $("#bloqueCerrarAbrirDiario #diarioAbrirCerrar").val();        
+        
+        // Mostramos los datos del diario seleccionado
+        mostrarDatosAbiertoCerradoDiario(idDiario);        
     });
     
     
@@ -454,6 +684,46 @@ $(function () {
                 var texto = "Crear asientos Nº: " + asientoInicial + " al " + asientoFinal + " con fecha: " + formatoFechaAsientos + " en diario: " + miDiario + " ?";
                 mostraCampoConfirmacion(miID, texto);
             }
+        }        
+        
+        if (miID == "#bloqueCrearDiario") {
+            if (validarDatosNuevoDiario(miID)) {
+                // Formo el texto para mostrar en el campo confirmación
+                var nuevoDiario = $(miID + " #numeroDiario").val();                
+                var miFecha = new Date($(miID + " #fechaDiario").val());
+                var formatoFechaDiario = digitosFecha(miFecha.getDate()) + "/" + digitosFecha((miFecha.getMonth() + 1)) + "/" + miFecha.getFullYear();                
+                var texto = "Crear diario número: " + nuevoDiario + " con fecha de apertura: " + formatoFechaDiario + " ?";
+                
+                mostraCampoConfirmacion(miID, texto);
+            }
+        }
+        
+        if (miID == "#bloqueCerrarAbrirDiario") {                        
+            // Recuperamos la posición del diario seleccionado en el array de diarios
+            var idDiario = $(miID + " #diarioAbrirCerrar").val();
+            var valorCerradoAbierto = 0;
+            
+            // Inicializamos el array de datos
+            datosGrabar = new Array(); 
+            
+            // Formo el texto para mostrar en el campo confirmación
+            var textoAbiertoCerrado = "";
+            // Comprobamos si esta abierto o cerrado el diario
+            if (listaDiarios[idDiario].cerrado == 0){
+                textoAbiertoCerrado = "ABRIR";
+                valorCerradoAbierto = 1;
+            }
+            else {
+                textoAbiertoCerrado = "CERRAR";
+                valorCerradoAbierto = 0;
+            }
+            
+            // Guardamos los datos de modificación
+            datosGrabar = {id: listaDiarios[idDiario].id, diario : listaDiarios[idDiario].diario, cerrado: valorCerradoAbierto};
+            
+            var texto = "Realmente quieres " + textoAbiertoCerrado + " el diario: " + listaDiarios[idDiario].diario  + " ?";            
+
+            mostraCampoConfirmacion(miID, texto);
         }
         
         // Paramos la propagación indeseada del evento
@@ -474,15 +744,10 @@ $(function () {
     $(".contenConfirmacion").on('click', ".botonConfirmaCerrar", function () {
         // Recupero el ID asignado al campo seleccionado para modificar
         var miID = $(this).data("id");
-        
-        // Comprobamos que evento fué seleccionado
-        if (miID == "#bloqueCrearAsientos") {
-            //Oculto y vacío el campo de confirmación
-            $(miID + " .contenConfirmacion").empty().css("display", "none");
-            // Mostramos los datos nuevamente
-            $(miID + " .contenZonaDatos").css("display", "block");
-        }
-        
+        //Oculto y vacío el campo de confirmación
+        $(miID + " .contenConfirmacion").empty().css("display", "none");
+        // Mostramos los datos nuevamente
+        $(miID + " .contenZonaDatos").css("display", "block");
     });
     
     $(".contenConfirmacion").on('click', ".botonConfirmaGrabar", function () {
@@ -496,6 +761,14 @@ $(function () {
         if (miID == "#bloqueCrearAsientos") {
             // Grabo los datos correspondientes
             crearNuevosAsientos(miID);
+        }
+        if (miID == "#bloqueCrearDiario") {
+            // Grabo los datos correspondientes
+            crearNuevoDiario(miID);
+        }
+        if (miID == "#bloqueCerrarAbrirDiario") {
+            // Grabo los datos correspondientes
+            modificarAbrirCerrarDiario(miID);
         }
         
     });

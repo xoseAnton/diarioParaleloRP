@@ -102,10 +102,135 @@ function mostrarCreacionAsientos(){
                 "</div>".
                 "<div class='cancelarFlotantes'></div>".
             "</div>".
-
+            
             "<div class='cancelarFlotantes'></div>".
         "</div>";
 }
+
+function mostrarCrearDiario(){
+    //-- Zona de control PARA CREAR NUEVO DIARIO --
+    echo "<div class='bloqueControl'>".
+            "<div class='contenBotonActivar' data-id='#bloqueCrearDiario'>".
+                "<div class='contenTextoBoton'>Crear</br>Diario</div>".
+            "</div>".
+
+            "<div id='bloqueCrearDiario' class='bloqueAdministrar'>".
+                "<div class='contenZonaUnion'>".
+                    "<div class='contenUnionDivision'></div>".
+                "</div>".
+
+                // Zona de confirmación guardar datos
+                "<div class='contenConfirmacion'></div>".
+
+                "<div class='contenZonaDatos'>".
+
+                    //-- Formulario para el envio: Crear Diario --            
+                    "<form id='formularioCrearDiario' name='formularioCrearDiario'>".
+                        "<div id='contenInformeUltimoDiario'>".
+                            "<div class='contenDatosInformeUltimoDiario'>".
+                                "<div class='datosInformeDiario'>".
+                                    "<label class='tituloDatosInforme'>Último diario creado:</label>".
+                                "</div>".
+                                "<div class='datosInformeDiario'>".
+                                    "<input type='text' class='textoUltimoDiario' name='ultimoDiario' value='' readonly/>".
+                                "</div>".
+                            "</div>".
+                        "</div>".
+                                        
+                        //-- Introducimos los datos para CREAR EL NUEVO DIARIO --
+                        "<div id='contenIntroducirDatosCrearDiario'>".
+                            "<fieldset id='introducirDatosCrearDiario'>".
+                                "<legend>Datos para crear nuevo diario:</legend>".
+                                "<div id='contenNumeroDiario'>".
+                                    "<label class='textoIntroducirDatos'>Nuevo diario:</label>".                            
+                                    "<input type='text' id='numeroDiario' name='numeroDiario' value='' readonly required/>".
+                                    "<div class='cancelarFlotantes'></div>".
+                                "</div>".
+                                "<div id='contenFechaDiario'>".
+                                    "<label class='textoIntroducirDatos'>Fecha apertura:</label>".
+                                    "<input type='date' id='fechaDiario' name='fechaDiario' value='' required/>".
+                                    "<div class='cancelarFlotantes'></div>".
+                                "</div>".
+                            "</fieldset>".
+                        "</div>".                             
+
+                        "<div id='contenResultadoBotonesCrearDiario'>".
+                            "<div id='contenBotonsCrearDiario'>".
+                                "<div id='zonaBotonCrearDiario' class='zonaBotonGuardar'>".
+                                    "<input type='button' class='botonGuardarConfirma' name='botonCrearDiario' data-id='#bloqueCrearDiario' value='Crear' title='Crea el nuevo diario'/>".
+                                "</div>".
+                                "<div id='zonaBotonCancelarDiario' class='zonaBotonCancelar'>".
+                                    "<input type='reset' class='botonCerrarConfirma' name='botonCancelarDiario' value='Cancelar' title='Cancelar la operación de crear nuevo diario'/>".
+                                "</div>".
+                                "<div class='cancelarFlotantes'></div>".
+                            "</div>".
+                        "</div>".                             
+
+                        "<div class='cancelarFlotantes'></div>".
+                    "</form>".            
+                //-- Fin formulario: Crear nuevo Diario
+            
+                "</div>".
+                "<div class='cancelarFlotantes'></div>".
+            "</div>".
+
+        "<div class='cancelarFlotantes'></div>".
+    "</div>";
+}
+
+function mostrarAbrirCerrarDiario(){
+    
+    //-- Zona de control ABRIR/CERRAR DIARIOS --
+    echo "<div class='bloqueControl'>".
+        "<div class='contenBotonActivar' data-id='#bloqueCerrarAbrirDiario'>".
+            "<div class='contenTextoBoton'><label>Abrir</br>Cerrar</br>Diario</label></div>".
+        "</div>".
+
+        "<div id='bloqueCerrarAbrirDiario' class='bloqueAdministrar'>".
+            "<div class='contenZonaUnion'>".
+                "<div class='contenUnionDivision'></div>".
+            "</div>".
+            
+            // Zona de confirmación guardar datos
+            "<div class='contenConfirmacion'></div>".
+            
+            "<div class='contenZonaDatos'>".
+            //-- Formulario para el envio: Cerrar/Abrir diario --
+            
+            "<form id='formularioAbrirCerrarDiario' name='formularioAbrirCerrarDiario'>".
+            
+                "<div id='contenTextoDiario'>".
+                    "<label>Diario:</label>".
+                "</div>".
+                "<div class='contenDiario'>".
+                    "<select id='diarioAbrirCerrar' name='diarioAbrirCerrar' required title='Número de diario'></select>".
+                "</div>".
+                "<div class='informaCerradoAbiertoDiario'></div>".
+
+                "<div id='contenResultadoBotonesAbrirCerrarDiario' >".
+                    "<div id='contenBotonsAbrirCerrarDiario'>".
+                        "<div id='zonaBotonAbrirCerrarDiario' class='zonaBotonGuardar'>".
+                            "<input type='button' id='botonAbrirCerrarDiario' class='botonGuardarConfirma' name='botonConfirmaAbrirCerrarDiario' data-id='#bloqueCerrarAbrirDiario' value='Cerrar' title='Cerrar/Abrir el diario'/>".
+                        "</div>".
+                        "<div id='zonaBotonCancelarAbrirCerrarDiario' class='zonaBotonCancelar'>".
+                            "<input type='button' class='botonCerrarConfirma' name='botonCancelarAbrirCerrarDiario' value='Cancelar' title='Cancelar la operación de abrir/cerrar un diario'/>".
+                        "</div>".
+                        "<div class='cancelarFlotantes'></div>".
+                    "</div>".
+                "</div>".
+                "<div class='cancelarFlotantes'></div>".
+            "</form>".
+            
+            
+            //-- Fin formulario: Cerrar/Abrir diario --
+            "</div>".
+            "<div class='cancelarFlotantes'></div>".
+        "</div>".
+
+        "<div class='cancelarFlotantes'></div>".
+    "</div>";
+}
+
 
 ?>
 
@@ -199,45 +324,13 @@ function mostrarCreacionAsientos(){
                         }
 
                         // Si tenemos el rol adecuado mostramos la posibilidad de crear nuevos diarios
-                        if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1) {
-                            
-                            //-- Zona de control PARA CREAR NUEVO DIARIO --
-                            echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar' data-id='#bloqueCrearDiario'>";
-                                    echo "<div class='contenTextoBoton'>Crear</br>Diario</div>";
-                                echo "</div>";
-                                
-                                echo "<div id='bloqueCrearDiario' class='bloqueAdministrar'>"; 
-                                    echo "<div class='contenZonaUnion'>";
-                                        echo "<div class='contenUnionDivision'></div>";
-                                    echo "</div>";
-                                    echo "<div class='contenZonaDatos'></div>";
-                                    echo "<div class='cancelarFlotantes'></div>";
-                                echo "</div>";               
-                                
-                                echo "<div class='cancelarFlotantes'></div>";                                
-                            echo "</div>";
+                        if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1) {                            
+                            mostrarCrearDiario();
                         }
 
                         // Si tenemos el rol adecuado mostramos la posibilidad de cerrar/abrir diarios
                         if ($_SESSION['usuario']['rol'] == 0 || $_SESSION['usuario']['rol'] == 1){
-                            
-                            //-- Zona de control ABRIR/CERRAR DIARIOS --
-                            echo "<div class='bloqueControl'>";
-                                echo "<div class='contenBotonActivar' data-id='#bloqueCerrarAbrirDiario'>";
-                                    echo "<div class='contenTextoBoton'><label>Abrir</br>Cerrar</br>Diario</label></div>";
-                                echo "</div>";
-                                
-                                echo "<div id='bloqueCerrarAbrirDiario' class='bloqueAdministrar'>"; 
-                                    echo "<div class='contenZonaUnion'>";
-                                        echo "<div class='contenUnionDivision'></div>";
-                                    echo "</div>";
-                                    echo "<div class='contenZonaDatos'></div>";
-                                    echo "<div class='cancelarFlotantes'></div>";
-                                echo "</div>";               
-                                
-                                echo "<div class='cancelarFlotantes'></div>";                                                                
-                            echo "</div>";
+                            mostrarAbrirCerrarDiario();                           
                         }
                     }
                     ?>

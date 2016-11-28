@@ -530,3 +530,163 @@
     background-color: green;
     border: none;
 }
+
+
+/* ZONA DE CONTROL PARA CREAR NUEVO DIARIO */
+
+#contenInformeUltimoDiario {
+    float: left;
+    margin: 0 0 0 10px;
+    padding: 0;
+    width: 200px;
+    height: 110px;
+    background-size: 100%;     
+    background-repeat: no-repeat; 
+    background-image: url(../imagenes/notas.png);
+}
+
+.contenDatosInformeUltimoDiario {      
+    margin: 38px 0 0 9px;   
+}
+
+.textoUltimoDiario {
+    font-family: Arial;
+    text-align: center;
+    color: blue;
+    font-size: 25pt;
+    font-weight: bold;
+    width: 155px;
+    height: 45px;
+    border: none;
+    background-color: transparent;
+}
+
+#contenIntroducirDatosCrearDiario {
+    margin-left: 75px;
+    float: left;
+    width: 340px;
+    height: 120px;
+}
+
+#introducirDatosCrearDiario {
+    width: 305px;
+    height: 95px;
+    border: 2px solid purple;
+    border-radius: 1em;
+}
+
+#introducirDatosCrearDiario legend {
+    font-size: 13pt;
+}
+
+#contenNumeroDiario {
+    padding: 7px 0px;
+}
+
+#numeroDiario {
+    float: left;
+    height: 20px;
+    width: 50px;
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center;
+    border: 2px solid purple;
+    background-color: #eee;
+}
+
+#contenFechaDiario {
+    padding: 7px 0px;
+}
+
+#fechaDiario {
+    float: left;
+    height: 25px;
+    width: 150px;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+#contenResultadoBotonesCrearDiario {
+    float: left;
+    margin: 30px 0 0 80px;
+    padding: 10px 0px;
+    width: 285px;
+    height: 115px;    
+}
+
+#contenBotonsCrearDiario {
+    width: 275px;
+    height: 40px;
+}
+
+
+/* ZONA DE CONTROL PARA ABRIR-CERRAR DIARIO */
+
+#diarioAbrirCerrar {
+    font-size: 20pt;
+    font-weight: bold;
+    width: 75px;
+    height: 40px;
+}
+
+.informaCerradoAbiertoDiario {
+    float: left;
+    margin: 0;
+    padding: 0;
+    width: 200px;
+    height: 110px;
+    background-size: 100%;     
+    background-repeat: no-repeat; 
+    background-image: url(../imagenes/notas.png);
+}
+
+.contenDatosInformeAbrirCerrarDiario {     
+    margin: 38px 0 0 9px;   
+}
+
+.textoInformeAbrirCerrar {
+    float: left;
+    font-family: Arial;
+    color: blue;
+    font-size: 11pt;
+    font-weight: bold;    
+    background-color: transparent;
+    border: none;
+    width: 80px;
+    height: 65px;
+}
+
+.contenImgDiarioCerrado {
+    float: left;
+    padding: 0;
+    margin: 0;
+    width: 80px;
+    height: 67px;    
+    background-repeat: no-repeat; 
+    background-image: url(../imagenes/diarioCerrado.png);
+    background-position: 50%;
+}
+
+.contenImgDiarioAbierto {
+    float: left;
+    padding: 0;
+    margin: 0;
+    width: 80px;
+    height: 67px;    
+    background-repeat: no-repeat; 
+    background-image: url(../imagenes/diarioAbierto.png);
+    background-position: 50%;
+}
+
+#contenResultadoBotonesAbrirCerrarDiario {
+    float: left;
+    margin: 30px 0 0 80px;
+    padding: 10px 0px;
+    width: 285px;
+    height: 115px;    
+}
+
+#contenBotonsAbrirCerrarDiario {
+    width: 275px;
+    height: 40px;
+}
