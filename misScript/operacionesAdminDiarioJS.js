@@ -98,8 +98,19 @@ function desactivarCampos(miEvento) {
     
     // Cambiamos la opacidad de los botones de administración del diario
     $(".contenBotonActivar").css("opacity", "0.2");
-    $(miEvento).css("opacity", "");
+    $(miEvento).css("opacity", ""); // Mantenemos la opacidad inicial en el botón seleccionado
     
+}
+
+function desactivarTotalCampos(){
+    // Desactivamos los eventos sobre los botones de control
+    $(".botonMenu").off("focus mouseenter focusout mouseleave");
+    $("#botonMostrarMenu").off("focus mouseenter focusout mouseleave");
+    $("#zonaControl").off("focus mouseenter focusout mouseleave");
+    $(".contenBotonActivar").off("focus mouseenter focusout mouseleave click");
+        
+    // Cambiamos la opacidad de los botones de administración del diario
+    $(".contenBotonActivar").css("opacity", "0.2");
 }
 
 
@@ -109,7 +120,7 @@ function desactivarCampos(miEvento) {
  */
 function activarCampos() {    
     // Establecemos los eventos
-    establecerEventosPagina();    
+    establecerEventosPagina();   
     
     // Cambiamos las propiedades del elemento a las iniciales    
     $(".contenBotonActivar").css({
@@ -774,6 +785,67 @@ $(function () {
     });
     
     
+    
+    /*
+     * Establecemos el evento "click" para el botón LISTAR ACCIONES
+     */
+    $("#mostrarAcciones").click(function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault(); 
+        
+        //LLamamos a la función para desactivar campos
+        desactivarTotalCampos();
+        
+        //Sacamos la barra de desplazamiento
+        $("#zonaRelacionControles").css("overflow-y", "hidden");
+        
+        // Mostramos el panel del listado de acciones
+        $("#contenedorZonaAcciones").css("display", "block");
+        
+        mostrarAcciones();        
+
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
+    
+    
+    // Eventos para el botón CERRAR cuadro de ACCIONES
+    $("#cerrarAcciones").on('focus mouseenter', function () {
+        $(this).css("padding", "15px");
+    });
+    $("#cerrarAcciones").on('focusout mouseleave', function () {
+        $(this).css("padding", "");
+    });
+    
+    $("#cerrarAcciones").click( function (evento) {
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+        // Ocultamos el contenedor la información de las acciones
+        $("#contenedorZonaAcciones").hide("slow"); //Desaparición con desplazamiento
+        
+        // Borramos los elementos de la consulta anteriores
+        $(".contenedorIncidencias").empty();
+
+        //LLamamos a la función para activar campos
+        activarCampos();        
+        
+        // Ocultamos los bordes de selección
+        ocultarBorde(".botonMenu");
+        
+        /*
+         * Ocultamos el menú de botones y mostramos el botón para poder
+         * desplegarlo nuevamente.      
+         */
+        $("#zonaBotonMenu").slideDown("slow"); // Muestro el botón
+        $("#zonaControl").slideUp("slow");  // Oculto el menu de botones
+        
+        //Mostramos la barra de desplazamiento
+        $("#contenedorZonaAcciones").css("overflow-y", "");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });
     
     
     /*

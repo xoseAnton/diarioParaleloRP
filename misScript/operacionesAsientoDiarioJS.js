@@ -783,22 +783,7 @@ function informeAsiento(consulta){
 }
 
 
-function mostrarAcciones() {        
-    $.ajax({
-        url: "./miAjax/listarAcciones.php",
-        type: 'POST',
-        dataType: 'json',        
-    }).done(function (resultado){        
-        for (var i in resultado) {
-            $(".contenedorIncidencias").append(resultado[i].accion+"\n");
-        }
-    }).fail(function() {
-         alert("No su pudo listar las acciones realizadas!");
-    }).always(function (){
-        // FALTA CODIGO
-    });
-    
-}
+
 
 
 

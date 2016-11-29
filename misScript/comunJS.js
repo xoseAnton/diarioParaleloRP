@@ -81,3 +81,23 @@ function ocultarBordeContenBusqueda(idElemento){
     else
         $(idElemento).parents(".contenedorBusqueda").css("border", "2px solid purple");
 }
+
+/*
+ * Función para mostrar las acciones realizadas en todas las páginas.
+ */
+function mostrarAcciones() {        
+    $.ajax({
+        url: "./miAjax/listarAcciones.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (resultado){        
+        for (var i in resultado) {
+            $(".contenedorIncidencias").append(resultado[i].accion+"\n");
+        }
+    }).fail(function() {
+         alert("No su pudo listar las acciones realizadas!");
+    }).always(function (){
+        // FALTA CODIGO
+    });
+    
+}
