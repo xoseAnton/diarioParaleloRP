@@ -144,7 +144,7 @@ class operacionesBD {
         // Comando para la consulta
         $sql = "SELECT id, nombre, rol FROM usuarios "
                 . "WHERE id='$idFiltrado' "
-                . "AND clave='" . md5($contrasenaFiltrada) . "'";
+                . "AND clave='" . $contrasenaFiltrada . "'";
 
         // Ejecuto la consulta
         $resultado = self::ejecutaConsulta($sql, "negreira");

@@ -4,14 +4,22 @@
  * en un "select".
  * @returns Lista de usuarios de la base de datos
  */
-function listarUsuario() {
+function listarUsuario() {    
     // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/listarUsuarios.php", function (resultado){
+    $.ajax({
+        url: "./miAjax/listarUsuarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (usuarios){        
         // Recorro todos los valores optenidos
-        $.each(resultado, function (i, usuario){
-            $("#usuario").append("<option value='"+usuario.id+"'>"+usuario.nombre+"</option>");
-        });
-    });
+        for (var i in usuarios) {
+            $("#usuario").append("<option value='"+usuarios[i].id+"'>"+usuarios[i].nombre+"</option>");
+        }
+    }).fail(function() {
+         alert("No su pudo listar los USUARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });     
     
     // Añadimos un campo vacio
     $("#usuario").append("<option value='' selected='true'></option>");    
@@ -23,18 +31,27 @@ function listarUsuario() {
  * @param {type} datos
  * @returns {undefined}
  */
-function comprobarUsuario(datos){      
+function comprobarUsuario(datos){  
     // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/comprobarUsuario.php", datos, function (resultado) {        
-        // Si se produjo un error de indentificación lo mostramos        
+    $.ajax({
+        url: "./miAjax/comprobarUsuario.php",
+        type: 'POST',
+        dataType: 'json',        
+        data: {datos: datos}
+    }).done(function (resultado){        
+        // Si se produjo un error de indentificación lo mostramos
         if(resultado.error) {
             // Mostramos el error            
             $("#contraseña").focus().after("<span class='campoError'>"+resultado.textoError+"</span>");
         }
         else {
             document.location.href = "asientosDiario.php";
-        }
-    });
+        }        
+    }).fail(function() {
+         alert("No su pudo comprobar la AUTENTIFICACIÓN del usuario en la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });     
 }
 
 
@@ -127,8 +144,8 @@ $(function (){
    $("#botonEntrar").click( function(evento){
        // Detenemos la acción del botón input:submit
        evento.preventDefault();
-       // Creamos el array con los datos
-       var datos = {id:$("#usuario").val(), contraseña:$("#contraseña").val()};       
+       // Creamos el array con los datos y codificamos la contraseña introducida
+       var datos = {id:$("#usuario").val(), contraseña: md5($("#contraseña").val())};
       // Comprobamos usuario y contraseña en la base de datos.
        comprobarUsuario(datos);      
    });

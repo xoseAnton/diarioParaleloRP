@@ -15,8 +15,9 @@ date_default_timezone_set('Europe/Berlin');
         <link href="estilos/estiloComunProyecto.css" rel="stylesheet" type="text/css">
         <!-- Por último incluimos los Script que utilizaremos -->
         <script src="misIncludes/jquery-3.1.1.js" type="text/javascript"></script>
+        <script src="misIncludes/md5.min.js" type="text/javascript"></script>
         <script src="misScript/comunJS.js" type="text/javascript"></script>
-        <script src="misScript/operacionesIndexJS.js" type="text/javascript"></script>
+        <script src="misScript/operacionesIndexJS.js" type="text/javascript"></script>        
         <title>Acceso Diario Paralelo</title>        
     </head>
     

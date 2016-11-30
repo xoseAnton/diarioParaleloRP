@@ -11,19 +11,27 @@ var pendienteGrabar = false;
  * en un "select". Si estamos identificados selecciona por defecto el usuario.
  * @returns Lista de usuarios de la base de datos
  */
-function listarUsuarios() {
+function listarUsuarios() {    
     // Enviamos la solicitud ajax a la página del servidor
-    $.getJSON("./miAjax/listarUsuarios.php", function (resultado) {
+    $.ajax({
+        url: "./miAjax/listarUsuarios.php",
+        type: 'POST',
+        dataType: 'json',        
+    }).done(function (resultado){        
         // Guardamos la consulta en la variable global
         usuarios = resultado;
         // Recorro todos los valores optenidos
-        $.each(resultado, function (i, usuario) {
-            if(usuario.porDefecto == true)
-                $("#usuario").append("<option value='" + usuario.nombre + "' selected='true'>" + usuario.nombre + "</option>");
+        for (var i in usuarios) {
+            if(usuarios[i].porDefecto == true)
+                $("#usuario").append("<option value='" + usuarios[i].nombre + "' selected='true'>" + usuarios[i].nombre + "</option>");
             else
-                $("#usuario").append("<option value='" + usuario.nombre + "'>" + usuario.nombre + "</option>");
-        });
-    });
+                $("#usuario").append("<option value='" + usuarios[i].nombre + "'>" + usuarios[i].nombre + "</option>");
+        }
+    }).fail(function() {
+         alert("No su pudo listar los USUARIOS de la base de datos!");
+    }).always(function (){
+        // FALTA CODIGO
+    });         
 }
 
 
@@ -191,7 +199,7 @@ function guardarDatosAsientos(){
                 $(miID).after("<div id='bloqueInformaInferior' class='bloquePendienteGrabar'></div>");
                 
                 // Avisamos de que los datos se grabaron correctamente
-                avisoDatosGrabados();
+                avisoDatosGrabados();                
                 
                 // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
                 setTimeout(function () {

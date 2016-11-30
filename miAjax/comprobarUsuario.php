@@ -10,8 +10,10 @@ require_once 'operacionesBD.php';
 date_default_timezone_set('Europe/Berlin');
 
 //Recupero las variables
-$miId = $_GET['id'];
-$miContraseña = $_GET['contraseña'];
+$datos = $_POST['datos'];
+
+$miId = $datos['id'];
+$miContraseña = $datos['contraseña'];
 
 // Verifico el usuario introducido
 $resultado = operacionesBD::verificaUsuario($miId, $miContraseña);
