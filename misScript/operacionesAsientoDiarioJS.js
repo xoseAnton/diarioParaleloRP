@@ -4,6 +4,7 @@ var usuarios; // Contiene los usuarios definidos
 var miID;   // Contiene la variable de control del asiento seleccionado
 var datosGrabar; // Contienen los datos que se quieren modificar
 var pendienteGrabar = false;
+var asientoInicial;
 
 
 /*
@@ -201,6 +202,9 @@ function guardarDatosAsientos(){
                 // Avisamos de que los datos se grabaron correctamente
                 avisoDatosGrabados();                
                 
+                // Actualizamos los nuevos datos en la lista de asientos
+                asientoInicial.actualizarDatosAsiento(situacion, asignado, incidencia, otroTexto, cerrado);
+                
                 // Pasados 2 segundo ocultamos el aviso y habilitamos los campos
                 setTimeout(function () {
                     
@@ -236,11 +240,20 @@ function guardarDatosAsientos(){
  * @returns {undefined}
  */
 function establecerEventosFormularioBusqueda(){
-     $(".contenedorBusqueda").on('focus mouseenter', '*', function() {
+    $(".contenedorBusqueda").on('focus mouseenter', '*', function() {
         mostrarBordeContenBusqueda(this);
     });
+    
     $(".contenedorBusqueda").on('focusout mouseleave', '*', function() {
         ocultarBordeContenBusqueda(this);
+    });    
+    
+    $("#zonaRelacionAsientos").on('click', '.checkActivo', function() {
+        if ($(this).is(':checked')) {
+            $(this).css("outline", "4px solid green");
+        } else {
+            $(this).css("outline", "4px solid red");
+        }
     });
 }
 
@@ -791,10 +804,6 @@ function informeAsiento(consulta){
 }
 
 
-
-
-
-
 /*
  * Cuando la página esté preparada
  * @returns {undefined}
@@ -809,8 +818,7 @@ $(function() {
      * 
      * DEFINIMOS LOS EVENTOS:
      * 
-     */
-    
+     */   
     
     /* 
      * Establecemos los eventos para los botones      
@@ -847,6 +855,11 @@ $(function() {
 
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
+        
+        // Guardo los datos iniciales por si quieren despues cancelar la modificación:
+        asientoInicial = new AsientoInicial(); // Creo un objeto y cargo los datos iniciales
+        asientoInicial.recuperaDatosInicialAsiento(miID);
+        
 
         /* Introduzco un campo en la parte superior e inferior del asiento para mostrar
          * posibles mensajes (y destacar el asiento que se modifica).
@@ -925,15 +938,17 @@ $(function() {
     
     // Evento click para el botón cancelar:
     $("#zonaRelacionAsientos").on('click', ".botonCerrar", function (evento) {
-
-        //LLamamos a la función para desactivar campos
+        
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();
+        
+         // Cargamos los datos iniciales
+        asientoInicial.mostrarDatosInicialesAsiento();
+        
+        //LLamamos a la función para activar los campos
         activarCampos();
 
-        // Muestro el borde original en el asiento seleccionado
-        $(miID + " .contenAsiento, " + miID + " .contenDatos").css("border", "");
-        $(miID + " .contenBotonsBaixo").css("border-top", "");
-
-        // Elimino los elementos creados especificamente para modificar datos        
+        // Elimino los elementos creados especificamente para modificar datos
         $(".botonGuardar, .botonAsignado, .contenAsignadoUsuario, .campoPendienteGrabar, #bloqueInformaSuperior, #bloqueInformaInferior").remove();
         pendienteGrabar = false; // Borrado el aviso, cambio la variable de control
 
@@ -949,6 +964,9 @@ $(function() {
 
         //Mostramos la barra de desplazamiento
         $("#zonaRelacionAsientos").css("overflow-y", "");
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
     });
         
      /* 
@@ -1136,6 +1154,10 @@ $(function() {
 
         // Recupero el ID asignado al asiento seleccionado para modificar
         miID = "#asientoID" + $(this).data("id");
+        
+        // Guardo los datos iniciales por si despues se quieren actualizar
+        asientoInicial = new AsientoInicial(); // Creo un objeto y cargo los datos iniciales
+        asientoInicial.recuperaDatosInicialAsiento(miID);
 
         //LLamamos a la función para desactivar campos
         desactivarCampos();

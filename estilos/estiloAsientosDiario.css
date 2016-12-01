@@ -422,8 +422,9 @@
 }
 
 .checkActivo {    
-    outline: 4px solid red;
+    outline: 4px solid red;    
 }
+
 .checkActivo:checked {
    outline: 4px solid green;
 }

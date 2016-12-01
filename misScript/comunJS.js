@@ -5,6 +5,72 @@ var informeProyecto = new Array(["Realizado por: ", "Jose Antonio Mariño Outeir
                                 ["Base de datos: ", "MySQL"],
                                 ["Servidor web: ", "Microsoft-IIS/8.5"],
                                 ["Versión de PHP: ", "5.6"]);
+                                
+
+// Creo una clase ASIENTO EN JAVASCRIPT para las modificaciones del asiento
+function AsientoInicial () {        
+    // Atributos de la clase
+    this.idInicial = "";
+    this.situacion = "";
+    this.incidencia = "";
+    this.otroTexto = "";
+    this.asignado = "";
+    this.cerrado = 0;
+    this.colorBorde = "";
+    
+    // Método para recuperar los datos introducidos en el Asiento
+    this.recuperaDatosInicialAsiento = function (idAsiento) {
+        this.idInicial = idAsiento;
+        this.situacion = $(idAsiento + " input.textoSituacion").val();
+        this.incidencia = $(idAsiento + " input.textoIncidencia").val();
+        this.otroTexto = $(idAsiento + " input.textoOtros").val();
+        this.asignado = $(idAsiento + " input.asignado").val();
+        if ($(idAsiento + " input.checkActivo").is(':checked')) {
+            this.cerrado = 1;
+        } else {
+            this.cerrado = 0;
+        }
+        this.colorBorde = $(this.idInicial + " .contenAsiento").css("border-color");
+    }
+
+    // Método para mostrar los datos modificables de un asiento
+    this.mostrarDatosInicialesAsiento = function () {
+        $(this.idInicial + " .textoSituacion").val(this.situacion);
+        $(this.idInicial + " .asignado").val(this.asignado);
+        $(this.idInicial + " .textoIncidencia").val(this.incidencia);
+        $(this.idInicial + " .textoOtros").val(this.otroTexto);
+        if (this.cerrado == 1) {            
+            $(this.idInicial + " input.checkActivo").prop("checked", true);
+            $(this.idInicial + " input.checkActivo").css("outline", "4px solid green");
+        } else {            
+            $(this.idInicial + " input.checkActivo").prop("checked", false);
+            $(this.idInicial + " input.checkActivo").css("outline", "4px solid red");
+        }        
+        // Muestro el borde como estaba inicialmente
+        $(this.idInicial + " .contenAsiento, " + this.idInicial + " .contenDatos").css("border-color", this.colorBorde);
+        $(this.idInicial + " .contenBotonsBaixo").css("border-top-color", this.colorBorde);
+    }
+
+    // Método para actualizar datos en un asiento
+    this.actualizarDatosAsiento = function (situacion, asignado, incidencia, otroTexto, cerrado) {
+        $(this.idInicial + " .textoSituacion").val(situacion);
+        $(this.idInicial + " .asignado").val(asignado);
+        $(this.idInicial + " .textoIncidencia").val(incidencia);
+        $(this.idInicial + " .textoOtros").val(otroTexto);
+        if (cerrado == 1) {
+            $(this.idInicial + " input.checkActivo").prop("checked", true);
+            $(this.idInicial + " input.checkActivo").css("outline", "4px solid green");
+        } else {
+            $(this.idInicial + " input.checkActivo").prop("checked", false);
+            $(this.idInicial + " input.checkActivo").css("outline", "4px solid red");
+        }
+        
+        // Muestro el borde con otro color inidicando que fué modificado
+        $(this.idInicial + " .contenAsiento, " + this.idInicial + " .contenDatos").css("border-color", "orange");
+        $(this.idInicial + " .contenBotonsBaixo").css("border-top-color", "orange");
+    }
+    
+};
 
 /*
  * Función para mostrar la información del Proyecto
