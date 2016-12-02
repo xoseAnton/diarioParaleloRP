@@ -119,7 +119,7 @@ body {
 /*
 * ZONA PARA MOSTRAR RECORDATORIO "PENDIENTE GRABAR"
 */
-.bloquePendienteGrabar {       
+.bloquePendienteGrabar {           
     margin: 0;
     pading: 0;
     height: 30px;
@@ -133,7 +133,7 @@ body {
     color: white;
     font-size: 12pt;
     font-weight: bold;        
-    width: 240px;    
+    width: 240px;        
     position: relative;
 }
 
@@ -240,3 +240,14 @@ body {
     resize: none;
     font-size: 9pt;
 }
+
+
+/*
+*   zona MOSTRAR "TRABAJANDO"
+*/
+
+.contenTrabajando {    
+    margin-left: 47%;
+    margin-top: 20%;
+}
+

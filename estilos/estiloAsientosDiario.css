@@ -220,7 +220,7 @@
     margin-top: 25px;
 }
 
-#zonaMostrarDatos { 
+#zonaMostrarDatos {     
     margin: 0;
     padding: 0 0 0 5px;
     height: 715px;
@@ -239,6 +239,7 @@
 }
 
 #zonaRelacionAsientos {    
+    display: none;    
     margin: 0;
     padding: 0;
     height: 675px;
@@ -531,7 +532,8 @@
     margin-top: 5px;
 }
 
-#zonaRelacionInfoAsientos {    
+#zonaRelacionInfoAsientos {
+    display: none;    
     margin: 0;
     padding: 0;
     height: 675px;

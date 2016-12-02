@@ -146,7 +146,8 @@ function guardarDatosAsientos(){
  * @returns {undefined}
  */ 
  function guardarDatosActuales() {
-     // Recuperamos los datos a guardar   
+     
+    // Recuperamos los datos a guardar   
     var asiento = $(miID).data("asiento");
     var diario = $(miID).data("diario");
     var fecha = $(miID+" label.mostrarFecha").data("fechaasiento");
@@ -160,6 +161,12 @@ function guardarDatosAsientos(){
     } else {
         cerrado = 0;
     }
+    
+    // Vaciamos los datos de informes anteriores
+    $("#zonaInfoAsientos").empty();
+        
+    // Añadimos el campo para el título y los datos:
+    $("#zonaInfoAsientos").append("<legend id='legendInfoAsientos'></legend><div id='zonaRelacionInfoAsientos'></div>");
     
     // Inicializamos el array
     datosGrabar = new Array(); 
@@ -179,7 +186,6 @@ function guardarDatosAsientos(){
              * Vaciamos el contenedor con el informe de los asientos para enseñar
              * los nuevos.
              */
-             $("#zonaRelacionInfoAsientos").empty();            
 
             // Realizamos la nueva consulta para enseñar los datos nuevos
             informeAsiento(datosGrabar);
@@ -221,7 +227,7 @@ function guardarDatosAsientos(){
                     //Mostramos la barra de desplazamiento
                     $("#zonaRelacionInfoAsientos").css("overflow-y", "");
 
-                }, 2000);
+                }, 3000);
             }, 100);
 
         } else {
@@ -229,8 +235,6 @@ function guardarDatosAsientos(){
         }
     }).fail(function() {
          alert("No su pudo grabar las modificaciones!");   
-    }).always(function (){
-        // FALTA CODIGO
     });
 }
 
@@ -248,7 +252,7 @@ function establecerEventosFormularioBusqueda(){
         ocultarBordeContenBusqueda(this);
     });    
     
-    $("#zonaRelacionAsientos").on('click', '.checkActivo', function() {
+    $("#zonaMostrarDatos").on('click', '.checkActivo', function() {
         if ($(this).is(':checked')) {
             $(this).css("outline", "4px solid green");
         } else {
@@ -444,6 +448,10 @@ function validarDatosListar(){
  */
 
 function listarAsientos(consulta){     
+    
+    // Añadimos la imagen de "trabajando"
+    $("#zonaMostrarDatos").append("<img class='contenTrabajando' src='./imagenes/trabajando.gif'/>");
+    
     $.ajax({
         url: "./miAjax/listarAsientos.php",
         type: 'POST',
@@ -559,13 +567,15 @@ function listarAsientos(consulta){
            };  
          
        }
-           
+       
+       // Ocultamos la imagen de trabajando
+       $(".contenTrabajando").css("display", "none");
+       // Mostramos los datos
+       $("#zonaRelacionAsientos").css("display", "block");
            
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
-    }).always(function (){
-        // FALTA CODIGO
-    });      
+    });
 }
 
 
@@ -656,6 +666,9 @@ function activarCampos() {
 
 
 function informeAsiento(consulta){
+    
+    // Añadimos la imagen de "trabajando"
+    $("#zonaInfoAsientos").append("<img class='contenTrabajando' src='./imagenes/trabajando.gif'/>");
     
     $.ajax({
         url: "./miAjax/informeAsiento.php",
@@ -790,11 +803,11 @@ function informeAsiento(consulta){
                 numeroInforme++;
            }  
            
-            // Ocultamos el contenedor con el listado de asientos
-            $("#zonaMostrarDatos").css("display", "none");
-            
-            // Mostramos el contenedor para enseñar los datos
-            $("#zonaInfoAsientos").css("display", "block");
+           // Ocultamos la imagen de trabajando
+           $(".contenTrabajando").css("display", "none");            
+           
+           // Mostramos el contenedor para enseñar los datos
+           $("#zonaRelacionInfoAsientos").css("display", "block");
        }
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
@@ -835,10 +848,10 @@ $(function() {
       * Establecemos los eventos para los botones:
       * Modificar asientos e informe asientos
       */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAbrir, .botonDetalle", function () {
+    $("#zonaMostrarDatos").on('focus mouseenter', ".botonAbrir, .botonDetalle", function () {
         $(this).css("padding", "15px");
     });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAbrir, .botonDetalle", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".botonAbrir, .botonDetalle", function () {
         $(this).css("padding", "");
     });    
     
@@ -846,7 +859,7 @@ $(function() {
     /*
      * Establezco el evento "ABRIR" para modificar asiento
      */
-    $("#zonaRelacionAsientos").on('click', ".botonAbrir", function (evento) {
+    $("#zonaMostrarDatos").on('click', ".botonAbrir", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
 
@@ -920,24 +933,24 @@ $(function() {
      * Establezco los eventos para los botones:
      * Guardar modificaciones y Cancelar modificaciones
      */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonGuardar", function () {
+    $("#zonaMostrarDatos").on('focus mouseenter', ".botonGuardar", function () {
         $(this).css("border-color", "red");
         $(this).css("color", "red");
     });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonGuardar", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".botonGuardar", function () {
         $(this).css("border-color", "");
         $(this).css("color", "");
     });
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonCerrar", function () {
+    $("#zonaMostrarDatos").on('focus mouseenter', ".botonCerrar", function () {
         $(this).css("padding", "15px");
     });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonCerrar", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".botonCerrar", function () {
         $(this).css("padding", "");
     });
     
     
     // Evento click para el botón cancelar:
-    $("#zonaRelacionAsientos").on('click', ".botonCerrar", function (evento) {
+    $("#zonaMostrarDatos").on('click', ".botonCerrar", function (evento) {
         
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
@@ -973,13 +986,13 @@ $(function() {
       * Establezco los eventos para el botón:
       * Incluir nuevo asignado
       */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".botonAsignado", function () {
+    $("#zonaMostrarDatos").on('focus mouseenter', ".botonAsignado", function () {
         $(this).css("padding", "4px 8px");
     });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".botonAsignado", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".botonAsignado", function () {
         $(this).css("padding", "");
     });
-    $("#zonaRelacionAsientos").on('click', ".botonAsignado", function (evento) {
+    $("#zonaMostrarDatos").on('click', ".botonAsignado", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         // Ocultamos el texto donde muestra el usuario asignado
@@ -1007,7 +1020,7 @@ $(function() {
      */
 
     /* Para el caso de que salgamos del contenedor */
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".contenAsignadoUsuario", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".contenAsignadoUsuario", function () {
         // Ocultamos el contenedor
         $(this).css("display", "none");
         // Mostramos el valor asignado anteriormente y el botón para modificar nuevamente
@@ -1017,14 +1030,14 @@ $(function() {
     });
     
     /* Para el caso de que nos pongamos sobre un usuario */
-    $("#zonaRelacionAsientos").on('focus mouseenter', ".asignadoUsuario", function () {
+    $("#zonaMostrarDatos").on('focus mouseenter', ".asignadoUsuario", function () {
         $(this).css("border", "2px solid purple");
     });
-    $("#zonaRelacionAsientos").on('focusout mouseleave', ".asignadoUsuario", function () {
+    $("#zonaMostrarDatos").on('focusout mouseleave', ".asignadoUsuario", function () {
         $(this).css("border", "");
     });
     /* Para el caso de que seleccionemos un usuario */
-    $("#zonaRelacionAsientos").on('click', ".asignadoUsuario", function (evento) {
+    $("#zonaMostrarDatos").on('click', ".asignadoUsuario", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         //Cambiamos el valor de lo seleccionado.
@@ -1045,7 +1058,7 @@ $(function() {
     /*
      * Establecemos el evento "click" para el botón GUARDAR
      */
-    $("#zonaRelacionAsientos").on('click', ".botonGuardar", function (event) {
+    $("#zonaMostrarDatos").on('click', ".botonGuardar", function (event) {
         // Detenemos la acción predeterminada del evento
         event.preventDefault();
         // Guardamos los datos introducidos
@@ -1106,16 +1119,13 @@ $(function() {
         evento.preventDefault();
         // Borramos las posibles notificaciones de errores existentes
         $(".campoError").remove();
-
-        // Borramos los posibles datos de otras consultas
-        $("#zonaRelacionAsientos").empty();
-
-        // Borramos el posible mensaje de NO DATOS de consultas anteriores
-        $("#zonaNoDatos").remove();
-
-        // Borramos la leyenda de posibles consultas anteriores
-        $("#leyendaListado").remove();
-
+        
+        // Vaciamos las consultas anteriores
+        $("#zonaMostrarDatos").empty();
+        
+        // Añadimos la zona del título y zona de datos.
+        $("#zonaMostrarDatos").append("<legend id='legendAñadir'></legend><div id='zonaRelacionAsientos'></div>");
+        
         // Validamos los datos introducidos
         if (validarDatosListar()) {
             // Realizamos la consulta                   
@@ -1148,7 +1158,7 @@ $(function() {
     /*
      * Establezco el evento "INFORME" para modificar asiento
      */
-    $("#zonaRelacionAsientos").on('click', ".botonDetalle", function (evento) {
+    $("#zonaMostrarDatos").on('click', ".botonDetalle", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();       
 
@@ -1169,6 +1179,18 @@ $(function() {
         var asiento = $(miID + " label.mostraAsiento").data("asiento");
         var diario = $(miID + " label.mostraAsiento").data("diario");
         
+        // Ocultamos el contenedor con el listado de asientos
+        $("#zonaMostrarDatos").css("display", "none");
+        
+        // Vaciamos los datos de informes anteriores
+        $("#zonaInfoAsientos").empty();
+        
+        // Añadimos el campo para el título y los datos:
+        $("#zonaInfoAsientos").append("<legend id='legendInfoAsientos'></legend><div id='zonaRelacionInfoAsientos'></div>");
+        
+        // Mostramos el contenedor para enseñar los datos
+        $("#zonaInfoAsientos").css("display", "block");
+        
         // Definimos el array JSON con los indices
         var consulta = {diario: diario, asiento: asiento};
         
@@ -1181,14 +1203,14 @@ $(function() {
     
     
     // Eventos para el botón Cerrar cuadro de información asiento
-    $("#legendInfoAsientos").on('focus mouseenter', "#botonCerrarInfo", function () {
+    $("#zonaInfoAsientos").on('focus mouseenter', "#botonCerrarInfo", function () {
         $(this).css("padding", "15px");
     });
-    $("#legendInfoAsientos").on('focusout mouseleave', "#botonCerrarInfo", function () {
+    $("#zonaInfoAsientos").on('focusout mouseleave', "#botonCerrarInfo", function () {
         $(this).css("padding", "");
     });
     
-    $("#legendInfoAsientos").on('click', "#botonCerrarInfo", function (evento) {
+    $("#zonaInfoAsientos").on('click', "#botonCerrarInfo", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         
@@ -1213,16 +1235,16 @@ $(function() {
     
     
     // Eventos para el botón Actualizar Información Asiento
-    $("#zonaRelacionInfoAsientos").on('focus mouseenter', ".botonActualInfo", function () {
+    $("#zonaInfoAsientos").on('focus mouseenter', ".botonActualInfo", function () {
         $(this).css("border-color", "red");
         $(this).css("color", "red");
     });
-    $("#zonaRelacionInfoAsientos").on('focusout mouseleave', ".botonActualInfo", function () {
+    $("#zonaInfoAsientos").on('focusout mouseleave', ".botonActualInfo", function () {
         $(this).css("border-color", "");
         $(this).css("color", "");
     });
         
-    $("#zonaRelacionInfoAsientos").on('click', ".botonActualInfo", function (evento) {
+    $("#zonaInfoAsientos").on('click', ".botonActualInfo", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         
@@ -1289,16 +1311,16 @@ $(function() {
    
    
    // Eventos para los botones de confirmación de "Actual detalle asiento".
-    $("#zonaRelacionInfoAsientos").on('focus mouseenter', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
+    $("#zonaInfoAsientos").on('focus mouseenter', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
         $(this).css("border-color", "red");
         $(this).css("color", "red");
     });
-    $("#zonaRelacionInfoAsientos").on('focusout mouseleave', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
+    $("#zonaInfoAsientos").on('focusout mouseleave', ".botonGuardarConfirma, .botonCerrarConfirma", function () {
         $(this).css("border-color", "");
         $(this).css("color", "");
     });
         
-    $("#zonaRelacionInfoAsientos").on('click', ".botonCerrarConfirma", function (evento) {
+    $("#zonaInfoAsientos").on('click', ".botonCerrarConfirma", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         
@@ -1327,12 +1349,12 @@ $(function() {
         evento.stopPropagation();
     });
     
-    $("#zonaRelacionInfoAsientos").on('click', ".botonGuardarConfirma", function (evento) {
+    $("#zonaInfoAsientos").on('click', ".botonGuardarConfirma", function (evento) {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();
         
         // Recupero el ID asignado al asiento seleccionado para modificar
-        miID = $(this).data("miid");
+        miID = $(this).data("miid");               
         
         // Guardamos los datos introducidos
         guardarDatosActuales();

@@ -218,18 +218,10 @@ if (isset($_POST['desconectar'])) {
             
             <!-- ZONA PARA MOSTRAR DATOS -->
             <div id="zonaMostrar">
-                
-                <fieldset id="zonaInfoAsientos">
-                    <legend id="legendInfoAsientos"></legend>
-                    <!-- Zona de datos -->
-                    <div id="zonaRelacionInfoAsientos"></div>
-                </fieldset>
-                
-                <fieldset id="zonaMostrarDatos">
-                    <legend id="legendAñadir"></legend>
-                    <!-- Zona de datos -->
-                    <div id="zonaRelacionAsientos"></div>
-                </fieldset>                   
+                <!-- Zona de detalle de un asiento -->
+                <fieldset id="zonaInfoAsientos"></fieldset>
+                <!-- Zona de listado de asientos -->
+                <fieldset id="zonaMostrarDatos"></fieldset>                   
             </div>     
             
         </div> <!-- Fin de zona PROGRAMA -->
