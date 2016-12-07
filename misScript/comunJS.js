@@ -81,22 +81,53 @@ function mostrarInformacion() {
     if(typeof informeProyecto != "undefined") {
         // Recorro todo el array
         for(var i=0; i<informeProyecto.length; i++) {
-            $("#contenedorTextoIndormacion").append("<p class='textoInformacion'><span class='textoTituloInformacion'>"+informeProyecto[i][0]+"</span>"+informeProyecto[i][1]+"</p>");
+            $("#contenedorTextoInformacion").append("<p class='textoInformacion'><span class='textoTituloInformacion'>"+informeProyecto[i][0]+"</span>"+informeProyecto[i][1]+"</p>");
         }
+        // Introducimos la localización del Registro
+        $("#contenedorTextoInformacion").append("<p class='textoInformacion'><span id='textoLocalizacion' class='textoTituloInformacion'>Localización: </span>"+
+                                                "<input type='button' id='botonLocalizacion' name='botonLocalizacion' value=''/></p>");
     }
     else {
-         $("#contenedorTextoIndormacion").html("<p class='textoInformacion'><span class='textoTituloInformacion'>Aviso: </span>Información no disponible!</p>");
+         $("#contenedorTextoInformacion").html("<p class='textoInformacion'><span class='textoTituloInformacion'>Aviso: </span>Información no disponible!</p>");
     }
     
-    // Animación para la zona "bloque de Información" 
-    $("#botonInformacion").hover(function () { // Cuando gana el foco      
+    /*
+     * Animación para la zona "bloque de Información" 
+     */    
+    $("#botonInformacion").mouseenter(function () { // Cuando gana el foco      
         $("#botonInformacion").css("background-color", "purple");
         $("#contenedorInformacion").fadeIn("slow"); //Aparición progresiva
+    });    
+    $("#contenedorInformacion").hover(function () { // Cuando gana el foco      
+        $("#contenedorInformacion").css("display", "block"); // Mostramos la información
     }, function () { // Cuando pierde el foco
         $("#botonInformacion").css("background-color", "");
         $("#contenedorInformacion").hide("slow"); //Desaparición con desplazamiento
-    }); 
+    });    
     
+    /* 
+     * Eventos para el boton "Localización"
+     */
+    $("#botonLocalizacion").hover(function (){
+       $("#textoLocalizacion").css("color", "red");
+       $("#botonLocalizacion").css("background-size", "110%");
+    }, function () {
+        $("#textoLocalizacion").css("color", "");
+        $("#botonLocalizacion").css("background-size", "");
+    });    
+    
+    $("#botonLocalizacion").click(function (evento){
+        // Detenemos la acción predeterminada del evento
+        evento.preventDefault();        
+        
+        var a = document.createElement("a");
+        a.target = "_blank";  
+        a.href = "https://www.google.es/maps/place/Registro+de+la+Propiedad+de+Negreira/@42.9099353,-8.7367809,17.5z/data=!4m5!3m4!1s0xd2ee3f01640822b:0xec3eec67925b6d78!8m2!3d42.9097886!4d-8.7350423"
+        a.click();
+        
+        // Paramos la propagación indeseada del evento
+        evento.stopPropagation();
+    });    
 }
 
 /*

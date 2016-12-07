@@ -17,7 +17,7 @@ body {
 #bloqueInformacion {
     width: 1250px;
     margin: 0 auto;   
-    padding: 0;
+    padding: 0;    
 }
 
 #botonInformacion {
@@ -40,17 +40,18 @@ body {
     display: none;
     position: absolute;
     margin-left: 860px;
-    margin-top: 30px;
+    margin-top: 0;
     width: 400px;
-    height: 350px;
+    height: 400px;
+    background-position-y: 30px;
     background-image: url(../imagenes/notas.png);     
     background-color: transparent;
     background-size: 100%; 
     background-repeat: no-repeat; 
 }
 
-#contenedorTextoIndormacion {
-    margin-top: 100px;
+#contenedorTextoInformacion {
+    margin-top: 110px;
     margin-left: 30px;
     width: 300px;
     font-size: 11pt;    
@@ -67,6 +68,21 @@ body {
 
 .cancelarFlotantes {
     clear: both;
+}
+
+#botonLocalizacion {
+    /* Suprimo el comportamiento del boton*/
+    outline: none;    
+    border: none;
+    margin: 0;
+    padding: 0;
+    width:70px;
+    height:70px;
+    background-color: transparent;
+    background-image: url(../imagenes/localizacion.png);
+    background-size: 100%; 
+    background-position-y: 7px;
+    background-repeat: no-repeat; 
 }
 
 

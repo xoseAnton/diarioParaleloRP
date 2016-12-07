@@ -28,7 +28,7 @@ date_default_timezone_set('Europe/Berlin');
                 <div id="contenedorBotonInformacion">
                     <input type="button" id="botonInformacion" name="botonInformacion" value="" />
                     <div id="contenedorInformacion">
-                        <div id="contenedorTextoIndormacion"></div>
+                        <div id="contenedorTextoInformacion"></div>
                     </div>
                 </div>           
                 <div class="cancelarFlotantes"></div>
