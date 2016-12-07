@@ -205,7 +205,7 @@ if (isset($_POST['desconectar'])) {
                         </div>
                         <div id = "menuBotones2">
                             <div id="botonDesconectar">
-                                <input type="submit" id="desconectar" class="botonMenu" name="desconectar" value="Desconectar" onclick="mostrarZonaTrabajando()" />
+                                <input type="submit" id="desconectar" class="botonMenu" name="desconectar" value="Desconectar" />
                             </div>  
                             <div class="cancelarFlotantes"></div>
                         </div>                        

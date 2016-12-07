@@ -345,8 +345,6 @@ function  mostrarBloqueCrearAsientos() {
         
     }).fail(function() {
          alert("No su pudo listar los DIARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });
     
     $("#bloqueCrearAsientos").show("slow");
@@ -377,8 +375,6 @@ function  mostrarBloqueCrearDiario() {
         
     }).fail(function() {
          alert("No su pudo listar los DIARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });
     
     $("#bloqueCrearDiario").show("slow");
@@ -412,8 +408,6 @@ function  mostrarBloqueAbrirCerrarDiario() {
         
     }).fail(function() {
          alert("No su pudo listar los DIARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });
     
     $("#bloqueCerrarAbrirDiario").show("slow");
@@ -481,7 +475,7 @@ function  validarDatosNuevosAsientos(miID) {
     }
     else {
         // Ocultamos los errores pasados 3 segundos.
-        setTimeout("$('.campoError').hide('slow');", 3000);       
+        setTimeout("$('.campoError').hide('slow');", 2000);       
     }
     
 }
@@ -530,7 +524,7 @@ function  validarDatosNuevoDiario(miID) {
     }
     else {
         // Ocultamos los errores pasados 3 segundos.
-        setTimeout("$('.campoError').hide('slow');", 3000);       
+        setTimeout("$('.campoError').hide('slow');", 2000);       
     }
     
 }
@@ -576,8 +570,6 @@ function crearNuevoDiario(miID){
         }                
     }).fail(function() {
          alert("No su pudo grabar el NUEVO DIARIO !");
-    }).always(function (){
-        // FALTA CODIGO
     });
 }
 
@@ -611,8 +603,6 @@ function modificarAbrirCerrarDiario(miID){
         }                
     }).fail(function() {
          alert("No su pudo MODIFICAR el diario seleccionado !");
-    }).always(function (){
-        // FALTA CODIGO
     });
 }
 

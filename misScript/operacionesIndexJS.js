@@ -17,8 +17,6 @@ function listarUsuario() {
         }
     }).fail(function() {
          alert("No su pudo listar los USUARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });     
     
     // Añadimos un campo vacio
@@ -49,8 +47,6 @@ function comprobarUsuario(datos){
         }        
     }).fail(function() {
          alert("No su pudo comprobar la AUTENTIFICACIÓN del usuario en la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });     
 }
 

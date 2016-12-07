@@ -265,5 +265,7 @@ body {
 .contenTrabajando {    
     margin-left: 47%;
     margin-top: 20%;
+    width: 70px;
+    height: 70px;        
 }
 

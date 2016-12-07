@@ -193,8 +193,6 @@ function mostrarAcciones() {
         }
     }).fail(function() {
          alert("No su pudo listar las acciones realizadas!");
-    }).always(function (){
-        // FALTA CODIGO
     });
     
 }

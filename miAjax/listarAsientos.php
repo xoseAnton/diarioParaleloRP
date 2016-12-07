@@ -31,7 +31,7 @@ if (isset($_SESSION['usuario'])) {
     $listaAsientos = operacionesBD::listarAsientos($opcionesConsulta);
     
     // Retorno un "string" con los datos optenidos
-    echo json_encode($listaAsientos);    
+    echo json_encode($listaAsientos);
 }
 
 ?>

@@ -30,8 +30,6 @@ function listarUsuarios() {
         }
     }).fail(function() {
          alert("No su pudo listar los USUARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });         
 }
 
@@ -54,8 +52,6 @@ function listarDiarios() {
         }
     }).fail(function() {
          alert("No su pudo listar los DIARIOS de la base de datos!");
-    }).always(function (){
-        // FALTA CODIGO
     });    
 }
 
@@ -133,8 +129,6 @@ function guardarDatosAsientos(){
         }
     }).fail(function() {
          alert("No su pudo grabar las modificaciones!");        
-    }).always(function (){
-        // FALTA CODIGO
     });
 }
    
@@ -227,7 +221,7 @@ function guardarDatosAsientos(){
                     //Mostramos la barra de desplazamiento
                     $("#zonaRelacionInfoAsientos").css("overflow-y", "");
 
-                }, 3000);
+                }, 2000);
             }, 100);
 
         } else {
@@ -437,7 +431,7 @@ function validarDatosListar(){
     }
     else {
         // Ocultamos los errores pasados 3 segundos.
-        setTimeout("$('.campoError').hide('slow');", 3000);       
+        setTimeout("$('.campoError').hide('slow');", 2000);       
     }
 }
 
@@ -811,8 +805,6 @@ function informeAsiento(consulta){
        }
     }).fail(function() {
         alert("FALLO LA RESPUESTA");
-    }).always(function (){
-        // FALTA CODIGO
     });      
 }
 
@@ -1435,9 +1427,24 @@ $(function() {
     
     
     /*
+     * Para controlar el pulsado de la tecla "enter" en el formulario
+     * @param {type} param
+     */
+    $("#formularioBusqueda").keypress(function (evento) {
+       if(evento.which == 13) {           
+           // Tomamos como evento por defecto el "listar" en el formulario
+            $("#listar").trigger('click');
+            // Retornamos "false" para no ejecutar por defecto el formulario
+            return false;
+       } 
+    });
+        
+    /*
      * FIN DE LA DEFINICIÓN DE EVENTOS
      */
     
+    // Al inicio establezco el foco en la selección de diario
+    $("#diario").focus();
    
     
 }); // Fin de la página preparada
