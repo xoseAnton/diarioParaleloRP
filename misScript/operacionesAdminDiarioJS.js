@@ -176,7 +176,20 @@ function mostraCampoConfirmacion(miID, texto){
     $(miID + " .contenConfirmacion").css("display", "block");
 }
 
-function mostrarCampoResultadoGrabar(resultado, miID,texto) {
+
+/*
+ * Función para mostrar el resultado de Grabación de los datos
+ * @param {type} resultado
+ * @param {type} miID
+ * @param {type} texto
+ * @returns {undefined}
+ */
+function mostrarCampoResultadoGrabar(resultado, miID,texto) {    
+    // Ocultamos la imagen de trabajando
+    $(miID + " .contenTrabajando").css("display", "none");
+    
+    // Mostramos el campo unión de datos
+    $(miID + " .contenZonaUnion").css("display", "");    
     
     // Cargamos el campo que contiene el texto
     $(miID + " .zonaConfirmacion").empty().append("<input type='text' class='textoExitoGrabar' name='textoExitoGrabar' value='" + texto + "' readonly />");
@@ -187,6 +200,9 @@ function mostrarCampoResultadoGrabar(resultado, miID,texto) {
             "background-color": "green",
             "border-color": "purple"
         });
+        
+        // Vacio el formulario
+        $(miID + " form")[0].reset();
     }
     if (resultado == "error") {
         $(miID + " .zonaConfirmacion").css("background-color", "#ffff00");
@@ -527,7 +543,6 @@ function crearNuevosAsientos(miID){
         dataType: 'json',
         data: {datos: datosGrabar}
     }).done(function (resultado){
-        
         if (resultado[0].noGrabados == 0 && resultado[0].grabadoDiario == true) {
             var texto = "¡ Creados correctamente: " + datosGrabar.nAsientos + " asientos en el diario: " + datosGrabar.diario + " !";
             mostrarCampoResultadoGrabar("correcto", miID, texto);
@@ -537,8 +552,6 @@ function crearNuevosAsientos(miID){
         }                
     }).fail(function() {
          alert("No su pudo grabar los nuevos asientos!");
-    }).always(function (){
-        // FALTA CODIGO
     });
     
     
@@ -765,8 +778,21 @@ $(function () {
         // Recupero el ID asignado al campo seleccionado para modificar
         var miID = $(this).data("id");
         
+        // Borramos los campos trabajando creados anteriormente
+        $(miID + " .contenTrabajando").remove();
+        
         // Ocultamos el campo de confirmación
         $(miID + " .contenConfirmacion").css("display", "none");
+        // Ocultamos el campo unión de datos
+        $(miID + " .contenZonaUnion").css("display", "none");
+        
+        
+        // Añadimos la imagen de "trabajando"
+        $(miID).append("<img class='contenTrabajando' src='./imagenes/trabajando.gif'/>");
+        $(miID + " .contenTrabajando").css({
+            "margin-left": "140px",
+            "margin-top": "35px"
+        }); 
         
         // Comprobamos que evento fué seleccionado
         if (miID == "#bloqueCrearAsientos") {
