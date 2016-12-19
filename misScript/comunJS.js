@@ -120,10 +120,7 @@ function mostrarInformacion() {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();        
         
-        var a = document.createElement("a");
-        a.target = "_blank";  
-        a.href = "https://www.google.es/maps/place/Registro+de+la+Propiedad+de+Negreira/@42.9099353,-8.7367809,17.5z/data=!4m5!3m4!1s0xd2ee3f01640822b:0xec3eec67925b6d78!8m2!3d42.9097886!4d-8.7350423"
-        a.click();
+		window.open("https://www.google.es/maps/place/Registro+de+la+Propiedad+de+Negreira/@42.9099353,-8.7367809,17.5z/data=!4m5!3m4!1s0xd2ee3f01640822b:0xec3eec67925b6d78!8m2!3d42.9097886!4d-8.7350423","_blank");
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();

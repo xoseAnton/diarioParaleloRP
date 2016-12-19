@@ -1137,10 +1137,7 @@ $(function() {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();        
         
-        var a = document.createElement("a");
-        a.target = "_blank";  
-        a.href = "./miAjax/pdfListadoAsientos.php"
-        a.click();
+		window.open("./miAjax/pdfListadoAsientos.php","_blank");
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();
@@ -1417,9 +1414,7 @@ $(function() {
         // Detenemos la acción predeterminada del evento
         evento.preventDefault();        
         
-        var a = document.createElement("a");        
-        a.href = "./adminDiario.php"
-        a.click();
+		window.open("./adminDiario.php","_self");
         
         // Paramos la propagación indeseada del evento
         evento.stopPropagation();

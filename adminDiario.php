@@ -68,7 +68,7 @@ function mostrarCreacionAsientos(){
                             "</div>".
                             "<div id='contenFechaAsientos'>".
                                 "<label class='textoIntroducirDatos'>Fecha presentacion:</label>".
-                                "<input type='date' id='fechaAsientos' name='fechaAsientos' required/>".
+                                "<input type='date' id='fechaAsientos' name='fechaAsientos' placeholder='aaaa/mm/dd' required/>".
                                 "<div class='cancelarFlotantes'></div>".
                             "</div>".
                         "</fieldset>".
@@ -148,7 +148,7 @@ function mostrarCrearDiario(){
                                 "</div>".
                                 "<div id='contenFechaDiario'>".
                                     "<label class='textoIntroducirDatos'>Fecha apertura:</label>".
-                                    "<input type='date' id='fechaDiario' name='fechaDiario' value='' required/>".
+                                    "<input type='date' id='fechaDiario' name='fechaDiario' placeholder='aaaa/mm/dd' required/>".
                                     "<div class='cancelarFlotantes'></div>".
                                 "</div>".
                             "</fieldset>".

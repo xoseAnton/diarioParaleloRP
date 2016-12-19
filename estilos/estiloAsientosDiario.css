@@ -119,11 +119,11 @@
 }
 
 #fechaModifica {
-    width: 127px;
+    width: 125px;
 }
 
 #horaModifica {
-    width: 68px;
+    width: 67px;
 }
 
 /* zona de búsqueda por ESTADO DEL ASIENTO */
@@ -555,6 +555,7 @@
 .textoFechaHora {
     text-align: center;
     font-weight: bold;
+    font-size: 8.5pt;
     margin: 0;
     width: 72px;
     height: 12px;

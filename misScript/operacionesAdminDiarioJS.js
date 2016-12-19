@@ -452,16 +452,32 @@ function  validarDatosNuevosAsientos(miID) {
     
     // Recupero el valor introducido
     var miFecha = new Date($(miID + " #fechaAsientos").val());
+    var fechaActual = new Date(); // Fecha Actual
     
     // Compruebo que el formato introducido de la fecha es correcto
-    if (validado && ((miFecha.getDate() < 1 || miFecha.getDate() > 31) || ((miFecha.getMonth() + 1) < 1 || (miFecha.getMonth() + 1) > 12) || miFecha.getFullYear() < 2016 || $(miID + " #fechaAsientos").val() == "")) {
+    if (validado && ((miFecha.getDate() < 1 || miFecha.getDate() > 31 || isNaN(miFecha.getDate())) || ((miFecha.getMonth() + 1) < 1 || (miFecha.getMonth() + 1) > 12 || isNaN(miFecha.getMonth())) || (isNaN(miFecha.getFullYear()) || miFecha.getFullYear() > fechaActual.getFullYear()) || $(miID + " #fechaAsientos").val() == "")) {
         validado = false;   // Cambiamos la variable de control            
         // Mostramos el error            
         $(miID + " #fechaAsientos").focus().after("<span class='campoError'>Fecha no valida!</span>");
     } else {
         // Comprobamos que la fecha ahora introducida es mayor o igual que la del último asiento grabado
         var fechaUltimoAsiento = new Date(listaDiarios[idDiario].fechaAsiento);
-        if (miFecha < fechaUltimoAsiento) {
+        
+        if (miFecha.getFullYear() >= fechaUltimoAsiento.getFullYear()) {
+            if((miFecha.getMonth()+1) >= (fechaUltimoAsiento.getMonth() +1)) {
+                if (miFecha.getDate() < fechaUltimoAsiento.getDate()) {
+            validado = false;   // Cambiamos la variable de control            
+            // Mostramos el error            
+            $(miID + " #fechaAsientos").focus().after("<span class='campoError'>Fecha no valida!</span>");
+        }
+                
+            } else {
+                validado = false;   // Cambiamos la variable de control            
+                // Mostramos el error            
+                $(miID + " #fechaAsientos").focus().after("<span class='campoError'>Fecha no valida!</span>");
+    }
+        }
+        else {
             validado = false;   // Cambiamos la variable de control            
             // Mostramos el error            
             $(miID + " #fechaAsientos").focus().after("<span class='campoError'>Fecha no valida!</span>");

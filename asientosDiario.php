@@ -108,7 +108,7 @@ if (isset($_POST['desconectar'])) {
                                 <label>Fecha asiento:</label>
                             </div>
                             <div>
-                                <input type="date" id="fecha" name="fecha" value="" disabled title="Fecha presentación asientos"/>
+                                <input type="date" id="fecha" name="fecha" value="" placeholder='aaaa/mm/dd' disabled title="Fecha presentación asientos"/>
                             </div>
                         </div>
 
@@ -141,8 +141,8 @@ if (isset($_POST['desconectar'])) {
                                 <label>Fecha/Hora modificación:</label>
                             </div>
                             <div>
-                                <input type="date" id="fechaModifica" name="fechaModifica" value="" disabled title="Fecha modificación"/>
-                                <input type="time" id="horaModifica" name="horaModifica" value=""  disabled title="Hora modificación"/>
+                                <input type="date" id="fechaModifica" name="fechaModifica" value="" placeholder='aaaa/mm/dd' disabled title="Fecha modificación"/>
+                                <input type="time" id="horaModifica" name="horaModifica" value=""  placeholder='hh:mm' disabled title="Hora modificación"/>
                             </div>
                         </div>
 

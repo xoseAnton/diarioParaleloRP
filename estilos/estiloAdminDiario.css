@@ -252,7 +252,7 @@
 #fechaAsientos {
     float: left;
     height: 25px;
-    width: 150px;
+    width: 145px;
     font-size: 12pt;
     font-weight: bold;
 }
@@ -601,7 +601,7 @@
 #fechaDiario {
     float: left;
     height: 25px;
-    width: 150px;
+    width: 145px;
     font-size: 12pt;
     font-weight: bold;
 }
