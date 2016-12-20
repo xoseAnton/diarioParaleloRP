@@ -1,7 +1,7 @@
 // Defino el array global con los datos del Proyecto
 var informeProyecto = new Array(["Realizado por: ", "Jose Antonio Mariño Outeiro"],
-                                ["Para: ", "Proyecto DAW"],
-                                ["Versión: ", "1.0 Diario Paralelo Registro"],
+                                ["Para: ", "Registro de la Propiedad de Negreira"],
+                                ["Versión: ", "3.1 Diario Paralelo"],
                                 ["Base de datos: ", "MySQL"],
                                 ["Servidor web: ", "Microsoft-IIS/8.5"],
                                 ["Versión de PHP: ", "5.6"]);
